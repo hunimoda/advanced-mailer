@@ -6,7 +6,7 @@ const App = () => {
 	return (
 		<>
 			<MainHeader />
-			<SideBar />
+			<SideBar isActive={true} />
 			<Router />
 		</>
 	);

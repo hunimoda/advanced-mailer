@@ -1,4 +1,5 @@
 .header {
+	background: red;
 	padding: 0 var(--blank-width);
 	height: var(--header-height);
 	display: flex;

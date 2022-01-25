@@ -1,12 +1,17 @@
-import MainNavigation from "./MainNavigation";
+import Backdrop from "../../UI/Backdrop";
 import MainLogo from "../MainLogo";
+import MainNavigation from "./MainNavigation";
 import classes from "./index.module.css";
 
-const SideBar = () => {
+const SideBar = ({ isActive }) => {
+	const sidebarClassName = `${classes.sidebar} ${
+		isActive ? classes["sidebar--active"] : ""
+	}`;
+
 	return (
 		<>
-			<div className={classes.backdrop} />
-			<section className={classes.sidebar}>
+			<Backdrop isActive={isActive} />
+			<section className={sidebarClassName}>
 				<header className={classes.header}>
 					<i
 						className="fas fa-times"

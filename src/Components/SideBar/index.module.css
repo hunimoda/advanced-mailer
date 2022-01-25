@@ -7,6 +7,12 @@
 	left: 0;
 	bottom: 0;
 	z-index: 11;
+	transition: transform var(--sidebar-transition-duration) ease-in-out 0s;
+	transform: translateX(-100%);
+}
+
+.sidebar--active {
+	transform: translateX(0);
 }
 
 .header {
@@ -14,14 +20,4 @@
 	display: flex;
 	align-items: center;
 	padding-left: var(--blank-width);
-}
-
-.backdrop {
-	position: fixed;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-	background: rgba(0, 0, 0, 0.4);
-	z-index: 10;
 }
