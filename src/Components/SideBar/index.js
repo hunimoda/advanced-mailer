@@ -18,7 +18,7 @@ const SideBar = ({ isActive, onSideBarClose }) => {
 					</button>
 					<MainLogo />
 				</header>
-				<MainNavigation />
+				<MainNavigation onLinkClick={onSideBarClose} />
 				<footer className={classes.sidebarFooter}>
 					<small>© 2022 HUNIMODA</small>
 				</footer>
