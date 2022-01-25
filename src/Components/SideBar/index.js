@@ -3,17 +3,17 @@ import MainLogo from "../MainLogo";
 import MainNavigation from "./MainNavigation";
 import classes from "./index.module.css";
 
-const SideBar = ({ isActive }) => {
+const SideBar = ({ isActive, onSideBarClose }) => {
 	const sidebarClassName = `${classes.sidebar} ${
 		isActive ? classes["sidebar--active"] : ""
 	}`;
 
 	return (
 		<>
-			<Backdrop isActive={isActive} />
+			<Backdrop isActive={isActive} onClick={onSideBarClose} />
 			<section className={sidebarClassName}>
 				<header className={classes.header}>
-					<button className={classes.closeNavBtn}>
+					<button className={classes.closeNavBtn} onClick={onSideBarClose}>
 						<i className="fas fa-times" />
 					</button>
 					<MainLogo />

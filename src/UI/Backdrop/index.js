@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import classes from "./index.module.css";
 
-const Backdrop = ({ isActive }) => {
+const Backdrop = ({ isActive, onClick }) => {
 	const [isVisible, setIsVisible] = useState(false);
 	const [backdropClass, setBackdropClass] = useState(classes.backdrop);
 
@@ -20,7 +20,7 @@ const Backdrop = ({ isActive }) => {
 	}, [isActive]);
 
 	if (isActive || isVisible) {
-		return <div className={backdropClass} />;
+		return <div className={backdropClass} onClick={onClick} />;
 	}
 
 	return null;

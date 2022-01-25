@@ -1,11 +1,11 @@
 import MainLogo from "../MainLogo";
 import classes from "./index.module.css";
 
-const MainHeader = () => {
+const MainHeader = ({ onSideBarOpen }) => {
 	return (
 		<header className={classes.header}>
 			<div className={classes.column}>
-				<button className={classes.openNavBtn}>
+				<button className={classes.openNavBtn} onClick={onSideBarOpen}>
 					<i className="fas fa-bars" />
 				</button>
 				<MainLogo />
