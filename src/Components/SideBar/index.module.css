@@ -34,3 +34,16 @@
 	color: var(--icon-grey);
 	font-size: 22px;
 }
+
+.sidebarFooter {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
+	color: #dfdfdf;
+	text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.8),
+		0px -1px 1px rgba(0, 0, 0, 0.3);
+	font-size: 18px;
+	font-weight: 500;
+	margin-bottom: 30px;
+}
