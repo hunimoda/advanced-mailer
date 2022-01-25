@@ -1,0 +1,25 @@
+.header {
+	padding: 0 25px;
+	height: 55px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.column {
+	display: flex;
+	align-items: center;
+}
+
+.appName {
+	color: #5f6265;
+	font-weight: 500;
+	font-size: 22px;
+}
+
+.profileImage {
+	width: 37px;
+	height: 37px;
+	border-radius: 100px;
+	object-fit: cover;
+}
