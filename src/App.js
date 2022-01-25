@@ -1,5 +1,15 @@
+import MainHeader from "./Components/MainHeader";
+import Router from "./Router";
+import MainNavigation from "./Components/MainNavigation";
+
 const App = () => {
-	return <h1>TEMP</h1>;
+	return (
+		<>
+			<MainHeader />
+			<Router />
+			<MainNavigation />
+		</>
+	);
 };
 
 export default App;
