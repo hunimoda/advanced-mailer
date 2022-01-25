@@ -13,15 +13,9 @@ const SideBar = ({ isActive }) => {
 			<Backdrop isActive={isActive} />
 			<section className={sidebarClassName}>
 				<header className={classes.header}>
-					<i
-						className="fas fa-times"
-						style={{
-							color: "var(--icon-grey)",
-							fontSize: "22px",
-							width: "19.25px",
-							textAlign: "center",
-						}}
-					/>
+					<button className={classes.closeNavBtn}>
+						<i className="fas fa-times" />
+					</button>
 					<MainLogo />
 				</header>
 				<MainNavigation />

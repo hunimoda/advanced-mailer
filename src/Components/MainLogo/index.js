@@ -1,8 +1,9 @@
+import { Link } from "react-router-dom";
 import classes from "./index.module.css";
 
 const MainLogo = () => {
 	return (
-		<div className={classes.mainLogo}>
+		<Link to="/" className={classes.mainLogo}>
 			<i
 				className="fab fa-mailchimp"
 				style={{
@@ -11,7 +12,7 @@ const MainLogo = () => {
 				}}
 			/>
 			<h1 className={classes.appTitle}>Mailer</h1>
-		</div>
+		</Link>
 	);
 };
 

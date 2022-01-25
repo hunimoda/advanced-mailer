@@ -1,7 +1,9 @@
 .mainLogo {
 	display: flex;
 	align-items: center;
-	margin-left: 26px;
+	text-decoration: none;
+	padding: 0 5px;
+	height: 42px;
 }
 
 .appTitle {

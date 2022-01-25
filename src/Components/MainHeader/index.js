@@ -5,15 +5,9 @@ const MainHeader = () => {
 	return (
 		<header className={classes.header}>
 			<div className={classes.column}>
-				<i
-					className="fas fa-bars"
-					style={{
-						color: "var(--icon-grey)",
-						fontSize: "22px",
-						width: "19.25px",
-						textAlign: "center",
-					}}
-				/>
+				<button className={classes.openNavBtn}>
+					<i className="fas fa-bars" />
+				</button>
 				<MainLogo />
 			</div>
 			<div className={classes.column}>
