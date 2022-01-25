@@ -1,13 +1,13 @@
 import MainHeader from "./Components/MainHeader";
 import Router from "./Router";
-import MainNavigation from "./Components/MainNavigation";
+import SideBar from "./Components/SideBar";
 
 const App = () => {
 	return (
 		<>
 			<MainHeader />
+			<SideBar />
 			<Router />
-			<MainNavigation />
 		</>
 	);
 };
