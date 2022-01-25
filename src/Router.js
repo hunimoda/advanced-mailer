@@ -1,4 +1,9 @@
 import { Switch, Route, Redirect } from "react-router-dom";
+import New from "./Pages/New";
+import Inbox from "./Pages/Inbox";
+import Sent from "./Pages/Sent";
+import Drafts from "./Pages/Drafts";
+import PageNotFound from "./Pages/PageNotFound";
 
 const Router = () => {
 	return (
@@ -7,19 +12,19 @@ const Router = () => {
 				<Redirect to="/inbox" />
 			</Route>
 			<Route exact path="/new">
-				<h2>New Page</h2>
+				<New />
 			</Route>
 			<Route exact path="/inbox">
-				<h2>Inbox Page</h2>
+				<Inbox />
 			</Route>
 			<Route exact path="/sent">
-				<h2>Sent Page</h2>
+				<Sent />
 			</Route>
 			<Route exact path="/drafts">
-				<h2>Drafts Page</h2>
+				<Drafts />
 			</Route>
 			<Route path="*">
-				<h2>404 Page not found</h2>
+				<PageNotFound />
 			</Route>
 		</Switch>
 	);
