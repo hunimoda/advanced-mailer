@@ -1,8 +1,9 @@
+import classes from "./index.module.css";
 import { Link } from "react-router-dom";
 
 const MainNavigation = () => {
 	return (
-		<nav>
+		<nav className={classes.mainNavigation}>
 			<ul>
 				<li>
 					<Link to="/new">편지 쓰기</Link>
@@ -20,8 +21,12 @@ const MainNavigation = () => {
 				</li>
 			</ul>
 			<ul>
-				<li>계정</li>
-				<li>로그아웃</li>
+				<li>
+					<span>계정</span>
+				</li>
+				<li>
+					<span>로그아웃</span>
+				</li>
 			</ul>
 		</nav>
 	);
