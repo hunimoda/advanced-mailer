@@ -1,0 +1,11 @@
+.mainLogo {
+	display: flex;
+	align-items: center;
+	margin-left: 26px;
+}
+
+.appTitle {
+	margin-left: 18px;
+	font-size: 20px;
+	color: var(--text-grey);
+}

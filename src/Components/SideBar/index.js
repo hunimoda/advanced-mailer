@@ -1,32 +1,30 @@
 import MainNavigation from "./MainNavigation";
+import MainLogo from "../MainLogo";
 import classes from "./index.module.css";
 
 const SideBar = () => {
 	return (
-		<section className={classes.section}>
-			<header>
-				<div className={classes.column}>
+		<>
+			<div className={classes.backdrop} />
+			<section className={classes.sidebar}>
+				<header className={classes.header}>
 					<i
-						className="fas fa-bars"
-						style={{ color: "#595959", fontSize: "22px" }}
-					/>
-					<i
-						className="fab fa-mailchimp"
+						className="fas fa-times"
 						style={{
-							marginLeft: "22px",
-							marginRight: "18px",
-							color: "#f5850e",
-							fontSize: "30px",
+							color: "var(--icon-grey)",
+							fontSize: "22px",
+							width: "19.25px",
+							textAlign: "center",
 						}}
 					/>
-					<h1 className={classes.appName}>Mailer</h1>
-				</div>
-			</header>
-			<MainNavigation />
-			<footer>
-				<small>© 2022 HUNIMODA</small>
-			</footer>
-		</section>
+					<MainLogo />
+				</header>
+				<MainNavigation />
+				<footer>
+					<small>© 2022 HUNIMODA</small>
+				</footer>
+			</section>
+		</>
 	);
 };
 
