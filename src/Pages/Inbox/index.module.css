@@ -1,0 +1,7 @@
+.inboxList {
+	padding: 0 var(--main-padding);
+}
+
+.inboxItem {
+	margin: var(--main-padding) 0;
+}

@@ -11,7 +11,7 @@ const SideBar = ({ isActive, onSideBarClose }) => {
 	return (
 		<>
 			<Backdrop isActive={isActive} onClick={onSideBarClose} />
-			<section className={sidebarClassName}>
+			<aside className={sidebarClassName}>
 				<header className={classes.header}>
 					<button className={classes.closeNavBtn} onClick={onSideBarClose}>
 						<i className="fas fa-times" />
@@ -22,7 +22,7 @@ const SideBar = ({ isActive, onSideBarClose }) => {
 				<footer className={classes.sidebarFooter}>
 					<small>© 2022 HUNIMODA</small>
 				</footer>
-			</section>
+			</aside>
 		</>
 	);
 };
