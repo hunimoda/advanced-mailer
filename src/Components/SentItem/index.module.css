@@ -21,11 +21,22 @@
 }
 
 .copyBtn {
-	padding: 7px 18px 7px 12px;
+	padding: 8px 18px 8px 12px;
+	height: 18px;
+	box-sizing: content-box;
 	border: none;
 	background: transparent;
 }
 
+.copyBtn--highlight {
+	background: #d6ffda;
+}
+
 .copyBtn i {
 	font-size: 18px;
+	width: 18px;
+}
+
+.copyBtn .check {
+	color: #2da44e;
 }
