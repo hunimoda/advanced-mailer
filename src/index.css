@@ -184,7 +184,8 @@ select {
 }
 
 html {
-	background: beige;
+	min-height: 100vh;
+	background: linear-gradient(#1967d3 0vh, white 80vh, #eee);
 }
 
 * {
