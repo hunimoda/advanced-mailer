@@ -1,0 +1,27 @@
+.draftItem {
+	background: rgba(255, 255, 255, 0.88);
+}
+
+.draftItemRow {
+	display: flex;
+	justify-content: space-between;
+	align-items: end;
+}
+
+.receiver {
+	font-size: 16px;
+}
+
+.timestamp {
+	font-size: 14px;
+	font-style: italic;
+	color: #aaa;
+}
+
+.message {
+	color: var(--text-grey);
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 20px;
+	margin-top: 5px;
+}

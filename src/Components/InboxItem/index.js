@@ -1,5 +1,5 @@
 import LetterItemCard from "../../UI/LetterItemCard";
-import LetterPreview from "../LetterPreview";
+import LetterPreview from "../../UI/LetterPreview";
 
 const InboxItem = ({ className }) => {
 	return (
