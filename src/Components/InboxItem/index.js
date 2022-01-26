@@ -1,10 +1,9 @@
+import ListItemCard from "../../UI/ListItemCard";
 import classes from "./index.module.css";
 
 const InboxItem = ({ className }) => {
-	const inboxItemClassName = `${classes.inboxItem} ${className}`;
-
 	return (
-		<li className={inboxItemClassName}>
+		<ListItemCard className={className}>
 			<img
 				src="https://place-hold.it/300x500"
 				alt="placeholder"
@@ -21,7 +20,7 @@ const InboxItem = ({ className }) => {
 				</div>
 				<span className={classes.timestamp}>2022.01.26 18:32:06</span>
 			</div>
-		</li>
+		</ListItemCard>
 	);
 };
 

@@ -1,9 +1,9 @@
 import classes from "./index.module.css";
 
-const TitleBar = () => {
+const TitleBar = ({ children }) => {
 	return (
 		<div className={classes.titleBar}>
-			<h2 className={classes.title}>받은 편지함</h2>
+			<h2 className={classes.title}>{children}</h2>
 		</div>
 	);
 };

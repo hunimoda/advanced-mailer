@@ -5,7 +5,7 @@ import classes from "./index.module.css";
 const Inbox = () => {
 	return (
 		<>
-			<TitleBar />
+			<TitleBar>받은 편지함</TitleBar>
 			<ul className={classes.inboxList}>
 				<InboxItem className={classes.inboxItem} />
 				<InboxItem className={classes.inboxItem} />

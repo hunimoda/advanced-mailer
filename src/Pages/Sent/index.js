@@ -1,5 +1,15 @@
+import TitleBar from "../../Components/TitleBar";
+import SentItem from "../../Components/SentItem";
+
 const Sent = () => {
-	return <h2>This is the SENT PAGE</h2>;
+	return (
+		<>
+			<TitleBar>보낸 편지함</TitleBar>
+			<ul>
+				<SentItem />
+			</ul>
+		</>
+	);
 };
 
 export default Sent;
