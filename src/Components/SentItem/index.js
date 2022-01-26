@@ -1,5 +1,7 @@
+import LetterItemCard from "../../UI/LetterItemCard";
+
 const SentItem = () => {
-	return <li>SentItem</li>;
+	return <LetterItemCard>SentItem</LetterItemCard>;
 };
 
 export default SentItem;
