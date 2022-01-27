@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import MainHeader from "./Components/MainHeader";
 import SideBar from "./Components/SideBar";
 import MyProfile from "./Components/MyProfile";
 import Router from "./Router";
 
 const App = () => {
+	const user = useSelector((state) => state.auth.user);
+	console.log(user);
+
 	const [isSideBarActive, setIsSideBarActive] = useState(false);
 	const [isProfileVisible, setIsProfileVisible] = useState(false);
 
