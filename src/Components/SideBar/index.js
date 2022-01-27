@@ -3,7 +3,7 @@ import MainLogo from "../MainLogo";
 import MainNavigation from "./MainNavigation";
 import classes from "./index.module.css";
 
-const SideBar = ({ isActive, onSideBarClose }) => {
+const SideBar = ({ isActive, onSideBarClose, onProfileOpen }) => {
 	const sidebarClassName = `${classes.sidebar} ${
 		isActive ? classes["sidebar--active"] : ""
 	}`;
@@ -18,7 +18,10 @@ const SideBar = ({ isActive, onSideBarClose }) => {
 					</button>
 					<MainLogo />
 				</header>
-				<MainNavigation onLinkClick={onSideBarClose} />
+				<MainNavigation
+					onLinkClick={onSideBarClose}
+					onAccountClick={onProfileOpen}
+				/>
 				<footer className={classes.sidebarFooter}>
 					<small>© 2022 HUNIMODA</small>
 				</footer>

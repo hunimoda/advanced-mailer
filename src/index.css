@@ -176,6 +176,7 @@ select {
 :root {
 	--blank-width: 27px;
 	--main-padding: 22px;
+	--profile-padding: 24px;
 	--header-height: 55px;
 	--text-grey: #686b6e;
 	--icon-grey: #5e6266;

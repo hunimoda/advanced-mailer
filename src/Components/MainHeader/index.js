@@ -1,7 +1,18 @@
+import { useState } from "react";
 import MainLogo from "../MainLogo";
 import classes from "./index.module.css";
 
-const MainHeader = ({ onSideBarOpen }) => {
+const MainHeader = ({ onSideBarOpen, onProfileOpen }) => {
+	const [imageClassName, setImageClassName] = useState(classes.profileImage);
+
+	const onProfileImageClick = () => {
+		setImageClassName(
+			`${classes.profileImage} ${classes["profileImage--clicked"]}`
+		);
+		setTimeout(() => setImageClassName(classes.profileImage), 500);
+		onProfileOpen();
+	};
+
 	return (
 		<header className={classes.header}>
 			<div className={classes.column}>
@@ -14,7 +25,8 @@ const MainHeader = ({ onSideBarOpen }) => {
 				<img
 					src="https://lh3.googleusercontent.com/ogw/ADea4I5bTzDF6IKYZRSEBgilnpwCo6YSqpLZKI8JQkgN=s83-c-mo"
 					alt="profile"
-					className={classes.profileImage}
+					className={imageClassName}
+					onClick={onProfileImageClick}
 				/>
 			</div>
 		</header>

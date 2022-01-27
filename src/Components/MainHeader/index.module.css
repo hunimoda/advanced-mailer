@@ -37,4 +37,19 @@
 	height: 37px;
 	border-radius: 100px;
 	object-fit: cover;
+	padding: 5px;
+	transform: translateX(5px);
+}
+
+.profileImage--clicked {
+	animation: imageShade 0.5s ease-in-out 0s;
+}
+
+@keyframes imageShade {
+	from {
+		background: rgba(0, 0, 0, 0.2);
+	}
+	to {
+		background: rgba(0, 0, 0, 0);
+	}
 }

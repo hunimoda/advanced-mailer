@@ -1,39 +1,46 @@
 import classes from "./index.module.css";
 import { Link } from "react-router-dom";
 
-const MainNavigation = ({ onLinkClick }) => {
+const MainNavigation = (props) => {
+	const { onLinkClick: onSideBarClose, onAccountClick: onProfileOpen } = props;
+
+	const onAccountClick = () => {
+		onSideBarClose();
+		onProfileOpen();
+	};
+
 	return (
 		<nav className={classes.mainNavigation}>
 			<ul>
 				<li>
-					<Link to="/new" onClick={onLinkClick}>
+					<Link to="/new" onClick={onSideBarClose}>
 						편지 쓰기
 					</Link>
 				</li>
 			</ul>
 			<ul>
 				<li>
-					<Link to="/inbox" onClick={onLinkClick}>
+					<Link to="/inbox" onClick={onSideBarClose}>
 						받은 편지함
 					</Link>
 				</li>
 				<li>
-					<Link to="/sent" onClick={onLinkClick}>
+					<Link to="/sent" onClick={onSideBarClose}>
 						보낸 편지함
 					</Link>
 				</li>
 				<li>
-					<Link to="/drafts" onClick={onLinkClick}>
+					<Link to="/drafts" onClick={onSideBarClose}>
 						임시 보관함
 					</Link>
 				</li>
 			</ul>
 			<ul>
 				<li>
-					<span onClick={onLinkClick}>계정</span>
+					<span onClick={onAccountClick}>계정</span>
 				</li>
 				<li>
-					<span onClick={onLinkClick}>로그아웃</span>
+					<span onClick={onSideBarClose}>로그아웃</span>
 				</li>
 			</ul>
 		</nav>

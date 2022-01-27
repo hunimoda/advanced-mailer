@@ -1,0 +1,95 @@
+.myProfile {
+	position: fixed;
+	z-index: 2;
+	top: 70px;
+	left: 50%;
+	transform: translateX(-50%);
+	box-sizing: border-box;
+	width: calc(100% - 2 * var(--main-padding) - 20px);
+	display: flex;
+	flex-direction: column;
+	background: white;
+	border-radius: 5px;
+	box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+		rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+
+.profileImage {
+	text-align: center;
+	position: relative;
+	margin: var(--profile-padding) 0 calc(0.75 * var(--profile-padding));
+}
+
+.profileImage img {
+	width: 92px;
+	height: 92px;
+	object-fit: cover;
+	border-radius: 100px;
+}
+
+.cameraBtnOuter {
+	background: white;
+	width: fit-content;
+	padding: 5px;
+	border-radius: 100px;
+	position: absolute;
+	left: calc(50% + 10px);
+	top: calc(50% + 10px);
+}
+
+.cameraBtn {
+	width: 30px;
+	height: 30px;
+	border-radius: 100px;
+	background: white;
+	border: none;
+	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+		rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.myNameContainer {
+	font-size: 18px;
+	width: fit-content;
+	margin: 0 auto;
+	position: relative;
+}
+
+.myNameContainer i {
+	position: absolute;
+	right: 0;
+	top: 0;
+	transform: translateX(calc(100% + 5px));
+	color: #ccc;
+}
+
+.myName {
+	font-weight: 500;
+}
+
+.myEmail {
+	color: var(--text-grey);
+	text-align: center;
+	margin-top: 8px;
+}
+
+.signoutBtnContainer {
+	padding: calc(var(--profile-padding) * 0.75) 0;
+	text-align: center;
+	border-top: 1px solid var(--border-color);
+	margin-top: var(--profile-padding);
+}
+
+.signoutBtn {
+	background: transparent;
+	width: fit-content;
+	font-size: 16px;
+	font-weight: bold;
+	color: var(--text-grey);
+	padding: 14px 30px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+.signoutBtn:active {
+	background: #f4f4f4;
+}
