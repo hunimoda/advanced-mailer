@@ -1,6 +1,7 @@
 import TitleBar from "../../Components/TitleBar";
 import LetterList from "../../UI/LetterList";
 import SentItem from "../../Components/SentItem";
+import MoreLetters from "../../Components/MoreLetters";
 
 const Sent = () => {
 	return (
@@ -9,6 +10,7 @@ const Sent = () => {
 			<LetterList>
 				<SentItem />
 			</LetterList>
+			<MoreLetters status="none" />
 		</>
 	);
 };

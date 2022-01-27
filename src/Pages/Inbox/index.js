@@ -1,6 +1,7 @@
 import LetterList from "../../UI/LetterList";
 import TitleBar from "../../Components/TitleBar";
 import InboxItem from "../../Components/InboxItem";
+import MoreLetters from "../../Components/MoreLetters";
 
 const Inbox = () => {
 	return (
@@ -11,6 +12,7 @@ const Inbox = () => {
 				<InboxItem />
 				<InboxItem />
 			</LetterList>
+			<MoreLetters status="none" />
 		</>
 	);
 };

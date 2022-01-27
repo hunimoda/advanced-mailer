@@ -1,6 +1,7 @@
 import DraftItem from "../../Components/DraftItem";
 import TitleBar from "../../Components/TitleBar";
 import LetterList from "../../UI/LetterList";
+import MoreLetters from "../../Components/MoreLetters";
 
 const Drafts = () => {
 	return (
@@ -12,6 +13,7 @@ const Drafts = () => {
 				<DraftItem />
 				<DraftItem />
 			</LetterList>
+			<MoreLetters status="none" />
 		</>
 	);
 };
