@@ -1,0 +1,150 @@
+.circleContainer {
+	display: flex;
+	width: fit-content;
+	margin: 20px auto 0;
+}
+
+.circle {
+	width: 10px;
+	height: 10px;
+	border-radius: 100px;
+	background: white;
+	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+		rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.circle:nth-child(n + 2) {
+	margin-left: calc(0.75 * 10px);
+}
+
+.bgImage {
+	position: fixed;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-image: url("https://place-hold.it/300x500");
+	background-size: cover;
+	background-position: center;
+}
+
+.openingText {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	position: fixed;
+	width: fit-content;
+	top: calc(50% - 137px);
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: white;
+	text-shadow: 0px 0px 15px black;
+}
+
+.appName {
+	font-size: 54px;
+}
+
+.description {
+	font-size: 22px;
+	line-height: 32px;
+	margin-top: 20px;
+	text-align: center;
+}
+
+.bottomContainer {
+	text-align: center;
+	position: fixed;
+	bottom: 88px;
+	width: 100%;
+	/* transform: translateY(120px); */
+}
+
+.openOptionsBtn {
+	width: 30px;
+	height: 30px;
+	padding: 0;
+	border-radius: 100px;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	color: rgba(0, 0, 0, 0.5);
+	background: rgba(255, 255, 255, 0.8);
+	box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em,
+		rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em,
+		rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+}
+
+.openOptionsBtn i {
+	font-size: 18px;
+}
+
+.loginOptions {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: calc(100% - 120px);
+	margin: 18px auto 0;
+}
+
+.loginOptions button {
+	width: 100%;
+	padding: 16px 0;
+	font-size: 16px;
+	line-height: 16px;
+	position: relative;
+	border: none;
+	border-radius: 5px;
+}
+
+.loginOptions button:nth-child(n + 2) {
+	margin-top: 12px;
+	opacity: 0;
+}
+
+.google {
+	color: white;
+	background: #de4032;
+}
+
+.kakao {
+	color: #4c282a;
+	background: #f9de59;
+}
+
+.naver {
+	color: white;
+	background: #5ec43a;
+}
+
+.loginOptions button span:first-child {
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: block;
+	width: 48px;
+	height: 48px;
+	font-size: 22px;
+	line-height: 48px;
+}
+
+.links {
+	width: 100%;
+	text-align: center;
+	padding-top: 24px;
+	padding-bottom: 48px;
+	position: fixed;
+	bottom: 0;
+}
+
+.links,
+.links a {
+	font-size: 16px;
+	color: white;
+	text-shadow: 0px 0px 3px black;
+}
+
+.links a {
+	text-decoration: none;
+	padding: 5px;
+}

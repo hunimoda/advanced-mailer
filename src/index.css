@@ -186,7 +186,7 @@ select {
 
 html {
 	min-height: 100vh;
-	/* background-image: url("/public/sunset.png"); */
+	background-image: url("/public/sunset.png");
 	background-size: cover;
 }
 
