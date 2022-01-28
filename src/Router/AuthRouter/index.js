@@ -12,9 +12,6 @@ const AuthRouter = () => {
 			<Route exact path="/sign-up">
 				Sign-Up Page
 			</Route>
-			<Route exact path="/:writtenBy/:letterId">
-				Letter Page
-			</Route>
 			<Route path="*">Forbidden!!!</Route>
 		</Switch>
 	);

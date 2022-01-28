@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { Switch, Route } from "react-router";
 import MainHeader from "./Components/MainHeader";
 import SideBar from "./Components/SideBar";
 import MyProfile from "./Components/MyProfile";
@@ -20,21 +21,31 @@ const App = () => {
 
 	const onProfileClose = () => setIsProfileVisible(false);
 
-	if (!user) {
-		return <AuthRouter />;
-	}
-
 	return (
-		<>
-			<MainHeader onSideBarOpen={onSideBarOpen} onProfileOpen={onProfileOpen} />
-			<SideBar
-				isActive={isSideBarActive}
-				onSideBarClose={onSideBarClose}
-				onProfileOpen={onProfileOpen}
-			/>
-			{isProfileVisible && <MyProfile onProfileClose={onProfileClose} />}
-			<MainRouter />
-		</>
+		<Switch>
+			<Route exact path="/:writtenBy/:letterId">
+				This is the LETTER PAGE!!!
+			</Route>
+			<Route path="*">
+				{user ? (
+					<>
+						<MainHeader
+							onSideBarOpen={onSideBarOpen}
+							onProfileOpen={onProfileOpen}
+						/>
+						<SideBar
+							isActive={isSideBarActive}
+							onSideBarClose={onSideBarClose}
+							onProfileOpen={onProfileOpen}
+						/>
+						{isProfileVisible && <MyProfile onProfileClose={onProfileClose} />}
+						<MainRouter />
+					</>
+				) : (
+					<AuthRouter />
+				)}
+			</Route>
+		</Switch>
 	);
 };
 

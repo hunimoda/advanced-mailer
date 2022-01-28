@@ -19,9 +19,6 @@ const MainRouter = () => {
 				<Route exact path="/inbox">
 					<Inbox />
 				</Route>
-				<Route exact path="/:writtenBy/:letterId">
-					Letter Page
-				</Route>
 				<Route exact path="/sent">
 					<Sent />
 				</Route>
