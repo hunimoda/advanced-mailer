@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { signInWithGoogle } from "../../Context/auth";
@@ -5,6 +6,14 @@ import classes from "./index.module.css";
 
 const Landing = () => {
 	const dispatch = useDispatch();
+
+	const [isOptionsOpen, setIsOptionsOpen] = useState(false);
+
+	const optionsClassName = `${classes.bottomContainer} ${
+		isOptionsOpen ? classes["bottomContainer--open"] : ""
+	}`;
+
+	const onToggleOpenClick = () => setIsOptionsOpen((prev) => !prev);
 
 	const onGoogleLoginClick = () => {
 		dispatch(signInWithGoogle());
@@ -27,10 +36,13 @@ const Landing = () => {
 					편지를 작성해보세요
 				</p>
 			</div>
-			<div className={classes.bottomContainer}>
-				<button className={classes.openOptionsBtn}>
+			<div className={optionsClassName}>
+				<button onClick={onToggleOpenClick}>
 					<i className="fas fa-chevron-up" />
 				</button>
+				<span onClick={onToggleOpenClick}>
+					옵션 {isOptionsOpen ? "숨기기" : "더보기"}
+				</span>
 				<div className={classes.loginOptions}>
 					<button onClick={onGoogleLoginClick} className={classes.google}>
 						<span>
