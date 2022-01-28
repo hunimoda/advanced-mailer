@@ -3,11 +3,11 @@ import { useSelector } from "react-redux";
 import MainHeader from "./Components/MainHeader";
 import SideBar from "./Components/SideBar";
 import MyProfile from "./Components/MyProfile";
-import Router from "./Router";
+import AuthRouter from "./Router/AuthRouter";
+import MainRouter from "./Router/MainRouter";
 
 const App = () => {
 	const user = useSelector((state) => state.auth.user);
-	console.log(user);
 
 	const [isSideBarActive, setIsSideBarActive] = useState(false);
 	const [isProfileVisible, setIsProfileVisible] = useState(false);
@@ -20,6 +20,10 @@ const App = () => {
 
 	const onProfileClose = () => setIsProfileVisible(false);
 
+	if (!user) {
+		return <AuthRouter />;
+	}
+
 	return (
 		<>
 			<MainHeader onSideBarOpen={onSideBarOpen} onProfileOpen={onProfileOpen} />
@@ -29,7 +33,7 @@ const App = () => {
 				onProfileOpen={onProfileOpen}
 			/>
 			{isProfileVisible && <MyProfile onProfileClose={onProfileClose} />}
-			<Router />
+			<MainRouter />
 		</>
 	);
 };

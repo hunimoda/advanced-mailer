@@ -1,12 +1,12 @@
 import { Switch, Route, Redirect } from "react-router-dom";
-import New from "../Pages/New";
-import Inbox from "../Pages/Inbox";
-import Sent from "../Pages/Sent";
-import Drafts from "../Pages/Drafts";
-import PageNotFound from "../Pages/PageNotFound";
+import New from "../../Pages/New";
+import Inbox from "../../Pages/Inbox";
+import Sent from "../../Pages/Sent";
+import Drafts from "../../Pages/Drafts";
+import PageNotFound from "../../Pages/PageNotFound";
 import classes from "./index.module.css";
 
-const Router = () => {
+const MainRouter = () => {
 	return (
 		<main className={classes.main}>
 			<Switch>
@@ -18,6 +18,9 @@ const Router = () => {
 				</Route>
 				<Route exact path="/inbox">
 					<Inbox />
+				</Route>
+				<Route exact path="/:writtenBy/:letterId">
+					Letter Page
 				</Route>
 				<Route exact path="/sent">
 					<Sent />
@@ -33,4 +36,4 @@ const Router = () => {
 	);
 };
 
-export default Router;
+export default MainRouter;
