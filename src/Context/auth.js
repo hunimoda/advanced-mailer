@@ -16,10 +16,12 @@ export const authSlice = createSlice({
 	},
 });
 
+export const authActions = authSlice.actions;
+
 export const signInWithGoogle = () => {
 	return async (dispatch) => {
 		const user = await signInWithGooglePopup();
 
-		dispatch(authSlice.actions.signIn(user));
+		dispatch(authActions.signIn(user));
 	};
 };

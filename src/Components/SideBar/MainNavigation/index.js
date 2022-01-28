@@ -1,12 +1,21 @@
-import classes from "./index.module.css";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../../Context/auth";
+import classes from "./index.module.css";
 
 const MainNavigation = (props) => {
 	const { onLinkClick: onSideBarClose, onAccountClick: onProfileOpen } = props;
 
+	const dispatch = useDispatch();
+
 	const onAccountClick = () => {
 		onSideBarClose();
 		onProfileOpen();
+	};
+
+	const onSignOutClick = () => {
+		onSideBarClose();
+		dispatch(authActions.signOut());
 	};
 
 	return (
@@ -40,7 +49,7 @@ const MainNavigation = (props) => {
 					<span onClick={onAccountClick}>계정</span>
 				</li>
 				<li>
-					<span onClick={onSideBarClose}>로그아웃</span>
+					<span onClick={onSignOutClick}>로그아웃</span>
 				</li>
 			</ul>
 		</nav>

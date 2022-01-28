@@ -1,7 +1,11 @@
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../Context/auth";
 import classes from "./index.module.css";
 
 const MyProfile = ({ onProfileClose }) => {
+	const dispatch = useDispatch();
+
 	useEffect(() => {
 		const closeProfile = () => onProfileClose();
 
@@ -12,6 +16,11 @@ const MyProfile = ({ onProfileClose }) => {
 
 	const onProfileClick = (event) => {
 		event.stopPropagation();
+	};
+
+	const onSignOutClick = () => {
+		dispatch(authActions.signOut());
+		onProfileClose();
 	};
 
 	return (
@@ -33,7 +42,9 @@ const MyProfile = ({ onProfileClose }) => {
 			</div>
 			<p className={classes.myEmail}>hunimoda@gmail.com</p>
 			<div className={classes.signoutBtnContainer}>
-				<button className={classes.signoutBtn}>로그아웃</button>
+				<button className={classes.signoutBtn} onClick={onSignOutClick}>
+					로그아웃
+				</button>
 			</div>
 		</div>
 	);
