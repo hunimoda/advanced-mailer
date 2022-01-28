@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../../Context/auth";
 import classes from "./index.module.css";
@@ -8,6 +8,8 @@ const MainNavigation = (props) => {
 
 	const dispatch = useDispatch();
 
+	const history = useHistory();
+
 	const onAccountClick = () => {
 		onSideBarClose();
 		onProfileOpen();
@@ -16,6 +18,7 @@ const MainNavigation = (props) => {
 	const onSignOutClick = () => {
 		onSideBarClose();
 		dispatch(authActions.signOut());
+		history.replace("/");
 	};
 
 	return (
