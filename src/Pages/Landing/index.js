@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
-import { signInWithGoogle } from "../../Firebase/auth";
+import { useDispatch } from "react-redux";
+import { signInWithGoogle } from "../../Context/auth";
 
 const Landing = () => {
+	const dispatch = useDispatch();
+
 	const onGoogleLoginClick = () => {
-		signInWithGoogle().then((user) => console.log(user));
+		dispatch(signInWithGoogle());
 	};
 
 	return (

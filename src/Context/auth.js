@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { signInWithGooglePopup } from "../Firebase/auth";
 
 export const authSlice = createSlice({
 	name: "auth",
@@ -6,11 +7,19 @@ export const authSlice = createSlice({
 		user: null,
 	},
 	reducers: {
-		signIn: (state, action) => {
-			state.user = action.payload;
+		signIn: (state, { payload: user }) => {
+			state.user = user;
 		},
 		signOut: (state) => {
 			state.user = null;
 		},
 	},
 });
+
+export const signInWithGoogle = () => {
+	return async (dispatch) => {
+		const user = await signInWithGooglePopup();
+
+		dispatch(authSlice.actions.signIn(user));
+	};
+};
