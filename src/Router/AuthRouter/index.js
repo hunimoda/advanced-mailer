@@ -1,5 +1,6 @@
 import { Switch, Route } from "react-router-dom";
 import Landing from "../../Pages/Landing";
+import Forbidden from "../../Pages/Forbidden";
 
 const AuthRouter = () => {
 	return (
@@ -13,7 +14,9 @@ const AuthRouter = () => {
 			<Route exact path="/sign-up">
 				Sign-Up Page
 			</Route>
-			<Route path="*">Forbidden!!!</Route>
+			<Route path="*">
+				<Forbidden />
+			</Route>
 		</Switch>
 	);
 };

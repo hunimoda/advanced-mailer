@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Switch, Route } from "react-router";
+import { Switch, Route, useHistory } from "react-router";
 import MainHeader from "./Components/MainHeader";
 import SideBar from "./Components/SideBar";
 import MyProfile from "./Components/MyProfile";
@@ -8,10 +8,22 @@ import AuthRouter from "./Router/AuthRouter";
 import MainRouter from "./Router/MainRouter";
 
 const App = () => {
-	const user = useSelector((state) => state.auth.user);
-
 	const [isSideBarActive, setIsSideBarActive] = useState(false);
 	const [isProfileVisible, setIsProfileVisible] = useState(false);
+
+	const history = useHistory();
+	const user = useSelector((state) => state.auth.user);
+
+	useEffect(() => {
+		if (user) {
+			const returnPath = window.localStorage.getItem("returnPath");
+
+			if (returnPath) {
+				window.localStorage.removeItem("returnPath");
+				history.replace(returnPath);
+			}
+		}
+	}, [user, history]);
 
 	const onSideBarOpen = () => setIsSideBarActive(true);
 
