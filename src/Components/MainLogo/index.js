@@ -11,7 +11,7 @@ const MainLogo = () => {
 					fontSize: "30px",
 				}}
 			/>
-			<h1 className={classes.appTitle}>Mailer</h1>
+			<h2 className={classes.appTitle}>Mailer</h2>
 		</Link>
 	);
 };
