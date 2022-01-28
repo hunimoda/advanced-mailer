@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import { signInWithGoogle } from "../../Firebase/auth";
 
 const Landing = () => {
 	const onGoogleLoginClick = () => {
-		console.log("google login");
+		signInWithGoogle().then((user) => console.log(user));
 	};
 
 	return (
