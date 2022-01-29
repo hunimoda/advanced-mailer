@@ -184,12 +184,6 @@ select {
 	--sidebar-transition-duration: 0.5s;
 }
 
-html {
-	min-height: 100vh;
-	background-image: url("/public/sunset.png");
-	background-size: cover;
-}
-
 * {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
 		Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;

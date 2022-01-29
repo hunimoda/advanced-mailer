@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import BackgroundImage from "../../Components/BackgroundImage";
 import OpeningText from "../../Components/OpeningText";
 import SocialLoginOptions from "../../Components/SocialLoginOptions";
 import classes from "./index.module.css";
@@ -12,7 +13,7 @@ const Landing = () => {
 				<div className={classes.circle} />
 				<div className={classes.circle} />
 			</div>
-			{/* <div className={classes.bgImage} /> */}
+			<BackgroundImage url="https://wallpapercave.com/uwp/uwp846324.jpeg" />
 			<OpeningText className={classes.openingText}>
 				소중한 사람에게 마음을 담아
 				<br />
