@@ -1,3 +1,9 @@
+.landing {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+
 .circleContainer {
 	display: flex;
 	width: fit-content;
@@ -8,9 +14,13 @@
 	width: 10px;
 	height: 10px;
 	border-radius: 100px;
-	background: white;
+	background: rgba(255, 255, 255, 0.35);
 	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
 		rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.circle--highlight {
+	background: rgba(255, 255, 255, 0.95);
 }
 
 .circle:nth-child(n + 2) {
@@ -30,21 +40,17 @@
 }
 
 .openingText {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	position: fixed;
-	width: fit-content;
-	top: calc(50% - 137px);
-	left: 50%;
-	transform: translate(-50%, -50%);
 	color: white;
 	text-shadow: 0px 0px 15px black;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 .appName {
 	font-size: 54px;
+	text-align: center;
 }
 
 .description {
@@ -54,90 +60,9 @@
 	text-align: center;
 }
 
-.bottomContainer {
-	text-align: center;
-	position: fixed;
-	bottom: 88px;
-	width: 100%;
-	transform: translateY(120px);
-	transition: transform 0.5s ease-in-out 0s;
-}
-
-.bottomContainer--open {
-	transform: translateY(0px);
-}
-
-.bottomContainer > button {
-	width: 30px;
-	height: 30px;
-	padding: 0;
-	border-radius: 100px;
-	border: 1px solid rgba(255, 255, 255, 0.3);
-	color: rgba(0, 0, 0, 0.5);
-	background: rgba(255, 255, 255, 0.8);
-	box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em,
-		rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em,
-		rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
-	transform: rotateX(0deg);
-	transition: transform 0.5s ease-in-out 0s;
-}
-
-.bottomContainer--open > button {
-	transform: rotateX(180deg);
-}
-
-.bottomContainer > button i {
-	font-size: 18px;
-}
-
-.bottomContainer > span {
-	color: rgba(255, 255, 255, 0.9);
-	text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.9);
-	margin-left: 5px;
-	display: inline-block;
-	line-height: 30px;
-}
-
-.bottomContainer > div {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	width: calc(100% - 120px);
-	margin: 18px auto 0;
-}
-
-.bottomContainer > div button:nth-child(n + 2) {
-	margin-top: 12px;
-	opacity: 0;
-	transition: opacity 0.5s ease-in-out 0s;
-}
-
-.bottomContainer--open > div button:nth-child(n + 2) {
-	opacity: 1;
-}
-
-.google {
-	color: white;
-	background: #de4032;
-}
-
-.kakao {
-	color: #4c282a;
-	background: #f9de59;
-}
-
-.naver {
-	color: white;
-	background: #5ec43a;
-}
-
 .links {
-	width: 100%;
 	text-align: center;
-	padding-top: 24px;
-	padding-bottom: 48px;
-	position: fixed;
-	bottom: 0;
+	padding: 24px 0 48px;
 }
 
 .links,

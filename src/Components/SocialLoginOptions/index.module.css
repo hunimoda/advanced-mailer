@@ -1,0 +1,60 @@
+.options {
+	width: 100%;
+	padding: 0 30px;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+
+.options > * {
+	transform: translateY(120px);
+	transition: transform 0.5s ease-in-out 0s;
+}
+
+.options--open > * {
+	transform: translateY(0px);
+}
+
+.options .loginBtns {
+	width: 100%;
+	margin-top: 18px;
+}
+
+.options .loginBtns button:nth-child(n + 2) {
+	margin-top: 12px;
+	opacity: 0;
+}
+
+.options .loginBtns button:nth-child(2) {
+	transition: opacity 0.3s ease-in-out 0.15s;
+}
+
+.options .loginBtns button:nth-child(3) {
+	transition: opacity 0.15s ease-in-out 0s;
+}
+
+.options--open .loginBtns button:nth-child(n + 2) {
+	opacity: 1;
+}
+
+.options--open .loginBtns button:nth-child(2) {
+	transition: opacity 0.5s ease-in-out 0.15s;
+}
+
+.options--open .loginBtns button:nth-child(3) {
+	transition: opacity 0.5s ease-in-out 0.3s;
+}
+
+.google {
+	color: white;
+	background: #de4032;
+}
+
+.kakao {
+	color: #4c282a;
+	background: #f9de59;
+}
+
+.naver {
+	color: white;
+	background: #5ec43a;
+}
