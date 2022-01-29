@@ -106,16 +106,6 @@
 	margin: 18px auto 0;
 }
 
-.bottomContainer > div button {
-	width: 100%;
-	padding: 16px 0;
-	font-size: 16px;
-	line-height: 16px;
-	position: relative;
-	border: none;
-	border-radius: 5px;
-}
-
 .bottomContainer > div button:nth-child(n + 2) {
 	margin-top: 12px;
 	opacity: 0;
@@ -139,17 +129,6 @@
 .naver {
 	color: white;
 	background: #5ec43a;
-}
-
-.loginOptions button span:first-child {
-	position: absolute;
-	left: 0;
-	top: 0;
-	display: block;
-	width: 48px;
-	height: 48px;
-	font-size: 22px;
-	line-height: 48px;
 }
 
 .links {

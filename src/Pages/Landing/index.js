@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import SocialLoginButton from "../../Components/SocialLoginButton";
 import { signInWithGoogle } from "../../Context/auth";
 import classes from "./index.module.css";
 
@@ -44,24 +45,24 @@ const Landing = () => {
 					옵션 {isOptionsOpen ? "숨기기" : "더보기"}
 				</span>
 				<div className={classes.loginOptions}>
-					<button onClick={onGoogleLoginClick} className={classes.google}>
-						<span>
-							<i className="fab fa-google" />
-						</span>
-						<span>구글 로그인</span>
-					</button>
-					<button onClick={onGoogleLoginClick} className={classes.kakao}>
-						<span>
-							<i className="fas fa-comment" />
-						</span>
-						<span>카카오 로그인</span>
-					</button>
-					<button onClick={onGoogleLoginClick} className={classes.naver}>
-						<span>
-							<i className="fab fa-neos" />
-						</span>
-						<span>네이버 로그인</span>
-					</button>
+					<SocialLoginButton
+						className={classes.google}
+						onClick={onGoogleLoginClick}
+						icon="fab fa-google"
+						value="구글 로그인"
+					/>
+					<SocialLoginButton
+						className={classes.kakao}
+						onClick={onGoogleLoginClick}
+						icon="fas fa-comment"
+						value="카카오 로그인"
+					/>
+					<SocialLoginButton
+						className={classes.naver}
+						onClick={onGoogleLoginClick}
+						icon="fab fa-neos"
+						value="네이버 로그인"
+					/>
 				</div>
 			</div>
 			<div className={classes.links}>

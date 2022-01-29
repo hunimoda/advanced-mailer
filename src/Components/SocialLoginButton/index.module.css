@@ -1,0 +1,20 @@
+.socialLoginBtn {
+	width: 100%;
+	padding: 16px 0;
+	font-size: 16px;
+	line-height: 16px;
+	position: relative;
+	border: none;
+	border-radius: 5px;
+}
+
+.socialLoginBtn span:first-child {
+	display: block;
+	width: 48px;
+	height: 48px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	font-size: 22px;
+	line-height: 48px;
+}
