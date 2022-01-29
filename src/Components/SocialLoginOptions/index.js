@@ -19,6 +19,16 @@ const SocialLoginOptions = ({ className }) => {
 		dispatch(signInWithGoogle());
 	};
 
+	const onKakaoLoginClick = () => {
+		console.log("Kakao Login");
+		// dispatch(signInWithKakao());
+	};
+
+	const onNaverLoginClick = () => {
+		console.log("Naver Login");
+		// dispatch(signInWithNaver());
+	};
+
 	return (
 		<div className={optionsClassName}>
 			<OptionsToggler isOpen={isOpen} onToggle={onToggle} />
@@ -31,13 +41,13 @@ const SocialLoginOptions = ({ className }) => {
 				/>
 				<SocialLoginButton
 					className={classes.kakao}
-					onClick={onGoogleLoginClick}
+					onClick={onKakaoLoginClick}
 					icon="fas fa-comment"
 					value="카카오 로그인"
 				/>
 				<SocialLoginButton
 					className={classes.naver}
-					onClick={onGoogleLoginClick}
+					onClick={onNaverLoginClick}
 					icon="fab fa-neos"
 					value="네이버 로그인"
 				/>

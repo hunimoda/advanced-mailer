@@ -40,24 +40,7 @@
 }
 
 .openingText {
-	color: white;
-	text-shadow: 0px 0px 15px black;
 	flex-grow: 1;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-
-.appName {
-	font-size: 54px;
-	text-align: center;
-}
-
-.description {
-	font-size: 22px;
-	line-height: 32px;
-	margin-top: 20px;
-	text-align: center;
 }
 
 .links {

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import OpeningText from "../../Components/OpeningText";
 import SocialLoginOptions from "../../Components/SocialLoginOptions";
 import classes from "./index.module.css";
 
@@ -12,14 +13,11 @@ const Landing = () => {
 				<div className={classes.circle} />
 			</div>
 			{/* <div className={classes.bgImage} /> */}
-			<div className={classes.openingText}>
-				<h1 className={classes.appName}>Mailer</h1>
-				<p className={classes.description}>
-					소중한 사람에게 마음을 담아
-					<br />
-					편지를 작성해보세요
-				</p>
-			</div>
+			<OpeningText className={classes.openingText}>
+				소중한 사람에게 마음을 담아
+				<br />
+				편지를 작성해보세요
+			</OpeningText>
 			<SocialLoginOptions className={classes.socialLoginOptions} />
 			<div className={classes.links}>
 				<Link to="/sign-in">이메일로 로그인</Link>/
