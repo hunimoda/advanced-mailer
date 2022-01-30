@@ -1,9 +1,11 @@
 import classes from "./index.module.css";
 
-const BackgroundImage = ({ url }) => {
+const BackgroundImage = ({ url, className }) => {
+	const bgImageClassName = `${classes.backgroundImage} ${className}`;
+
 	return (
 		<div
-			className={classes.backgroundImage}
+			className={bgImageClassName}
 			style={{ backgroundImage: `url(${url})` }}
 		/>
 	);

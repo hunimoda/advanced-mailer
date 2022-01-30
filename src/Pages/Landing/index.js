@@ -29,13 +29,20 @@ const Landing = () => {
 	useEffect(() => {
 		setInterval(() => {
 			setDisplayItemIndex((prevIndex) => (prevIndex + 1) % displayItemsLength);
-		}, 8000);
+		}, 9000);
 	}, [displayItemsLength]);
 
 	return (
 		<div className={classes.landing}>
 			<CarouselIndicator length={displayItemsLength} index={displayItemIndex} />
-			<BackgroundImage url={DUMMY_DISPLAYS[displayItemIndex].bgImage} />
+			{DUMMY_DISPLAYS.map((display, index) => (
+				<BackgroundImage
+					url={display.bgImage}
+					className={`${classes.backgroundImage} ${
+						index === displayItemIndex ? classes["backgroundImage--active"] : ""
+					}`}
+				/>
+			))}
 			<OpeningText className={classes.openingText}>
 				{DUMMY_DISPLAYS[displayItemIndex].text}
 			</OpeningText>
