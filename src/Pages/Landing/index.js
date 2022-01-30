@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import CarouselIndicator from "../../Components/Landing/CarouselIndicator";
 import BackgroundImage from "../../Components/Landing/BackgroundImage";
@@ -23,16 +23,28 @@ const DUMMY_DISPLAYS = [
 ];
 
 const Landing = () => {
-	const [isInit, setIsInit] = useState(true);
+	const [isInitialized, setIsInitialized] = useState(false);
 	const [displayItemIndex, setDisplayItemIndex] = useState(0);
+
 	const displayItemsLength = DUMMY_DISPLAYS.length;
 
+	const onShiftLeftClick = () =>
+		setDisplayItemIndex(
+			(prevIndex) => (prevIndex > 0 ? prevIndex : displayItemsLength) - 1
+		);
+	const onShiftRightClick = useCallback(
+		() =>
+			setDisplayItemIndex((prevIndex) => (prevIndex + 1) % displayItemsLength),
+		[displayItemsLength]
+	);
+
+	useEffect(() => setIsInitialized(true), []);
+
 	useEffect(() => {
-		setIsInit(false);
-		setInterval(() => {
-			setDisplayItemIndex((prevIndex) => (prevIndex + 1) % displayItemsLength);
-		}, 15000);
-	}, [displayItemsLength]);
+		const timer = setTimeout(() => onShiftRightClick(), 15000);
+
+		return () => clearTimeout(timer);
+	}, [displayItemIndex, onShiftRightClick]);
 
 	return (
 		<div className={classes.landing}>
@@ -42,12 +54,16 @@ const Landing = () => {
 					key={index}
 					url={display.bgImage}
 					className={`${classes.backgroundImage} ${
-						!isInit && index === displayItemIndex
+						isInitialized && index === displayItemIndex
 							? classes["backgroundImage--active"]
 							: ""
 					}`}
 				/>
 			))}
+			<div className={classes.controls}>
+				<button onClick={onShiftLeftClick} />
+				<button onClick={onShiftRightClick} />
+			</div>
 			<OpeningText className={classes.openingText}>
 				{DUMMY_DISPLAYS[displayItemIndex].text}
 			</OpeningText>
