@@ -4,41 +4,6 @@
 	height: 100vh;
 }
 
-.circleContainer {
-	display: flex;
-	width: fit-content;
-	margin: 20px auto 0;
-}
-
-.circle {
-	width: 10px;
-	height: 10px;
-	border-radius: 100px;
-	background: rgba(255, 255, 255, 0.35);
-	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-		rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-}
-
-.circle--highlight {
-	background: rgba(255, 255, 255, 0.95);
-}
-
-.circle:nth-child(n + 2) {
-	margin-left: calc(0.75 * 10px);
-}
-
-.bgImage {
-	position: fixed;
-	z-index: -1;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-image: url("https://place-hold.it/300x500");
-	background-size: cover;
-	background-position: center;
-}
-
 .openingText {
 	flex-grow: 1;
 }

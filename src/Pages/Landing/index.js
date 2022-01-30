@@ -1,23 +1,43 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import CarouselIndicator from "../../Components/CarouselIndicator";
 import BackgroundImage from "../../Components/BackgroundImage";
 import OpeningText from "../../Components/OpeningText";
 import SocialLoginOptions from "../../Components/SocialLoginOptions";
 import classes from "./index.module.css";
 
+const DUMMY_DISPLAYS = [
+	{
+		bgImage: "https://wallpapercave.com/uwp/uwp846324.jpeg",
+		text: "소중한 사람에게 마음을 담아\n편지를 작성해보세요",
+	},
+	{
+		bgImage: "https://iso.500px.com/wp-content/uploads/2014/07/big-one.jpg",
+		text: "아이패드 사용자이신가요?\n손글씨를 남겨 정성을 전하세요",
+	},
+	{
+		bgImage:
+			"https://img2.10bestmedia.com/Images/Photos/362106/dark-hedges_54_990x660.jpg",
+		text: "여러분만의 개성과 감각으로\n편지를 꾸며보아요",
+	},
+];
+
 const Landing = () => {
+	const [displayItemIndex, setDisplayItemIndex] = useState(0);
+	const displayItemsLength = DUMMY_DISPLAYS.length;
+
+	useEffect(() => {
+		setInterval(() => {
+			setDisplayItemIndex((prevIndex) => (prevIndex + 1) % displayItemsLength);
+		}, 8000);
+	}, [displayItemsLength]);
+
 	return (
 		<div className={classes.landing}>
-			<div className={classes.circleContainer}>
-				<div className={classes.circle} />
-				<div className={`${classes.circle} ${classes["circle--highlight"]}`} />
-				<div className={classes.circle} />
-				<div className={classes.circle} />
-			</div>
-			<BackgroundImage url="https://wallpapercave.com/uwp/uwp846324.jpeg" />
+			<CarouselIndicator length={displayItemsLength} index={displayItemIndex} />
+			<BackgroundImage url={DUMMY_DISPLAYS[displayItemIndex].bgImage} />
 			<OpeningText className={classes.openingText}>
-				소중한 사람에게 마음을 담아
-				<br />
-				편지를 작성해보세요
+				{DUMMY_DISPLAYS[displayItemIndex].text}
 			</OpeningText>
 			<SocialLoginOptions className={classes.socialLoginOptions} />
 			<div className={classes.links}>
