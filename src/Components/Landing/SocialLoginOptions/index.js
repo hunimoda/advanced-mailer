@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { signInWithGoogle } from "../../Context/auth";
+import { signInWithGoogle } from "../../../Context/auth";
 import OptionsToggler from "./OptionsToggler";
-import SocialLoginButton from "../../Components/SocialLoginOptions/SocialLoginButton";
+import SocialLoginButton from "./SocialLoginButton";
 import classes from "./index.module.css";
 
 const SocialLoginOptions = ({ className }) => {

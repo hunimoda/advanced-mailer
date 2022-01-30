@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import CarouselIndicator from "../../Components/CarouselIndicator";
-import BackgroundImage from "../../Components/BackgroundImage";
-import OpeningText from "../../Components/OpeningText";
-import SocialLoginOptions from "../../Components/SocialLoginOptions";
+import CarouselIndicator from "../../Components/Landing/CarouselIndicator";
+import BackgroundImage from "../../Components/Landing/BackgroundImage";
+import OpeningText from "../../Components/Landing/OpeningText";
+import SocialLoginOptions from "../../Components/Landing/SocialLoginOptions";
 import classes from "./index.module.css";
 
 const DUMMY_DISPLAYS = [
@@ -23,13 +23,15 @@ const DUMMY_DISPLAYS = [
 ];
 
 const Landing = () => {
+	const [isInit, setIsInit] = useState(true);
 	const [displayItemIndex, setDisplayItemIndex] = useState(0);
 	const displayItemsLength = DUMMY_DISPLAYS.length;
 
 	useEffect(() => {
+		setIsInit(false);
 		setInterval(() => {
 			setDisplayItemIndex((prevIndex) => (prevIndex + 1) % displayItemsLength);
-		}, 9000);
+		}, 15000);
 	}, [displayItemsLength]);
 
 	return (
@@ -37,9 +39,12 @@ const Landing = () => {
 			<CarouselIndicator length={displayItemsLength} index={displayItemIndex} />
 			{DUMMY_DISPLAYS.map((display, index) => (
 				<BackgroundImage
+					key={index}
 					url={display.bgImage}
 					className={`${classes.backgroundImage} ${
-						index === displayItemIndex ? classes["backgroundImage--active"] : ""
+						!isInit && index === displayItemIndex
+							? classes["backgroundImage--active"]
+							: ""
 					}`}
 				/>
 			))}
