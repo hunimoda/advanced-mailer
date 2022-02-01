@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Switch, Route, useHistory } from "react-router";
+import Letter from "./Pages/Letter";
 import MainHeader from "./Components/MainHeader";
 import SideBar from "./Components/SideBar";
 import MyProfile from "./Components/MyProfile";
@@ -35,8 +36,8 @@ const App = () => {
 
 	return (
 		<Switch>
-			<Route exact path="/:writtenBy/:letterId">
-				This is the LETTER PAGE!!!
+			<Route exact path="/:sender/:letter">
+				<Letter />
 			</Route>
 			<Route path="*">
 				{user ? (

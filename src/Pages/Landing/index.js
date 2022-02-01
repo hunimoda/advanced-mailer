@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import CarouselIndicator from "../../Components/Landing/CarouselIndicator";
-import BackgroundImage from "../../Components/Landing/BackgroundImage";
+import BackgroundImage from "../../Components/BackgroundImage";
 import OpeningText from "../../Components/Landing/OpeningText";
 import SocialLoginOptions from "../../Components/Landing/SocialLoginOptions";
 import classes from "./index.module.css";
