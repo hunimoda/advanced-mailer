@@ -1,4 +1,10 @@
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import {
+	getFirestore,
+	collection,
+	doc,
+	getDoc,
+	addDoc,
+} from "firebase/firestore";
 import "./init";
 
 const db = getFirestore();
@@ -12,4 +18,13 @@ export const getLetter = async (sender, letter) => {
 	}
 
 	return null;
+};
+
+export const addLetter = async (sender, data) => {
+	const docRef = await addDoc(
+		collection(db, `senders/${sender}/letters`),
+		data
+	);
+
+	return docRef.id;
 };
