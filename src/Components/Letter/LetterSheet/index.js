@@ -2,9 +2,12 @@ import classes from "./index.module.css";
 
 const LetterSheet = ({ style, children }) => {
 	return (
-		<div className={classes.letterSheet} style={style}>
-			{children}
-		</div>
+		<>
+			<div className={classes.backdrop} />
+			<div className={classes.letterSheet} style={style}>
+				{children}
+			</div>
+		</>
 	);
 };
 
