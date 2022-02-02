@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Switch, Route, useHistory } from "react-router";
+import { setAuthObserver } from "./Firebase/auth";
+import { authActions } from "./Context/auth";
 import Letter from "./Pages/Letter";
 import MainHeader from "./Components/MainHeader";
 import SideBar from "./Components/SideBar";
@@ -14,6 +16,15 @@ const App = () => {
 
 	const history = useHistory();
 	const user = useSelector((state) => state.auth.user);
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		setAuthObserver((user) => {
+			if (user) {
+				dispatch(authActions.signIn(user.toJSON()));
+			}
+		});
+	}, [dispatch]);
 
 	useEffect(() => {
 		if (user) {

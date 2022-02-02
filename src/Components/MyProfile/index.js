@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { authActions } from "../../Context/auth";
+import { signOut } from "../../Context/auth";
 import classes from "./index.module.css";
 
 const MyProfile = ({ onProfileClose }) => {
@@ -22,7 +22,7 @@ const MyProfile = ({ onProfileClose }) => {
 	};
 
 	const onSignOutClick = () => {
-		dispatch(authActions.signOut());
+		dispatch(signOut());
 		onProfileClose();
 		history.replace("/");
 	};

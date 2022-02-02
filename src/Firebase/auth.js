@@ -1,4 +1,10 @@
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+	getAuth,
+	onAuthStateChanged,
+	GoogleAuthProvider,
+	signInWithPopup,
+	signOut as signOutFirebase,
+} from "firebase/auth";
 import "./init";
 
 const auth = getAuth();
@@ -6,9 +12,13 @@ const auth = getAuth();
 const google = new GoogleAuthProvider();
 
 export const signInWithGooglePopup = async () => {
-	const {
-		user: { uid },
-	} = await signInWithPopup(auth, google);
+	const { user } = await signInWithPopup(auth, google);
 
-	return { uid };
+	return user.toJSON();
+};
+
+export const signOut = () => signOutFirebase(auth);
+
+export const setAuthObserver = (callback) => {
+	onAuthStateChanged(auth, callback);
 };
