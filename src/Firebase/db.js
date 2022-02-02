@@ -10,7 +10,7 @@ import "./init";
 const db = getFirestore();
 
 export const getLetter = async (sender, letter) => {
-	const docRef = doc(db, `senders/${sender}/letters/${letter}`);
+	const docRef = doc(db, `users/${sender}/letters/${letter}`);
 	const docSnap = await getDoc(docRef);
 
 	if (docSnap.exists()) {
@@ -21,10 +21,7 @@ export const getLetter = async (sender, letter) => {
 };
 
 export const addLetter = async (sender, data) => {
-	const docRef = await addDoc(
-		collection(db, `senders/${sender}/letters`),
-		data
-	);
+	const docRef = await addDoc(collection(db, `users/${sender}/letters`), data);
 
 	return docRef.id;
 };
