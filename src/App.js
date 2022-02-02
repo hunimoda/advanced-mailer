@@ -53,7 +53,7 @@ const App = () => {
 
 	return (
 		<Switch>
-			<Route exact path="/:sender/:letter">
+			<Route exact path="/:letter([-0-9A-Za-z_]{128})">
 				<Letter />
 			</Route>
 			<Route path="*">

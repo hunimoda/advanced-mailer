@@ -7,7 +7,7 @@ import {
 } from "firebase/auth";
 import "./init";
 
-const auth = getAuth();
+export const auth = getAuth();
 
 const google = new GoogleAuthProvider();
 

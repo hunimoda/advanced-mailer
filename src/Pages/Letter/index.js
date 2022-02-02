@@ -5,20 +5,22 @@ import LetterSheet from "../../Components/Letter/LetterSheet";
 import Object from "../../Components/Letter/Object";
 
 const Letter = () => {
-	const { sender, letter: letterId } = useParams();
+	const { letter: letterId } = useParams();
 
 	const [sheetSize, setSheetSize] = useState(null);
 	const [bgColor, setBgColor] = useState(null);
 	const [objects, setObjects] = useState(null);
 
 	useEffect(() => {
-		getLetter(sender, letterId).then((letter) => {
+		getLetter(letterId).then((letter) => {
 			if (letter) {
 				const { screen } = window;
 				const {
-					aspectRatio: sheetAspectRatio,
-					backgroundColor: sheetBackgroundColor,
-					objects: letterObjects,
+					sheet: {
+						aspectRatio: sheetAspectRatio,
+						backgroundColor: sheetBackgroundColor,
+						objects: letterObjects,
+					},
 				} = letter;
 
 				setBgColor(sheetBackgroundColor);
@@ -49,7 +51,7 @@ const Letter = () => {
 				console.log("No data!");
 			}
 		});
-	}, [sender, letterId]);
+	}, [letterId]);
 
 	if (sheetSize === null || objects === null) {
 		return null;

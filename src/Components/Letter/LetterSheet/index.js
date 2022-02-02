@@ -14,7 +14,7 @@ const LetterSheet = ({ style, children }) => {
 
 	useEffect(() => {
 		if (user) {
-			isInbox(user.uid, letter).then((exists) => setIsLetterInbox(exists));
+			isInbox(letter).then((exists) => setIsLetterInbox(exists));
 		}
 	}, [user, letter]);
 
