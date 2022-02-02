@@ -3,7 +3,7 @@ import {
 	collection,
 	doc,
 	getDoc,
-	getDocs,
+	// getDocs,
 	addDoc,
 } from "firebase/firestore";
 import "./init";
@@ -21,16 +21,23 @@ export const getLetter = async (sender, letter) => {
 	return null;
 };
 
-export const getLetters = async (sender) => {
-	const querySnapshot = await getDocs(
-		collection(db, `users/${sender}/letters`)
-	);
+// export const getLetters = async (sender) => {
+// 	const querySnapshot = await getDocs(
+// 		collection(db, `users/${sender}/letters`)
+// 	);
 
-	querySnapshot.forEach((doc) => console.log(doc.id, " => ", doc.data()));
-};
+// 	querySnapshot.forEach((doc) => console.log(doc.id, " => ", doc.data()));
+// };
 
 export const addLetter = async (sender, data) => {
 	const docRef = await addDoc(collection(db, `users/${sender}/letters`), data);
 
 	return docRef.id;
+};
+
+export const isInbox = async (uid, letter) => {
+	const docRef = doc(db, `users/${uid}/inbox/${letter}`);
+	const docSnap = await getDoc(docRef);
+
+	return docSnap.exists();
 };
