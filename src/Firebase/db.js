@@ -3,6 +3,7 @@ import {
 	collection,
 	doc,
 	getDoc,
+	getDocs,
 	addDoc,
 } from "firebase/firestore";
 import "./init";
@@ -18,6 +19,14 @@ export const getLetter = async (sender, letter) => {
 	}
 
 	return null;
+};
+
+export const getLetters = async (sender) => {
+	const querySnapshot = await getDocs(
+		collection(db, `users/${sender}/letters`)
+	);
+
+	querySnapshot.forEach((doc) => console.log(doc.id, " => ", doc.data()));
 };
 
 export const addLetter = async (sender, data) => {
