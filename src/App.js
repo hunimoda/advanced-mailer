@@ -11,6 +11,7 @@ import AuthRouter from "./Router/AuthRouter";
 import MainRouter from "./Router/MainRouter";
 
 const App = () => {
+	const [isInitialized, setIsInitialized] = useState(false);
 	const [isSideBarActive, setIsSideBarActive] = useState(false);
 	const [isProfileVisible, setIsProfileVisible] = useState(false);
 
@@ -23,6 +24,7 @@ const App = () => {
 			if (user) {
 				dispatch(authActions.signIn(user.toJSON()));
 			}
+			setIsInitialized(true);
 		});
 	}, [dispatch]);
 
@@ -44,6 +46,10 @@ const App = () => {
 	const onProfileOpen = () => setIsProfileVisible(true);
 
 	const onProfileClose = () => setIsProfileVisible(false);
+
+	if (!isInitialized) {
+		return <p>Initializing...</p>;
+	}
 
 	return (
 		<Switch>
