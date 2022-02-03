@@ -1,3 +1,4 @@
+import { auth } from "../Firebase/auth";
 import store from "../Context";
 import { getProfile } from "../Firebase/db";
 
@@ -13,4 +14,8 @@ export const getProfileByUid = async (uid) => {
 	}
 
 	return profile;
+};
+
+export const getMyProfile = () => {
+	return getProfileByUid(auth.currentUser.uid);
 };

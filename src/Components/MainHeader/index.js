@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MainLogo from "../MainLogo";
+import { getMyProfile } from "../../Helper/profile";
 import classes from "./index.module.css";
 
 const MainHeader = ({ onSideBarOpen, onProfileOpen }) => {
 	const [imageClassName, setImageClassName] = useState(classes.profileImage);
+	const [profileImage, setProfileImage] = useState(null);
+
+	useEffect(() => {
+		getMyProfile().then(({ image }) => setProfileImage(image));
+	}, []);
 
 	const onProfileImageClick = () => {
 		setImageClassName(
@@ -22,12 +28,14 @@ const MainHeader = ({ onSideBarOpen, onProfileOpen }) => {
 				<MainLogo />
 			</div>
 			<div className={classes.column}>
-				<img
-					src="https://lh3.googleusercontent.com/ogw/ADea4I5bTzDF6IKYZRSEBgilnpwCo6YSqpLZKI8JQkgN=s83-c-mo"
-					alt="profile"
-					className={imageClassName}
-					onClick={onProfileImageClick}
-				/>
+				{profileImage && (
+					<img
+						src={profileImage}
+						alt="profile"
+						className={imageClassName}
+						onClick={onProfileImageClick}
+					/>
+				)}
 			</div>
 		</header>
 	);
