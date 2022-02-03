@@ -1,6 +1,22 @@
+import { useState, useEffect } from "react";
+import { getProfile } from "../../Firebase/db";
 import classes from "./index.module.css";
 
 const LetterPreview = ({ description }) => {
+	const { summary, writerUid } = description;
+
+	const [profile, setProfile] = useState(null);
+
+	useEffect(() => {
+		getProfile(writerUid).then((profile) => {
+			if (profile) {
+				setProfile(profile);
+			} else {
+				console.log("No profile found");
+			}
+		});
+	}, [writerUid]);
+
 	return (
 		<>
 			<img
@@ -8,12 +24,14 @@ const LetterPreview = ({ description }) => {
 				alt="placeholder"
 				className={classes.thumbnail}
 			/>
-			<p className={classes.message}>{description.summary}</p>
+			<p className={classes.message}>{summary}</p>
 			<div className={classes.itemRow}>
-				<div className={classes.sender}>
-					<img src="https://place-hold.it/300x500" alt="profile" />
-					<h4>보물 1호</h4>
-				</div>
+				{profile && (
+					<div className={classes.sender}>
+						<img src={profile.image} alt="profile" />
+						<h4>{profile.name}</h4>
+					</div>
+				)}
 				<span className={classes.timestamp}>2022.01.26 18:32:06</span>
 			</div>
 		</>

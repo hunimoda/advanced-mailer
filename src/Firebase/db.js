@@ -116,3 +116,14 @@ export const getInboxes = async () => {
 
 	return inboxes;
 };
+
+export const getProfile = async (uid) => {
+	const docRef = doc(db, `profiles/${uid}`);
+	const docSnap = await getDoc(docRef);
+
+	if (docSnap.exists()) {
+		return docSnap.data();
+	}
+
+	return null;
+};
