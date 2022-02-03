@@ -45,13 +45,13 @@ export const getLetter = async (letter) => {
 // };
 
 const DUMMY_SHEET = {
-	aspectRatio: 1.3333333333333333,
-	backgroundColor: "yellow",
+	aspectRatio: 0.75,
+	backgroundColor: "teal",
 	objects: [
 		{
 			style: {
-				backgroundColor: "red",
-				fontFamily: "consolas",
+				backgroundColor: "tomato",
+				fontFamily: "monospace",
 				height: 0.17,
 				left: 0.1725,
 				lineHeight: 2.1666,
@@ -63,20 +63,7 @@ const DUMMY_SHEET = {
 				zIndex: 2,
 			},
 			type: "text",
-			value:
-				"Hello World!\n이것은 테스트를 위한 예시 문장입니다.\n사이트가 빨리 완성되었으면 좋겠네요!!",
-		},
-		{
-			type: "image",
-			value:
-				"https://d5nunyagcicgy.cloudfront.net/external_assets/hero_examples/hair_beach_v391182663/original.jpeg",
-			style: {
-				height: 0.2,
-				left: 0.55,
-				top: 0.386666,
-				width: 0.2,
-				zIndex: 3,
-			},
+			value: "후니모다의 보낸 편지 테스트입니다!\n사이트 만들기 힘드네요",
 		},
 	],
 };
@@ -115,6 +102,19 @@ export const getInboxes = async () => {
 	);
 
 	return inboxes;
+};
+
+export const getSentLetters = async () => {
+	const querySnapshot = await getDocs(
+		collection(db, `users/${auth.currentUser.uid}/sent`)
+	);
+	const sentLetters = [];
+
+	querySnapshot.forEach((doc) =>
+		sentLetters.push({ id: doc.id, description: doc.data() })
+	);
+
+	return sentLetters;
 };
 
 export const getProfile = async (uid) => {

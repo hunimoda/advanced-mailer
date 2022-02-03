@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import { getInboxes } from "../../Firebase/db";
-import LetterList from "../../UI/LetterList";
 import TitleBar from "../../Components/TitleBar";
+import LetterList from "../../UI/LetterList";
 import InboxItem from "../../Components/InboxItem";
 import MoreLetters from "../../Components/MoreLetters";
 
 const Inbox = () => {
 	const [inboxItems, setInboxItems] = useState([]);
 
-	useEffect(() => {
-		getInboxes().then((inboxes) => setInboxItems(inboxes));
-	}, []);
+	useEffect(() => getInboxes().then((inboxes) => setInboxItems(inboxes)), []);
 
 	return (
 		<>
