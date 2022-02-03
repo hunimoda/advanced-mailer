@@ -54,8 +54,6 @@ const Letter = () => {
 		description,
 	} = letter;
 
-	const onDownload = () => console.log(description);
-
 	return (
 		<LetterSheet
 			style={{
@@ -63,7 +61,7 @@ const Letter = () => {
 				width: `${sheetSize.width}px`,
 				height: `${sheetSize.height}px`,
 			}}
-			onDownload={onDownload}
+			description={description}
 		>
 			{objects.map((object, index) => (
 				<Object

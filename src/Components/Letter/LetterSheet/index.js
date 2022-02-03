@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { isInbox } from "../../../Firebase/db";
+import { isInbox, saveLetterToInbox } from "../../../Firebase/db";
 import classes from "./index.module.css";
 
-const LetterSheet = ({ style, onDownload, children }) => {
+const LetterSheet = ({ style, description, children }) => {
 	const history = useHistory();
 	const { letter } = useParams();
 
@@ -22,7 +22,10 @@ const LetterSheet = ({ style, onDownload, children }) => {
 
 	const onDownloadClick = () => {
 		if (user) {
-			onDownload();
+			saveLetterToInbox(letter, description).then(() => {
+				alert("added to inbox");
+				setIsLetterInbox(true);
+			});
 		} else {
 			console.log("need to login");
 		}

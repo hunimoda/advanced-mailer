@@ -96,3 +96,9 @@ export const isInbox = async (letter) => {
 
 	return docSnap.exists();
 };
+
+export const saveLetterToInbox = (letter, description) => {
+	const docRef = doc(db, `users/${auth.currentUser.uid}/inbox/${letter}`);
+
+	return setDoc(docRef, description);
+};
