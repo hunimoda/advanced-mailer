@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { isInbox } from "../../../Firebase/db";
 import classes from "./index.module.css";
 
-const LetterSheet = ({ style, children }) => {
+const LetterSheet = ({ style, onDownload, children }) => {
 	const history = useHistory();
 	const { letter } = useParams();
 
@@ -20,6 +20,14 @@ const LetterSheet = ({ style, children }) => {
 
 	const onGoBackClick = () => history.push(user ? "/inbox" : "/");
 
+	const onDownloadClick = () => {
+		if (user) {
+			onDownload();
+		} else {
+			console.log("need to login");
+		}
+	};
+
 	const showDownloadButton = !user || isLetterInbox === false;
 
 	return (
@@ -33,7 +41,7 @@ const LetterSheet = ({ style, children }) => {
 					)}
 				</button>
 				{showDownloadButton && (
-					<button>
+					<button onClick={onDownloadClick}>
 						<i className="fas fa-download" />
 					</button>
 				)}

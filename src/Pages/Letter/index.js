@@ -8,27 +8,17 @@ const Letter = () => {
 	const { letter: letterId } = useParams();
 
 	const [sheetSize, setSheetSize] = useState(null);
-	const [bgColor, setBgColor] = useState(null);
-	const [objects, setObjects] = useState(null);
+	const [letter, setLetter] = useState(null);
 
 	useEffect(() => {
 		getLetter(letterId).then((letter) => {
 			if (letter) {
-				const { screen } = window;
-				const {
-					sheet: {
-						aspectRatio: sheetAspectRatio,
-						backgroundColor: sheetBackgroundColor,
-						objects: letterObjects,
-					},
-				} = letter;
-
-				setBgColor(sheetBackgroundColor);
-				setObjects(letterObjects);
+				setLetter(letter);
 
 				const updateSheetSize = () => {
-					const { width: screenWidth, height: screenHeight } = screen;
+					const { width: screenWidth, height: screenHeight } = window.screen;
 					const screenAspectRatio = screenWidth / screenHeight;
+					const sheetAspectRatio = letter.sheet.aspectRatio;
 
 					let sheetWidth;
 					let sheetHeight;
@@ -45,7 +35,9 @@ const Letter = () => {
 				};
 
 				updateSheetSize();
-				screen.orientation.addEventListener("change", () => updateSheetSize());
+				window.screen.orientation.addEventListener("change", () =>
+					updateSheetSize()
+				);
 			} else {
 				// Show error message: invalid URL
 				console.log("No data!");
@@ -53,17 +45,25 @@ const Letter = () => {
 		});
 	}, [letterId]);
 
-	if (sheetSize === null || objects === null) {
+	if (sheetSize === null || letter === null) {
 		return null;
 	}
+
+	const {
+		sheet: { backgroundColor, objects },
+		description,
+	} = letter;
+
+	const onDownload = () => console.log(description);
 
 	return (
 		<LetterSheet
 			style={{
-				backgroundColor: bgColor ?? "transparent",
+				backgroundColor: backgroundColor ?? "transparent",
 				width: `${sheetSize.width}px`,
 				height: `${sheetSize.height}px`,
 			}}
+			onDownload={onDownload}
 		>
 			{objects.map((object, index) => (
 				<Object
