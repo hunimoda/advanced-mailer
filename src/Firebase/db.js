@@ -1,8 +1,9 @@
 import {
 	getFirestore,
 	doc,
+	collection,
 	getDoc,
-	// getDocs,
+	getDocs,
 	setDoc,
 } from "firebase/firestore";
 import "./init";
@@ -101,4 +102,17 @@ export const saveLetterToInbox = (letter, description) => {
 	const docRef = doc(db, `users/${auth.currentUser.uid}/inbox/${letter}`);
 
 	return setDoc(docRef, description);
+};
+
+export const getInboxes = async () => {
+	const querySnapshot = await getDocs(
+		collection(db, `users/${auth.currentUser.uid}/inbox`)
+	);
+	const inboxes = [];
+
+	querySnapshot.forEach((doc) =>
+		inboxes.push({ id: doc.id, description: doc.data() })
+	);
+
+	return inboxes;
 };
