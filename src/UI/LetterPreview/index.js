@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { profileActions } from "../../Context/profile";
-import { getProfile } from "../../Firebase/db";
+import { getProfileByUid } from "../../Helper/profile";
 import classes from "./index.module.css";
 
 const LetterPreview = ({ description }) => {
@@ -9,21 +7,10 @@ const LetterPreview = ({ description }) => {
 
 	const [profile, setProfile] = useState(null);
 
-	const dispatch = useDispatch();
-	const profiles = useSelector((state) => state.profile);
-
-	useEffect(() => {
-		(async () => {
-			let profile = profiles[writerUid];
-
-			if (!profile) {
-				profile = await getProfile(writerUid);
-				dispatch(profileActions.addNewProfile({ uid: writerUid, profile }));
-			}
-
-			setProfile(profile);
-		})();
-	}, [profiles, writerUid, dispatch]);
+	useEffect(
+		() => getProfileByUid(writerUid).then((profile) => setProfile(profile)),
+		[writerUid]
+	);
 
 	return (
 		<>
