@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getLetter } from "../../Firebase/db";
+import { getLetterById } from "../../Firebase/db";
 import LetterSheet from "../../Components/Letter/LetterSheet";
 import Object from "../../Components/Letter/Object";
 
@@ -11,7 +11,7 @@ const Letter = () => {
 	const [letter, setLetter] = useState(null);
 
 	useEffect(() => {
-		getLetter(letterId).then((letter) => {
+		getLetterById(letterId).then((letter) => {
 			if (letter) {
 				setLetter(letter);
 

@@ -22,3 +22,5 @@ export const signOut = () => signOutFirebase(auth);
 export const setAuthObserver = (callback) => {
 	onAuthStateChanged(auth, callback);
 };
+
+export const getMyUid = () => auth.currentUser.uid;
