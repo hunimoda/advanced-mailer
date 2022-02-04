@@ -5,6 +5,10 @@ import {
 	getDoc,
 	getDocs,
 	setDoc,
+	query,
+	where,
+	orderBy,
+	limit,
 } from "firebase/firestore";
 import "./init";
 import { getMyUid } from "./auth";
@@ -98,6 +102,25 @@ export const getInboxes = async () => {
 	);
 
 	return inboxes;
+};
+
+export const getSentLettersBeforeTimestamp = async (timestamp, limitCount) => {
+	const sentLettersRef = collection(db, `users/${getMyUid()}/sent`);
+	const q = query(
+		sentLettersRef,
+		where("metaData.createdAt", "<", timestamp),
+		orderBy("metaData.createdAt", "desc"),
+		limit(limitCount)
+	);
+
+	const sentLetters = [];
+	const querySnapshot = await getDocs(q);
+
+	querySnapshot.forEach((doc) =>
+		sentLetters.push({ id: doc.id, ...doc.data() })
+	);
+
+	return sentLetters;
 };
 
 export const getSentLetters = async () => {
