@@ -7,6 +7,10 @@ export const pageSlice = createSlice({
 			timestamp: { start: null, end: null },
 			letters: [],
 		},
+		inbox: {
+			timestamp: { start: null, end: null },
+			letters: [],
+		},
 	},
 	reducers: {
 		append: (state, { payload: { pageName, letters } }) => {

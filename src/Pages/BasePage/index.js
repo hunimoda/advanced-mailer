@@ -1,10 +1,9 @@
 import TitleBar from "../../Components/TitleBar";
 import LetterList from "../../UI/LetterList";
-import SentItem from "../../Components/SentItem";
 import MoreLetters from "../../Components/MoreLetters";
 import { useLetter } from "../../Hooks/useLetter";
 
-const Sent = () => {
+const BasePage = ({ type, title, item: LetterItem }) => {
 	const {
 		isNewPending,
 		isOldPending,
@@ -12,7 +11,7 @@ const Sent = () => {
 		onGetNewLetters,
 		onGetOldLetters,
 		letters,
-	} = useLetter("sent");
+	} = useLetter(type);
 
 	let oldStatus = null;
 
@@ -24,19 +23,17 @@ const Sent = () => {
 
 	const newStatus = isNewPending ? "pending" : "";
 
-	console.log(isNewPending);
-
 	return (
 		<>
-			<TitleBar>보낸 편지함</TitleBar>
+			<TitleBar>{title}</TitleBar>
 			<MoreLetters status={newStatus} />
 			<button onClick={onGetNewLetters}>최근 편지 가져오기</button>
 			<LetterList>
-				{letters.map((sentLetter) => (
-					<SentItem
-						key={sentLetter.id}
-						id={sentLetter.id}
-						metaData={sentLetter.metaData}
+				{letters.map((letter) => (
+					<LetterItem
+						key={letter.id}
+						id={letter.id}
+						metaData={letter.metaData}
 					/>
 				))}
 			</LetterList>
@@ -46,4 +43,4 @@ const Sent = () => {
 	);
 };
 
-export default Sent;
+export default BasePage;

@@ -1,7 +1,9 @@
 import { Switch, Route, Redirect } from "react-router-dom";
 import New from "../../Pages/New";
 import Inbox from "../../Pages/Inbox";
-import Sent from "../../Pages/Sent";
+import BasePage from "../../Pages/BasePage";
+import SentItem from "../../Components/SentItem";
+import InboxItem from "../../Components/InboxItem";
 import Drafts from "../../Pages/Drafts";
 import PageNotFound from "../../Pages/PageNotFound";
 import classes from "./index.module.css";
@@ -17,10 +19,10 @@ const MainRouter = () => {
 					<New />
 				</Route>
 				<Route exact path="/inbox">
-					<Inbox />
+					<BasePage type="inbox" title="나에게 온 편지" item={InboxItem} />
 				</Route>
 				<Route exact path="/sent">
-					<Sent />
+					<BasePage type="sent" title="내가 보낸 편지" item={SentItem} />
 				</Route>
 				<Route exact path="/drafts">
 					<Drafts />
