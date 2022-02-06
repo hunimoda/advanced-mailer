@@ -6,7 +6,7 @@ import classes from "./index.module.css";
 
 const DUMMY_URL = "https://some-application-url/user-id/letter-id";
 
-const SentItem = ({ id, description }) => {
+const SentItem = ({ id, metaData }) => {
 	const [showCopiedOK, setShowCopiedOK] = useState(false);
 
 	const history = useHistory();
@@ -44,7 +44,7 @@ const SentItem = ({ id, description }) => {
 					<i className={copyIconClassName} />
 				</button>
 			</div>
-			<LetterPreview description={description} />
+			<LetterPreview metaData={metaData} />
 		</LetterItemCard>
 	);
 };

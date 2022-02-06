@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { getProfileByUid } from "../../Helper/profile";
 import classes from "./index.module.css";
 
-const LetterPreview = ({ description }) => {
-	const { summary, writerUid } = description;
+const LetterPreview = ({ metaData }) => {
+	const { summary, writerUid } = metaData;
 
 	const [profile, setProfile] = useState(null);
 

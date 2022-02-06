@@ -8,6 +8,8 @@ const MoreLetters = ({ status }) => {
 		display = <LoadingSpinner className={classes.spinner} />;
 	} else if (status === "none") {
 		display = <p className={classes.noLetters}>편지가 더 이상 없습니다.</p>;
+	} else {
+		return null;
 	}
 
 	return <div className={classes.moreLetters}>{display}</div>;
