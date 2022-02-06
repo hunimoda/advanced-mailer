@@ -123,6 +123,25 @@ export const getSentLettersBeforeTimestamp = async (timestamp, limitCount) => {
 	return sentLetters;
 };
 
+export const getSentLettersAfterTimestamp = async (timestamp, limitCount) => {
+	const sentLettersRef = collection(db, `users/${getMyUid()}/sent`);
+	const q = query(
+		sentLettersRef,
+		where("metaData.createdAt", ">", timestamp),
+		orderBy("metaData.createdAt", "desc"),
+		limit(limitCount)
+	);
+
+	const sentLetters = [];
+	const querySnapshot = await getDocs(q);
+
+	querySnapshot.forEach((doc) =>
+		sentLetters.push({ id: doc.id, ...doc.data() })
+	);
+
+	return sentLetters;
+};
+
 export const getSentLetters = async () => {
 	const querySnapshot = await getDocs(
 		collection(db, `users/${getMyUid()}/sent`)

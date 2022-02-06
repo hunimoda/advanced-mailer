@@ -4,19 +4,16 @@ export const pageSlice = createSlice({
 	name: "page",
 	initialState: {
 		sent: {
-			startTimestamp: null,
-			endTimestamp: null,
+			timestamp: { start: null, end: null },
 			letters: [],
 		},
 	},
 	reducers: {
-		push: (state, { payload: letters }) => {
-			if (letters.length !== 0) {
-				const startTimestamp = letters[letters.length - 1].metaData.createdAt;
-
-				state.sent.startTimestamp = startTimestamp;
-			}
-			state.sent.letters.push(...letters);
+		append: (state, { payload: { pageName, letters } }) => {
+			state[pageName].letters.push(...letters);
+		},
+		setTimestamp: (state, { payload: { pageName, timestamp } }) => {
+			state[pageName].timestamp = timestamp;
 		},
 	},
 });
