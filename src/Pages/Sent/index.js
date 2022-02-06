@@ -12,7 +12,7 @@ const Sent = () => {
 		onGetNewLetters,
 		onGetOldLetters,
 		letters,
-	} = useLetter();
+	} = useLetter("sent");
 
 	let oldStatus = null;
 

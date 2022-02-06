@@ -104,56 +104,28 @@ export const getInboxes = async () => {
 	return inboxes;
 };
 
-export const getSentLettersBeforeTimestamp = async (timestamp, limitCount) => {
-	const sentLettersRef = collection(db, `users/${getMyUid()}/sent`);
+const getLetters = async (pageName, relation, timestamp, limitCount) => {
+	const lettersRef = collection(db, `users/${getMyUid()}/${pageName}`);
 	const q = query(
-		sentLettersRef,
-		where("metaData.createdAt", "<", timestamp),
+		lettersRef,
+		where("metaData.createdAt", relation === "before" ? "<" : ">", timestamp),
 		orderBy("metaData.createdAt", "desc"),
-		limit(limitCount)
+		limit(limitCount ?? 20)
 	);
 
-	const sentLetters = [];
+	const letters = [];
 	const querySnapshot = await getDocs(q);
 
-	querySnapshot.forEach((doc) =>
-		sentLetters.push({ id: doc.id, ...doc.data() })
-	);
+	querySnapshot.forEach((doc) => letters.push({ id: doc.id, ...doc.data() }));
 
-	return sentLetters;
+	return letters;
 };
 
-export const getSentLettersAfterTimestamp = async (timestamp, limitCount) => {
-	const sentLettersRef = collection(db, `users/${getMyUid()}/sent`);
-	const q = query(
-		sentLettersRef,
-		where("metaData.createdAt", ">", timestamp),
-		orderBy("metaData.createdAt", "desc"),
-		limit(limitCount)
-	);
+export const getLettersAfterTimestamp = (pageName, timestamp) =>
+	getLetters(pageName, "after", timestamp);
 
-	const sentLetters = [];
-	const querySnapshot = await getDocs(q);
-
-	querySnapshot.forEach((doc) =>
-		sentLetters.push({ id: doc.id, ...doc.data() })
-	);
-
-	return sentLetters;
-};
-
-export const getSentLetters = async () => {
-	const querySnapshot = await getDocs(
-		collection(db, `users/${getMyUid()}/sent`)
-	);
-	const sentLetters = [];
-
-	querySnapshot.forEach((doc) =>
-		sentLetters.push({ id: doc.id, description: doc.data() })
-	);
-
-	return sentLetters;
-};
+export const getLettersBeforeTimestamp = (pageName, timestamp) =>
+	getLetters(pageName, "before", timestamp, 1);
 
 export const getProfile = async (uid) => {
 	const docRef = doc(db, `profiles/${uid}`);

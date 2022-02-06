@@ -1,21 +1,21 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-	getSentLettersBeforeTimestamp,
-	getSentLettersAfterTimestamp,
+	getLettersBeforeTimestamp,
+	getLettersAfterTimestamp,
 } from "../Firebase/db";
 import { pageActions } from "../Context/page";
 
-export const useLetter = () => {
+export const useLetter = (pageName) => {
 	const [isNewPending, setIsNewPending] = useState(false);
 	const [isOldPending, setIsOldPending] = useState(false);
 
 	const dispatch = useDispatch();
-	const sent = useSelector((state) => state.page.sent);
+	const page = useSelector((state) => state.page[pageName]);
 	const {
 		timestamp: { start, end },
 		letters,
-	} = sent;
+	} = page;
 
 	const onGetNewLetters = async () => {
 		if (end === null) {
@@ -24,14 +24,13 @@ export const useLetter = () => {
 
 		setIsNewPending(true);
 
-		const letters = await getSentLettersAfterTimestamp(end, 1);
-		console.log(letters, start, end);
+		const letters = await getLettersAfterTimestamp(pageName, end);
 
 		if (letters.length > 0) {
-			dispatch(pageActions.prepend({ pageName: "sent", letters }));
+			dispatch(pageActions.prepend({ pageName, letters }));
 			dispatch(
 				pageActions.setTimestamp({
-					pageName: "sent",
+					pageName,
 					timestamp: { start, end: letters[0].metaData.createdAt },
 				})
 			);
@@ -48,20 +47,19 @@ export const useLetter = () => {
 		setIsOldPending(true);
 
 		const refTimestamp = start ?? Date.now();
-		const letters = await getSentLettersBeforeTimestamp(refTimestamp, 1);
+		const letters = await getLettersBeforeTimestamp(pageName, refTimestamp);
 		let startTimestamp = null;
-		console.log(letters, start, end);
 
 		if (letters.length > 0) {
 			startTimestamp = letters[letters.length - 1].metaData.createdAt;
-			dispatch(pageActions.append({ pageName: "sent", letters }));
+			dispatch(pageActions.append({ pageName, letters }));
 		} else {
 			startTimestamp = -1;
 		}
 
 		dispatch(
 			pageActions.setTimestamp({
-				pageName: "sent",
+				pageName,
 				timestamp: { start: startTimestamp, end: end ?? refTimestamp },
 			})
 		);
