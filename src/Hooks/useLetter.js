@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getSentLettersBeforeTimestamp } from "../Firebase/db";
+import {
+	getSentLettersBeforeTimestamp,
+	getSentLettersAfterTimestamp,
+} from "../Firebase/db";
 import { pageActions } from "../Context/page";
 
 export const useLetter = () => {
@@ -14,7 +17,28 @@ export const useLetter = () => {
 		letters,
 	} = sent;
 
-	const onGetNewLetters = () => {};
+	const onGetNewLetters = async () => {
+		if (end === null) {
+			return;
+		}
+
+		setIsNewPending(true);
+
+		const letters = await getSentLettersAfterTimestamp(end, 1);
+		console.log(letters, start, end);
+
+		if (letters.length > 0) {
+			dispatch(pageActions.prepend({ pageName: "sent", letters }));
+			dispatch(
+				pageActions.setTimestamp({
+					pageName: "sent",
+					timestamp: { start, end: letters[0].metaData.createdAt },
+				})
+			);
+		}
+
+		setIsNewPending(false);
+	};
 
 	const onGetOldLetters = async () => {
 		if (start < 0) {
@@ -26,6 +50,7 @@ export const useLetter = () => {
 		const refTimestamp = start ?? Date.now();
 		const letters = await getSentLettersBeforeTimestamp(refTimestamp, 1);
 		let startTimestamp = null;
+		console.log(letters, start, end);
 
 		if (letters.length > 0) {
 			startTimestamp = letters[letters.length - 1].metaData.createdAt;
@@ -37,7 +62,7 @@ export const useLetter = () => {
 		dispatch(
 			pageActions.setTimestamp({
 				pageName: "sent",
-				timestamp: { start: startTimestamp, end: refTimestamp },
+				timestamp: { start: startTimestamp, end: end ?? refTimestamp },
 			})
 		);
 

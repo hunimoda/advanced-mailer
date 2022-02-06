@@ -5,7 +5,14 @@ import MoreLetters from "../../Components/MoreLetters";
 import { useLetter } from "../../Hooks/useLetter";
 
 const Sent = () => {
-	const { isOldPending, hasNoMoreOlds, onGetOldLetters, letters } = useLetter();
+	const {
+		isNewPending,
+		isOldPending,
+		hasNoMoreOlds,
+		onGetNewLetters,
+		onGetOldLetters,
+		letters,
+	} = useLetter();
 
 	let oldStatus = null;
 
@@ -15,12 +22,15 @@ const Sent = () => {
 		oldStatus = "none";
 	}
 
-	console.log(isOldPending);
+	const newStatus = isNewPending ? "pending" : "";
+
+	console.log(isNewPending);
 
 	return (
 		<>
 			<TitleBar>보낸 편지함</TitleBar>
-			<button>최근 편지 가져오기</button>
+			<MoreLetters status={newStatus} />
+			<button onClick={onGetNewLetters}>최근 편지 가져오기</button>
 			<LetterList>
 				{letters.map((sentLetter) => (
 					<SentItem

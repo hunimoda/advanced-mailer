@@ -12,6 +12,9 @@ export const pageSlice = createSlice({
 		append: (state, { payload: { pageName, letters } }) => {
 			state[pageName].letters.push(...letters);
 		},
+		prepend: (state, { payload: { pageName, letters } }) => {
+			state[pageName].letters.unshift(...letters);
+		},
 		setTimestamp: (state, { payload: { pageName, timestamp } }) => {
 			state[pageName].timestamp = timestamp;
 		},
