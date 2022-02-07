@@ -1,49 +1,60 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getLetterById } from "../../Firebase/db";
+import { getLetterByParams } from "../../Firebase/db";
 import LetterSheet from "../../Components/Letter/LetterSheet";
 import Object from "../../Components/Letter/Object";
+import { getMyUid } from "../../Firebase/auth";
 
-const Letter = () => {
-	const { letter: letterId } = useParams();
-
+const Letter = ({ type }) => {
 	const [sheetSize, setSheetSize] = useState(null);
 	const [letter, setLetter] = useState(null);
 
+	const { id: letterId } = useParams();
+
 	useEffect(() => {
-		getLetterById(letterId).then((letter) => {
-			if (letter) {
-				setLetter(letter);
+		const { location, screen } = window;
+		const params = new URLSearchParams(location.search);
 
-				const updateSheetSize = () => {
-					const { width: screenWidth, height: screenHeight } = window.screen;
-					const screenAspectRatio = screenWidth / screenHeight;
-					const sheetAspectRatio = letter.sheet.aspectRatio;
+		const uid = type ? getMyUid() : params.get("uid");
+		const id = type ? letterId : params.get("id");
 
-					let sheetWidth;
-					let sheetHeight;
+		if (!id || !uid) {
+			console.log("Invalid url");
+		} else {
+			getLetterByParams(uid, type ?? "sent", id).then((letter) => {
+				if (letter) {
+					setLetter(letter);
 
-					if (sheetAspectRatio > screenAspectRatio) {
-						sheetWidth = screenWidth;
-						sheetHeight = sheetWidth / sheetAspectRatio;
-					} else {
-						sheetHeight = screenHeight;
-						sheetWidth = sheetHeight * sheetAspectRatio;
-					}
+					const {
+						width: screenWidth,
+						height: screenHeight,
+						orientation,
+					} = screen;
 
-					setSheetSize({ width: sheetWidth, height: sheetHeight });
-				};
+					const updateSheetSize = () => {
+						const screenRatio = screenWidth / screenHeight;
+						const sheetRatio = letter.sheet.aspectRatio;
 
-				updateSheetSize();
-				window.screen.orientation.addEventListener("change", () =>
-					updateSheetSize()
-				);
-			} else {
-				// Show error message: invalid URL
-				console.log("No data!");
-			}
-		});
-	}, [letterId]);
+						const width =
+							sheetRatio > screenRatio
+								? screenWidth
+								: screenHeight * sheetRatio;
+						const height =
+							sheetRatio > screenRatio
+								? screenWidth / sheetRatio
+								: screenHeight;
+
+						setSheetSize({ width, height });
+					};
+
+					updateSheetSize();
+					orientation.addEventListener("change", () => updateSheetSize());
+				} else {
+					console.log("Letter doesn't exist!");
+				}
+			});
+		}
+	}, [letterId, type]);
 
 	if (sheetSize === null || letter === null) {
 		return null;
