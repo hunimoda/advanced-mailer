@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getProfileByUid } from "../../Helper/profile";
 import classes from "./index.module.css";
 
-const LetterPreview = ({ metaData }) => {
+const LetterPreview = ({ metaData, onClick }) => {
 	const { previewImageUrl, summary, writerUid, createdAt } = metaData;
 
 	const [profile, setProfile] = useState(null);
@@ -23,8 +23,11 @@ const LetterPreview = ({ metaData }) => {
 				src={previewImageUrl}
 				alt="placeholder"
 				className={classes.thumbnail}
+				onClick={onClick}
 			/>
-			<p className={classes.message}>{summary}</p>
+			<p className={classes.message} onClick={onClick}>
+				{summary}
+			</p>
 			<div className={classes.itemRow}>
 				{profile && (
 					<div className={classes.sender}>

@@ -40,7 +40,6 @@ const App = () => {
 
 	return (
 		<Switch>
-			{/* <Route exact path="/:letter([-0-9A-Za-z_]{128})"> */}
 			<Route exact path="/view">
 				<Letter />
 			</Route>
