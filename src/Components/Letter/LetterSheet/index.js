@@ -18,7 +18,17 @@ const LetterSheet = ({ style, description, children }) => {
 		}
 	}, [user, letter]);
 
-	const onGoBackClick = () => history.push(user ? "/inbox" : "/");
+	const onGoBackClick = () => {
+		const { pathname } = window.location;
+
+		if (pathname.startsWith("/sent")) {
+			history.push("/sent");
+		} else if (pathname.startsWith("/inbox")) {
+			history.push("/inbox");
+		} else {
+			history.push("/");
+		}
+	};
 
 	const onDownloadClick = () => {
 		if (user) {
