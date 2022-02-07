@@ -4,19 +4,11 @@ import { useSelector } from "react-redux";
 import { isInbox, saveLetterToInbox } from "../../../Firebase/db";
 import classes from "./index.module.css";
 
-const LetterSheet = ({ style, description, children }) => {
+const LetterSheet = ({ type, style, description, children }) => {
 	const history = useHistory();
 	const { letter } = useParams();
 
 	const user = useSelector((state) => state.auth.user);
-
-	const [isLetterInbox, setIsLetterInbox] = useState(null);
-
-	useEffect(() => {
-		if (user) {
-			isInbox(letter).then((exists) => setIsLetterInbox(exists));
-		}
-	}, [user, letter]);
 
 	const onGoBackClick = () => {
 		const { pathname } = window.location;
@@ -32,16 +24,13 @@ const LetterSheet = ({ style, description, children }) => {
 
 	const onDownloadClick = () => {
 		if (user) {
-			saveLetterToInbox(letter, description).then(() => {
-				alert("added to inbox");
-				setIsLetterInbox(true);
-			});
+			//
 		} else {
 			console.log("need to login");
 		}
 	};
 
-	const showDownloadButton = !user || isLetterInbox === false;
+	const showDownloadButton = !type;
 
 	return (
 		<>

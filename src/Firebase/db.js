@@ -78,13 +78,6 @@ export const sendLetter = async (sheet) => {
 	await setDoc(docRef, { metaData, sheet });
 };
 
-export const isInbox = async (letter) => {
-	const docRef = doc(db, `users/${getMyUid()}/inbox/${letter}`);
-	const docSnap = await getDoc(docRef);
-
-	return docSnap.exists();
-};
-
 export const saveLetterToInbox = (letter, description) => {
 	const docRef = doc(db, `users/${getMyUid()}/inbox/${letter}`);
 

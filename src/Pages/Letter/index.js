@@ -4,12 +4,21 @@ import { getLetterByParams } from "../../Firebase/db";
 import LetterSheet from "../../Components/Letter/LetterSheet";
 import Object from "../../Components/Letter/Object";
 import { getMyUid } from "../../Firebase/auth";
+import store from "../../Context";
 
 const Letter = ({ type }) => {
 	const [sheetSize, setSheetSize] = useState(null);
 	const [letter, setLetter] = useState(null);
 
 	const { id: letterId } = useParams();
+
+	useEffect(() => {
+		if (!type) {
+			//
+		} else {
+			console.log(store.getState().page[type].letters);
+		}
+	}, [type, letterId]);
 
 	useEffect(() => {
 		const { location, screen } = window;
@@ -73,6 +82,7 @@ const Letter = ({ type }) => {
 				height: `${sheetSize.height}px`,
 			}}
 			description={description}
+			type={type}
 		>
 			{objects.map((object, index) => (
 				<Object

@@ -11,7 +11,10 @@ const SentItem = ({ id, metaData }) => {
 	const history = useHistory();
 
 	const { protocol, hostname } = window.location;
-	const letterUrl = `${protocol}//${hostname}/view?id=${id}&uid=${getMyUid()}`;
+	const letterPath = `/view?id=${id}&uid=${getMyUid()}`;
+	const letterUrl = `${protocol}//${hostname}${letterPath}`;
+
+	const onShowLetterClick = () => history.push(letterPath);
 
 	const onCopyUrlClick = () => {
 		if (window.isSecureContext) {
@@ -20,16 +23,12 @@ const SentItem = ({ id, metaData }) => {
 					setShowCopiedOK(true);
 					setTimeout(() => setShowCopiedOK(false), 2000);
 				},
-				() => {
-					alert("Clipboard write failed");
-				}
+				() => alert("Clipboard write failed")
 			);
 		} else {
 			alert("window.isSecureContext === false");
 		}
 	};
-
-	const onShowLetterClick = () => history.push(`/sent/${id}`);
 
 	const copyBtnClassName = `${classes.copyBtn} ${
 		showCopiedOK ? classes["copyBtn--highlight"] : ""
