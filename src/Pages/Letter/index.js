@@ -13,14 +13,6 @@ const Letter = ({ type }) => {
 	const { id: letterId } = useParams();
 
 	useEffect(() => {
-		if (!type) {
-			//
-		} else {
-			console.log(store.getState().page[type].letters);
-		}
-	}, [type, letterId]);
-
-	useEffect(() => {
 		const { location, screen } = window;
 		const params = new URLSearchParams(location.search);
 

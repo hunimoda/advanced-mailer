@@ -3,7 +3,7 @@ import New from "../../Pages/New";
 import BasePage from "../../Pages/BasePage";
 import SentItem from "../../Components/SentItem";
 import InboxItem from "../../Components/InboxItem";
-import Drafts from "../../Pages/Drafts";
+import DraftItem from "../../Components/DraftItem";
 import PageNotFound from "../../Pages/PageNotFound";
 import Layout from "../../UI/Layout";
 import Letter from "../../Pages/Letter";
@@ -14,9 +14,6 @@ const MainRouter = () => {
 			<Route exact path="/">
 				<Redirect to="/inbox" />
 			</Route>
-			<Route exact path="/new">
-				<New />
-			</Route>
 			<Route exact path="/inbox">
 				<BasePage type="inbox" title="나에게 온 편지" item={InboxItem} />
 			</Route>
@@ -24,7 +21,7 @@ const MainRouter = () => {
 				<BasePage type="sent" title="내가 보낸 편지" item={SentItem} />
 			</Route>
 			<Route exact path="/drafts">
-				<Drafts />
+				<BasePage type="draft" title="잠깐 보관" item={DraftItem} />
 			</Route>
 			<Route path="*">
 				<PageNotFound />
@@ -39,6 +36,9 @@ const MainRouter = () => {
 			</Route>
 			<Route exact path="/inbox/:id">
 				<Letter type="inbox" />
+			</Route>
+			<Route exact path="/new">
+				<New />
 			</Route>
 			<Route exact path="*">
 				<Layout>{innerSwitch}</Layout>

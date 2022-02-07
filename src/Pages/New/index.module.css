@@ -1,0 +1,61 @@
+.topHeader {
+	background: #1c1c1c;
+	display: flex;
+	justify-content: space-between;
+}
+
+.topHeader button {
+	border: none;
+	border-radius: 100px;
+	height: var(--header-height);
+	background: transparent;
+	color: white;
+	font-size: 18px;
+}
+
+.controls button {
+	width: calc(1.5 * var(--header-height));
+}
+
+.topHeader button:active {
+	background: #515151;
+}
+
+.topHeader > button {
+	width: var(--header-height);
+	font-size: 24px;
+}
+
+.workspace {
+	height: calc(100vh - 2 * var(--header-height));
+	background: #1c1c1c;
+}
+
+.toolboxFooter {
+	height: var(--header-height);
+	overflow: hidden;
+}
+
+.toolbox {
+	background: #282828;
+	width: 100%;
+	overflow-x: scroll;
+	display: flex;
+	padding-bottom: 30px;
+}
+
+.toolbox button {
+	width: var(--header-height);
+	height: var(--header-height);
+	margin: 0 calc(11vw - var(--header-height) / 2);
+	border: none;
+	border-radius: 100px;
+	background: transparent;
+	color: white;
+	font-size: 24px;
+	flex-shrink: 0;
+}
+
+.toolbox button:active {
+	background: #535353;
+}
