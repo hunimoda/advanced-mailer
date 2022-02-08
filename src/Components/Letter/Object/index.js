@@ -1,7 +1,8 @@
 import classes from "./index.module.css";
 
-const Object = ({ type, value, style, sheetSize }) => {
-	const cssStyle = { fontSize: `${sheetSize.height}px` };
+const processStyle = (style, sheetSize) => {
+	const objectStyle = {};
+	const contentStyle = { fontSize: `${sheetSize.height}px` };
 
 	let scale = null;
 
@@ -47,23 +48,53 @@ const Object = ({ type, value, style, sheetSize }) => {
 			default:
 		}
 
-		cssStyle[prop] = value;
+		switch (prop) {
+			case "top":
+			case "left":
+			case "width":
+			case "height":
+			case "transform":
+				objectStyle[prop] = value;
+				break;
+			default:
+				contentStyle[prop] = value;
+		}
 	}
+
+	return [objectStyle, contentStyle];
+};
+
+const Object = ({ type, value, style, sheetSize }) => {
+	const [objectStyle, contentStyle] = processStyle(style, sheetSize);
+
+	let content = null;
 
 	switch (type) {
 		case "image":
-			return (
-				<img className={classes.object} src={value} alt="" style={cssStyle} />
+			content = (
+				<img
+					className={classes.content}
+					src={value}
+					alt=""
+					style={contentStyle}
+				/>
 			);
+			break;
 		case "text":
-			return (
-				<p className={classes.object} style={cssStyle}>
+			content = (
+				<p className={classes.content} style={contentStyle}>
 					{value}
 				</p>
 			);
+			break;
 		default:
-			return null;
 	}
+
+	return (
+		<div className={classes.object} style={objectStyle}>
+			{content}
+		</div>
+	);
 };
 
 export default Object;

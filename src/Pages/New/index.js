@@ -68,7 +68,6 @@ const New = () => {
 								sheetSize={sheetSize}
 							/>
 						))}
-						<input type="text" style={{}} />
 					</Sheet>
 				)}
 			</main>
