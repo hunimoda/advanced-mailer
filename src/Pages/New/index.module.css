@@ -29,6 +29,8 @@
 .workspace {
 	height: calc(100vh - 2 * var(--header-height));
 	background: #1c1c1c;
+	width: 100%;
+	position: relative;
 }
 
 .toolboxFooter {
