@@ -2,10 +2,20 @@ import { useState } from "react";
 import SheetContainer from "../../Components/SheetContainer";
 import classes from "./index.module.css";
 
-const New = () => {
-	const [sheetRatio, setSheetRatio] = useState(1);
+const ratios = [3 / 4, 1, 4 / 3];
 
-	const { width: screenWidth, height: screenHeight } = window.screen;
+const New = () => {
+	const [sheetRatioIdx, setSheetRatioIdx] = useState(0);
+
+	const onChangeRatioClick = () => {
+		let newSheetRatioIdx = sheetRatioIdx + 1;
+
+		if (newSheetRatioIdx >= ratios.length) {
+			newSheetRatioIdx = 0;
+		}
+
+		setSheetRatioIdx(newSheetRatioIdx);
+	};
 
 	return (
 		<>
@@ -19,11 +29,11 @@ const New = () => {
 				</div>
 			</header>
 			<main className={classes.workspace}>
-				<SheetContainer sheetRatio={0.75}>Wow</SheetContainer>
+				<SheetContainer sheetRatio={ratios[sheetRatioIdx]}>Wow</SheetContainer>
 			</main>
 			<footer className={classes.toolboxFooter}>
 				<div className={classes.toolbox}>
-					<button>1:1</button>
+					<button onClick={onChangeRatioClick}>%</button>
 					<button>
 						<i className="fas fa-times" />
 					</button>

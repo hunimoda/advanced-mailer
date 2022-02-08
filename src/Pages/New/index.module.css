@@ -59,3 +59,8 @@
 .toolbox button:active {
 	background: #535353;
 }
+
+.ratio {
+	font-size: 18px;
+	line-height: var(--header-height);
+}
