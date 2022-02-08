@@ -1,6 +1,8 @@
-import { useState, useEffect, useReducer, useRef } from "react";
-import SheetContainer from "../../Components/SheetContainer";
+import { useRef, useState, useEffect, useReducer } from "react";
+import TopHeader from "../../Components/New/TopHeader";
+import Sheet from "../../Components/Sheet";
 import Object from "../../Components/Letter/Object";
+import ToolBox from "../../Components/New/ToolBox";
 import classes from "./index.module.css";
 
 const INIT_SHEET = {
@@ -33,10 +35,7 @@ const reducer = (state, action) => {};
 
 const New = () => {
 	const [sheet, dispatch] = useReducer(reducer, INIT_SHEET);
-
-	const { aspectRatio, backgroundColor, objects } = sheet;
-
-	const mainRef = useRef();
+	const { aspectRatio, backgroundColor: sheetBgColor, objects } = sheet;
 
 	const [sheetSize, setSheetSize] = useState(null);
 
@@ -52,24 +51,14 @@ const New = () => {
 		setSheetSize({ width: sheetWidth, height: sheetHeight });
 	}, [aspectRatio]);
 
+	const mainRef = useRef();
+
 	return (
 		<>
-			<header className={classes.topHeader}>
-				<button>
-					<i className="fas fa-times" />
-				</button>
-				<div className={classes.controls}>
-					<button>저장</button>
-					<button>완료</button>
-				</div>
-			</header>
-			<main ref={mainRef} className={classes.workspace}>
+			<TopHeader />
+			<main ref={mainRef} className={classes.main}>
 				{sheetSize && (
-					<SheetContainer
-						sheetSize={sheetSize}
-						aspectRatio={aspectRatio}
-						backgroundColor={backgroundColor}
-					>
+					<Sheet size={sheetSize} backgroundColor={sheetBgColor}>
 						{objects.map((object) => (
 							<Object
 								key={object.id}
@@ -79,32 +68,11 @@ const New = () => {
 								sheetSize={sheetSize}
 							/>
 						))}
-					</SheetContainer>
+						<input type="text" style={{}} />
+					</Sheet>
 				)}
 			</main>
-			<footer className={classes.toolboxFooter}>
-				<div className={classes.toolbox}>
-					<button>%</button>
-					<button>
-						<i className="fas fa-times" />
-					</button>
-					<button>
-						<i className="fas fa-times" />
-					</button>
-					<button>
-						<i className="fas fa-times" />
-					</button>
-					<button>
-						<i className="fas fa-times" />
-					</button>
-					<button>
-						<i className="fas fa-times" />
-					</button>
-					<button>
-						<i className="fas fa-times" />
-					</button>
-				</div>
-			</footer>
+			<ToolBox />
 		</>
 	);
 };

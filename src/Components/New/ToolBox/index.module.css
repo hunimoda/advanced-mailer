@@ -1,0 +1,28 @@
+.footer {
+	height: var(--header-height);
+	overflow: hidden;
+}
+
+.toolbox {
+	background: #282828;
+	width: 100%;
+	padding-bottom: 30px;
+	overflow-x: scroll;
+	display: flex;
+}
+
+.toolbox button {
+	width: var(--header-height);
+	height: var(--header-height);
+	border-radius: 100px;
+	margin: 0 calc(11vw - var(--header-height) / 2);
+	border: none;
+	font-size: 24px;
+	flex-shrink: 0;
+	color: white;
+	background: transparent;
+}
+
+.toolbox button:active {
+	background: #535353;
+}
