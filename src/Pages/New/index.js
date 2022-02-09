@@ -98,6 +98,8 @@ const reducer = (state, action) => {
 				}
 				return object;
 			});
+		case "DELETE_OBJECT":
+			return state.filter((object) => object.id !== payload);
 		default:
 			return state;
 	}
@@ -128,9 +130,11 @@ const New = () => {
 		setSheetSize({ width: sheetWidth, height: sheetHeight });
 	}, [aspectRatio]);
 
-	const onObjectMove = (id, delta) => {
+	const onObjectMove = (id, delta) =>
 		dispatch({ type: "MOVE_OBJECT", payload: { id, delta } });
-	};
+
+	const onObjectDelete = (id) =>
+		dispatch({ type: "DELETE_OBJECT", payload: id });
 
 	return (
 		<>
@@ -148,6 +152,7 @@ const New = () => {
 								sheetSize={sheetSize}
 								selected={true}
 								onMove={onObjectMove}
+								onDelete={onObjectDelete}
 							/>
 						))}
 					</Sheet>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import classes from "./index.module.css";
 
 const processStyle = (style, sheetSize) => {
@@ -88,7 +87,16 @@ const createContentJsx = (type, value, contentStyle) => {
 
 let prevCoord = null;
 
-const Object = ({ id, type, value, style, sheetSize, selected, onMove }) => {
+const Object = ({
+	id,
+	type,
+	value,
+	style,
+	sheetSize,
+	selected,
+	onMove,
+	onDelete,
+}) => {
 	const [objectStyle, contentStyle, scale] = processStyle(style, sheetSize);
 
 	const content = createContentJsx(type, value, contentStyle);
@@ -109,6 +117,7 @@ const Object = ({ id, type, value, style, sheetSize, selected, onMove }) => {
 			<button
 				className={classes.delete}
 				style={{ transform: `scale(${1 / scale}) translate(50%, -50%)` }}
+				onClick={() => onDelete(id)}
 			>
 				<i className="fas fa-times" />
 			</button>
