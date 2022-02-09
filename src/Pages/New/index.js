@@ -107,21 +107,14 @@ const reducer = (state, { type, payload }) => {
 			},
 		};
 	} else if (type === "MOVE_OBJECT") {
-		const {
-			id,
-			disposition: { left, top },
-		} = payload;
+		const { id, disposition } = payload;
 
-		newObjects[id].style.top += top;
-		newObjects[id].style.left += left;
+		newObjects[id].style.top += disposition.top;
+		newObjects[id].style.left += disposition.left;
 	} else if (type === "DELETE_OBJECT") {
-		const id = payload;
-
-		delete newObjects[id];
+		delete newObjects[payload]; // payload = id
 	} else if (type === "UPDATE_Z_INDEX") {
-		const id = payload;
-
-		newObjects[id].style.zIndex = ++maxZIndex;
+		newObjects[payload].style.zIndex = ++maxZIndex; // payload = id
 	}
 
 	return newObjects;
@@ -131,12 +124,10 @@ const New = () => {
 	const mainRef = useRef();
 
 	const [sheetSize, setSheetSize] = useState(null);
-
 	const [aspectRatio, setAspectRatio] = useState(INIT_SHEET.aspectRatio);
 	const [backgroundColor, setBackgroundColor] = useState(
 		INIT_SHEET.backgroundColor
 	);
-
 	const [selectedId, setSelectedId] = useState("temp");
 
 	const [objects, dispatch] = useReducer(reducer, INIT_SHEET.objects);
@@ -184,23 +175,6 @@ const New = () => {
 								selected={id === selectedId}
 							/>
 						))}
-						<button onClick={() => dispatch({ type: "ADD_TEXT" })}>
-							텍스트
-						</button>
-						<button
-							onClick={() =>
-								dispatch({
-									type: "ADD_IMAGE",
-									payload: {
-										src: "https://place-hold.it/300x500",
-										imageRatio: 0.6,
-										sheetRatio: aspectRatio,
-									},
-								})
-							}
-						>
-							이미지
-						</button>
 					</Sheet>
 				)}
 			</main>

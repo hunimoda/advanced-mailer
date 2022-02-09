@@ -1,66 +1,56 @@
 import classes from "./index.module.css";
 
+const OBJECT_STYLE_PROPS = [
+	"top",
+	"left",
+	"width",
+	"height",
+	"zIndex",
+	"transform",
+];
+
+const convertTransformValue = (value) => {
+	let convertedValue = "";
+
+	Object.entries(value).forEach(([transformProp, transformValue]) => {
+		if (transformProp === "rotate") {
+			convertedValue += ` rotate(${transformValue}deg)`;
+		} else if (transformProp === "scale") {
+			convertedValue += ` scale(${transformValue})`;
+		}
+	});
+
+	return convertedValue;
+};
+
+const convertStyleValue = (prop, value, sheetSize, scale) => {
+	if (prop === "height") {
+		value = `${(sheetSize.height * value) / (scale ?? 1)}px`;
+	} else if (prop === "width") {
+		value = `${(sheetSize.width * value) / (scale ?? 1)}px`;
+	} else if (["top", "left"].includes(prop)) {
+		value = `${value * 100}%`;
+	} else if (prop === "transform") {
+		value = convertTransformValue(value);
+	}
+
+	return value;
+};
+
 const processStyle = (style, sheetSize) => {
 	const objectStyle = {};
 	const contentStyle = { fontSize: `${sheetSize.height}px` };
+	const scale = style.transform?.scale;
 
-	let scale = null;
+	Object.entries(style).forEach(([prop, value]) => {
+		const convertedValue = convertStyleValue(prop, value, sheetSize, scale);
 
-	if (
-		style.hasOwnProperty("transform") &&
-		style.transform.hasOwnProperty("scale")
-	) {
-		scale = style.transform.scale;
-	}
-
-	for (const prop in style) {
-		let value = style[prop];
-
-		switch (prop) {
-			case "height":
-				value = `${(sheetSize.height * value) / (scale ?? 1)}px`;
-				break;
-			case "width":
-				value = `${(sheetSize.width * value) / (scale ?? 1)}px`;
-				break;
-			case "top":
-			case "left":
-				value = `${value * 100}%`;
-				break;
-			case "transform":
-				const transform = value;
-				value = "";
-
-				for (const transformProp in transform) {
-					let transformValue = transform[transformProp];
-
-					switch (transformProp) {
-						case "rotate":
-							value += ` rotate(${transformValue}deg)`;
-							break;
-						case "scale":
-							value += ` scale(${transformValue})`;
-							break;
-						default:
-					}
-				}
-				break;
-			default:
+		if (OBJECT_STYLE_PROPS.includes(prop)) {
+			objectStyle[prop] = convertedValue;
+		} else {
+			contentStyle[prop] = convertedValue;
 		}
-
-		switch (prop) {
-			case "top":
-			case "left":
-			case "width":
-			case "height":
-			case "transform":
-			case "zIndex":
-				objectStyle[prop] = value;
-				break;
-			default:
-				contentStyle[prop] = value;
-		}
-	}
+	});
 
 	return [objectStyle, contentStyle, scale ?? 1];
 };
