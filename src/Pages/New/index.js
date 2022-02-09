@@ -78,16 +78,34 @@ const reducer = (state, action) => {
 						height: 0.1,
 						top: 0.45,
 						left: 0.25,
-						backgroundColor: "rgba(0, 0, 0, 0.5)",
+						backgroundColor: "rgba(0, 0, 0, 0.3)",
+						transform: {
+							scale: 0.04,
+						},
 					},
 				},
 			];
+		case "MOVE_OBJECT":
+			const {
+				id,
+				delta: { deltaLeft, deltaTop },
+			} = payload;
+
+			return state.map((object) => {
+				if (object.id === id) {
+					object.style.top += deltaTop;
+					object.style.left += deltaLeft;
+				}
+				return object;
+			});
 		default:
 			return state;
 	}
 };
 
 const New = () => {
+	const mainRef = useRef();
+
 	const [sheetSize, setSheetSize] = useState(null);
 
 	const [aspectRatio, setAspectRatio] = useState(INIT_SHEET.aspectRatio);
@@ -98,6 +116,7 @@ const New = () => {
 	const [objects, dispatch] = useReducer(reducer, INIT_SHEET.objects);
 
 	useEffect(() => {
+		dispatch({ type: "ADD_TEXT" });
 		const { offsetWidth: width, offsetHeight: height } = mainRef.current;
 		const containerRatio = width / height;
 
@@ -109,7 +128,9 @@ const New = () => {
 		setSheetSize({ width: sheetWidth, height: sheetHeight });
 	}, [aspectRatio]);
 
-	const mainRef = useRef();
+	const onObjectMove = (id, delta) => {
+		dispatch({ type: "MOVE_OBJECT", payload: { id, delta } });
+	};
 
 	return (
 		<>
@@ -120,11 +141,13 @@ const New = () => {
 						{objects.map((object) => (
 							<Object
 								key={object.id}
+								id={object.id}
 								type={object.type}
 								value={object.value}
 								style={object.style}
 								sheetSize={sheetSize}
 								selected={true}
+								onMove={onObjectMove}
 							/>
 						))}
 					</Sheet>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import classes from "./index.module.css";
 
 const processStyle = (style, sheetSize) => {
@@ -85,7 +86,9 @@ const createContentJsx = (type, value, contentStyle) => {
 	return null;
 };
 
-const Object = ({ type, value, style, sheetSize, selected }) => {
+let prevCoord = null;
+
+const Object = ({ id, type, value, style, sheetSize, selected, onMove }) => {
 	const [objectStyle, contentStyle, scale] = processStyle(style, sheetSize);
 
 	const content = createContentJsx(type, value, contentStyle);
@@ -118,8 +121,35 @@ const Object = ({ type, value, style, sheetSize, selected }) => {
 		</>
 	);
 
+	const onTouchStart = (event) => {
+		const { screenX: x, screenY: y } = event.touches[0];
+
+		prevCoord = { x, y };
+	};
+
+	const onTouchMove = (event) => {
+		if (selected) {
+			const { screenX: x, screenY: y } = event.touches[0];
+
+			const deltaLeft = (x - prevCoord.x) / sheetSize.width;
+			const deltaTop = (y - prevCoord.y) / sheetSize.height;
+
+			onMove(id, { deltaLeft, deltaTop });
+
+			prevCoord = { x, y };
+		}
+	};
+
+	const onTouchEnd = () => (prevCoord = null);
+
 	return (
-		<div className={classes.object} style={objectStyle}>
+		<div
+			className={classes.object}
+			style={objectStyle}
+			onTouchStart={onTouchStart}
+			onTouchMove={onTouchMove}
+			onTouchEnd={onTouchEnd}
+		>
 			{selected && modifier}
 			{content}
 		</div>
