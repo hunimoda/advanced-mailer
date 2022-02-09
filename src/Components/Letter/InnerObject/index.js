@@ -54,6 +54,7 @@ const processStyle = (style, sheetSize) => {
 			case "width":
 			case "height":
 			case "transform":
+			case "zIndex":
 				objectStyle[prop] = value;
 				break;
 			default:
@@ -87,7 +88,15 @@ const createContentJsx = (type, value, contentStyle) => {
 
 let prevCoord = null;
 
-const InnerObject = ({ id, object, sheetSize, onMove, onDelete, selected }) => {
+const InnerObject = ({
+	id,
+	object,
+	sheetSize,
+	onMove,
+	onDelete,
+	onSelect,
+	selected,
+}) => {
 	const { type, value, style } = object;
 	const [objectStyle, contentStyle, scale] = processStyle(style, sheetSize);
 
@@ -110,12 +119,14 @@ const InnerObject = ({ id, object, sheetSize, onMove, onDelete, selected }) => {
 				className={classes.delete}
 				style={{ transform: `scale(${1 / scale}) translate(50%, -50%)` }}
 				onClick={() => onDelete(id)}
+				onTouchMove={(event) => event.stopPropagation()}
 			>
 				<i className="fas fa-times" />
 			</button>
 			<span
 				className={classes.resize}
 				style={{ transform: `scale(${1 / scale}) translate(50%, 50%)` }}
+				onTouchMove={(event) => event.stopPropagation()}
 			>
 				<i className="fas fa-arrows-alt-h" />
 			</span>
@@ -123,6 +134,8 @@ const InnerObject = ({ id, object, sheetSize, onMove, onDelete, selected }) => {
 	);
 
 	const onTouchStart = (event) => {
+		onSelect(id);
+
 		const { screenX: x, screenY: y } = event.touches[0];
 
 		prevCoord = { x, y };

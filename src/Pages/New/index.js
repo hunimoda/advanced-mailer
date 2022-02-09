@@ -27,6 +27,7 @@ const INIT_SHEET = {
 					rotate: 10,
 				},
 				width: 0.8,
+				zIndex: 1,
 			},
 		},
 		another: {
@@ -38,6 +39,7 @@ const INIT_SHEET = {
 				top: 0.5,
 				height: 0.5,
 				width: 0.4,
+				zIndex: 2,
 			},
 		},
 	},
@@ -62,6 +64,8 @@ const generateObjectId = () => {
 	return idxArray.map((idx) => ID_CHARS[idx]).join("");
 };
 
+let maxZIndex = 0;
+
 const reducer = (state, { type, payload }) => {
 	const newObjects = JSON.parse(JSON.stringify(state));
 
@@ -78,6 +82,28 @@ const reducer = (state, { type, payload }) => {
 				transform: {
 					scale: 0.04,
 				},
+				zIndex: ++maxZIndex,
+			},
+		};
+	} else if (type === "ADD_IMAGE") {
+		const { src, imageRatio, sheetRatio } = payload;
+
+		const width = Math.min(1, imageRatio / sheetRatio) / 2;
+		const height = Math.min(1, sheetRatio / imageRatio) / 2;
+
+		newObjects[generateObjectId()] = {
+			type: "image",
+			value: src,
+			style: {
+				width,
+				height,
+				top: 0.5 - height / 2,
+				left: 0.5 - width / 2,
+				backgroundColor: "rgba(0, 0, 0, 0.3)",
+				transform: {
+					scale: 0.04,
+				},
+				zIndex: ++maxZIndex,
 			},
 		};
 	} else if (type === "MOVE_OBJECT") {
@@ -112,7 +138,6 @@ const New = () => {
 	const [objects, dispatch] = useReducer(reducer, INIT_SHEET.objects);
 
 	useEffect(() => {
-		dispatch({ type: "ADD_TEXT" });
 		const { offsetWidth: width, offsetHeight: height } = mainRef.current;
 		const containerRatio = width / height;
 
@@ -130,6 +155,8 @@ const New = () => {
 	const onObjectDelete = (id) =>
 		dispatch({ type: "DELETE_OBJECT", payload: id });
 
+	const onObjectSelect = (id) => setSelectedId(id);
+
 	return (
 		<>
 			<TopHeader />
@@ -144,9 +171,27 @@ const New = () => {
 								sheetSize={sheetSize}
 								onMove={onObjectMove}
 								onDelete={onObjectDelete}
+								onSelect={onObjectSelect}
 								selected={id === selectedId}
 							/>
 						))}
+						<button onClick={() => dispatch({ type: "ADD_TEXT" })}>
+							텍스트
+						</button>
+						<button
+							onClick={() =>
+								dispatch({
+									type: "ADD_IMAGE",
+									payload: {
+										src: "https://place-hold.it/300x500",
+										imageRatio: 0.6,
+										sheetRatio: aspectRatio,
+									},
+								})
+							}
+						>
+							이미지
+						</button>
 					</Sheet>
 				)}
 			</main>
