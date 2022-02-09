@@ -24,7 +24,7 @@ const INIT_SHEET = {
 				top: 0.1,
 				transform: {
 					scale: 0.02,
-					rotate: 30,
+					rotate: 10,
 				},
 				width: 0.8,
 			},
@@ -43,13 +43,59 @@ const INIT_SHEET = {
 	],
 };
 
-const reducer = (state, action) => {};
+const generateObjectId = () => {
+	const idxArray = [];
+	const ID_CHARS =
+		"-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
+
+	let timestamp = Date.now();
+
+	while (timestamp > 0) {
+		idxArray.unshift(timestamp % 64);
+		timestamp = Math.floor(timestamp / 64);
+	}
+
+	for (let i = 0; i < 16; i++) {
+		idxArray.push(Math.floor(Math.random() * 64));
+	}
+
+	return idxArray.map((idx) => ID_CHARS[idx]).join("");
+};
+
+const reducer = (state, action) => {
+	const { type, payload } = action;
+
+	switch (type) {
+		case "ADD_TEXT":
+			return [
+				...state,
+				{
+					id: generateObjectId(),
+					type: "text",
+					value: "",
+					style: {
+						width: 0.5,
+						height: 0.1,
+						top: 0.45,
+						left: 0.25,
+						backgroundColor: "rgba(0, 0, 0, 0.5)",
+					},
+				},
+			];
+		default:
+			return state;
+	}
+};
 
 const New = () => {
-	const [sheet, dispatch] = useReducer(reducer, INIT_SHEET);
-	const { aspectRatio, backgroundColor: sheetBgColor, objects } = sheet;
-
 	const [sheetSize, setSheetSize] = useState(null);
+
+	const [aspectRatio, setAspectRatio] = useState(INIT_SHEET.aspectRatio);
+	const [backgroundColor, setBackgroundColor] = useState(
+		INIT_SHEET.backgroundColor
+	);
+
+	const [objects, dispatch] = useReducer(reducer, INIT_SHEET.objects);
 
 	useEffect(() => {
 		const { offsetWidth: width, offsetHeight: height } = mainRef.current;
@@ -70,7 +116,7 @@ const New = () => {
 			<TopHeader />
 			<main ref={mainRef} className={classes.main}>
 				{sheetSize && (
-					<Sheet size={sheetSize} backgroundColor={sheetBgColor}>
+					<Sheet size={sheetSize} backgroundColor={backgroundColor}>
 						{objects.map((object) => (
 							<Object
 								key={object.id}
