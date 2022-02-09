@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getLetterByParams } from "../../Firebase/db";
 import LetterSheet from "../../Components/Letter/LetterSheet";
-import Object from "../../Components/Letter/Object";
+import InnerObject from "../../Components/Letter/InnerObject";
 import { getMyUid } from "../../Firebase/auth";
 import store from "../../Context";
 
@@ -77,7 +77,7 @@ const Letter = ({ type }) => {
 			type={type}
 		>
 			{objects.map((object, index) => (
-				<Object
+				<InnerObject
 					key={index}
 					type={object.type}
 					value={object.value}

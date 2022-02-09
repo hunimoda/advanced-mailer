@@ -1,16 +1,16 @@
 import { useRef, useState, useEffect, useReducer } from "react";
 import TopHeader from "../../Components/New/TopHeader";
 import Sheet from "../../Components/Sheet";
-import Object from "../../Components/Letter/Object";
+import InnerObject from "../../Components/Letter/InnerObject";
 import ToolBox from "../../Components/New/ToolBox";
 import classes from "./index.module.css";
 
 const INIT_SHEET = {
 	aspectRatio: 0.75,
 	backgroundColor: "pink",
-	objects: [
-		{
-			id: "temp",
+	objects: {
+		temp: {
+			selected: false,
 			type: "text",
 			value:
 				"오늘은 3.1절입니다.\n독립열사들의 정신을 기리며\n조국을 수호합시다!",
@@ -29,8 +29,8 @@ const INIT_SHEET = {
 				width: 0.8,
 			},
 		},
-		{
-			id: "another",
+		another: {
+			selected: false,
 			type: "image",
 			value: "https://place-hold.it/300x500",
 			style: {
@@ -40,7 +40,7 @@ const INIT_SHEET = {
 				width: 0.4,
 			},
 		},
-	],
+	},
 };
 
 const generateObjectId = () => {
@@ -62,47 +62,39 @@ const generateObjectId = () => {
 	return idxArray.map((idx) => ID_CHARS[idx]).join("");
 };
 
-const reducer = (state, action) => {
-	const { type, payload } = action;
+const reducer = (state, { type, payload }) => {
+	const newObjects = JSON.parse(JSON.stringify(state));
 
-	switch (type) {
-		case "ADD_TEXT":
-			return [
-				...state,
-				{
-					id: generateObjectId(),
-					type: "text",
-					value: "",
-					style: {
-						width: 0.5,
-						height: 0.1,
-						top: 0.45,
-						left: 0.25,
-						backgroundColor: "rgba(0, 0, 0, 0.3)",
-						transform: {
-							scale: 0.04,
-						},
-					},
+	if (type === "ADD_TEXT") {
+		newObjects[generateObjectId()] = {
+			type: "text",
+			value: "",
+			style: {
+				width: 0.5,
+				height: 0.1,
+				top: 0.45,
+				left: 0.25,
+				backgroundColor: "rgba(0, 0, 0, 0.3)",
+				transform: {
+					scale: 0.04,
 				},
-			];
-		case "MOVE_OBJECT":
-			const {
-				id,
-				delta: { deltaLeft, deltaTop },
-			} = payload;
+			},
+		};
+	} else if (type === "MOVE_OBJECT") {
+		const {
+			id,
+			disposition: { left, top },
+		} = payload;
 
-			return state.map((object) => {
-				if (object.id === id) {
-					object.style.top += deltaTop;
-					object.style.left += deltaLeft;
-				}
-				return object;
-			});
-		case "DELETE_OBJECT":
-			return state.filter((object) => object.id !== payload);
-		default:
-			return state;
+		newObjects[id].style.top += top;
+		newObjects[id].style.left += left;
+	} else if (type === "DELETE_OBJECT") {
+		const id = payload;
+
+		delete newObjects[id];
 	}
+
+	return newObjects;
 };
 
 const New = () => {
@@ -114,6 +106,8 @@ const New = () => {
 	const [backgroundColor, setBackgroundColor] = useState(
 		INIT_SHEET.backgroundColor
 	);
+
+	const [selectedId, setSelectedId] = useState("temp");
 
 	const [objects, dispatch] = useReducer(reducer, INIT_SHEET.objects);
 
@@ -130,8 +124,8 @@ const New = () => {
 		setSheetSize({ width: sheetWidth, height: sheetHeight });
 	}, [aspectRatio]);
 
-	const onObjectMove = (id, delta) =>
-		dispatch({ type: "MOVE_OBJECT", payload: { id, delta } });
+	const onObjectMove = (id, disposition) =>
+		dispatch({ type: "MOVE_OBJECT", payload: { id, disposition } });
 
 	const onObjectDelete = (id) =>
 		dispatch({ type: "DELETE_OBJECT", payload: id });
@@ -142,17 +136,15 @@ const New = () => {
 			<main ref={mainRef} className={classes.main}>
 				{sheetSize && (
 					<Sheet size={sheetSize} backgroundColor={backgroundColor}>
-						{objects.map((object) => (
-							<Object
-								key={object.id}
-								id={object.id}
-								type={object.type}
-								value={object.value}
-								style={object.style}
+						{Object.entries(objects).map(([id, object]) => (
+							<InnerObject
+								key={id}
+								id={id}
+								object={object}
 								sheetSize={sheetSize}
-								selected={true}
 								onMove={onObjectMove}
 								onDelete={onObjectDelete}
+								selected={id === selectedId}
 							/>
 						))}
 					</Sheet>

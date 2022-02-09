@@ -87,16 +87,8 @@ const createContentJsx = (type, value, contentStyle) => {
 
 let prevCoord = null;
 
-const Object = ({
-	id,
-	type,
-	value,
-	style,
-	sheetSize,
-	selected,
-	onMove,
-	onDelete,
-}) => {
+const InnerObject = ({ id, object, sheetSize, onMove, onDelete, selected }) => {
+	const { type, value, style } = object;
 	const [objectStyle, contentStyle, scale] = processStyle(style, sheetSize);
 
 	const content = createContentJsx(type, value, contentStyle);
@@ -140,10 +132,10 @@ const Object = ({
 		if (selected) {
 			const { screenX: x, screenY: y } = event.touches[0];
 
-			const deltaLeft = (x - prevCoord.x) / sheetSize.width;
-			const deltaTop = (y - prevCoord.y) / sheetSize.height;
+			const left = (x - prevCoord.x) / sheetSize.width;
+			const top = (y - prevCoord.y) / sheetSize.height;
 
-			onMove(id, { deltaLeft, deltaTop });
+			onMove(id, { left, top });
 
 			prevCoord = { x, y };
 		}
@@ -165,4 +157,4 @@ const Object = ({
 	);
 };
 
-export default Object;
+export default InnerObject;
