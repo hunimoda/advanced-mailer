@@ -8,3 +8,57 @@
 	width: 100%;
 	height: 100%;
 }
+
+.border {
+	width: 100%;
+	height: 100%;
+	border-style: dotted;
+	border-color: red;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.center {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 10px;
+	height: 10px;
+	border-radius: 100px;
+	background: red;
+	transform-origin: top left;
+}
+
+.delete,
+.resize {
+	display: block;
+	background: white;
+	border: none;
+	width: 30px;
+	height: 30px;
+	font-size: 18px;
+	text-align: center;
+	line-height: 30px;
+	border-radius: 100px;
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+		rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.delete {
+	position: absolute;
+	top: 0;
+	right: 0;
+	transform-origin: top right;
+}
+
+.resize {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	transform-origin: bottom right;
+}
+
+.resize i {
+	transform: rotate(-45deg);
+}

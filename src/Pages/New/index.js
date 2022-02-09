@@ -24,8 +24,20 @@ const INIT_SHEET = {
 				top: 0.1,
 				transform: {
 					scale: 0.02,
+					rotate: 30,
 				},
 				width: 0.8,
+			},
+		},
+		{
+			id: "another",
+			type: "image",
+			value: "https://place-hold.it/300x500",
+			style: {
+				left: 0.1,
+				top: 0.5,
+				height: 0.5,
+				width: 0.4,
 			},
 		},
 	],
@@ -66,6 +78,7 @@ const New = () => {
 								value={object.value}
 								style={object.style}
 								sheetSize={sheetSize}
+								selected={true}
 							/>
 						))}
 					</Sheet>

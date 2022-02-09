@@ -61,37 +61,66 @@ const processStyle = (style, sheetSize) => {
 		}
 	}
 
-	return [objectStyle, contentStyle];
+	return [objectStyle, contentStyle, scale ?? 1];
 };
 
-const Object = ({ type, value, style, sheetSize }) => {
-	const [objectStyle, contentStyle] = processStyle(style, sheetSize);
-
-	let content = null;
-
-	switch (type) {
-		case "image":
-			content = (
-				<img
-					className={classes.content}
-					src={value}
-					alt=""
-					style={contentStyle}
-				/>
-			);
-			break;
-		case "text":
-			content = (
-				<p className={classes.content} style={contentStyle}>
-					{value}
-				</p>
-			);
-			break;
-		default:
+const createContentJsx = (type, value, contentStyle) => {
+	if (type === "image") {
+		return (
+			<img
+				className={classes.content}
+				src={value}
+				alt=""
+				style={contentStyle}
+			/>
+		);
+	} else if (type === "text") {
+		return (
+			<p className={classes.content} style={contentStyle}>
+				{value}
+			</p>
+		);
 	}
+
+	return null;
+};
+
+const Object = ({ type, value, style, sheetSize, selected }) => {
+	const [objectStyle, contentStyle, scale] = processStyle(style, sheetSize);
+
+	const content = createContentJsx(type, value, contentStyle);
+
+	const modifier = (
+		<>
+			<div
+				className={classes.border}
+				style={{
+					borderWidth: `${1 / scale}px`,
+					transform: `translate(-${1 / scale}px, -${1 / scale}px)`,
+				}}
+			/>
+			<div
+				className={classes.center}
+				style={{ transform: `scale(${1 / scale}) translate(-50%, -50%)` }}
+			/>
+			<button
+				className={classes.delete}
+				style={{ transform: `scale(${1 / scale}) translate(50%, -50%)` }}
+			>
+				<i className="fas fa-times" />
+			</button>
+			<span
+				className={classes.resize}
+				style={{ transform: `scale(${1 / scale}) translate(50%, 50%)` }}
+			>
+				<i className="fas fa-arrows-alt-h" />
+			</span>
+		</>
+	);
 
 	return (
 		<div className={classes.object} style={objectStyle}>
+			{selected && modifier}
 			{content}
 		</div>
 	);
