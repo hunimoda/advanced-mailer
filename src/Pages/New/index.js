@@ -118,6 +118,10 @@ const reducer = (state, { type, payload }) => {
 		const id = payload;
 
 		delete newObjects[id];
+	} else if (type === "UPDATE_Z_INDEX") {
+		const id = payload;
+
+		newObjects[id].style.zIndex = ++maxZIndex;
 	}
 
 	return newObjects;
@@ -155,7 +159,12 @@ const New = () => {
 	const onObjectDelete = (id) =>
 		dispatch({ type: "DELETE_OBJECT", payload: id });
 
-	const onObjectSelect = (id) => setSelectedId(id);
+	const onObjectSelect = (id) => {
+		if (id !== selectedId) {
+			setSelectedId(id);
+			dispatch({ type: "UPDATE_Z_INDEX", payload: id });
+		}
+	};
 
 	return (
 		<>
