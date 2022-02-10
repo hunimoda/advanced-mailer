@@ -182,7 +182,7 @@ const New = () => {
 		const diffLength = vectorLength(diffVector);
 
 		if (newLength === 0) {
-			console.log("ZERO!");
+			onObjectDelete(id);
 			return;
 		}
 
