@@ -1,3 +1,4 @@
+import { useState } from "react";
 import classes from "./index.module.css";
 
 const OBJECT_STYLE_PROPS = [
@@ -94,6 +95,7 @@ const InnerObject = ({
 	const content = createContentJsx(type, value, contentStyle);
 
 	const onTouchStart = (event) => {
+		event.stopPropagation();
 		onSelect(id);
 
 		const { clientX: x, clientY: y } = event.touches[0];

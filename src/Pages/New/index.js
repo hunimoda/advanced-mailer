@@ -142,6 +142,14 @@ const New = () => {
 	const [objects, dispatch] = useReducer(reducer, INIT_SHEET.objects);
 
 	useEffect(() => {
+		const deselectAllObjects = () => setSelectedId(null);
+
+		window.addEventListener("touchstart", deselectAllObjects);
+
+		return () => window.removeEventListener("touchstart", deselectAllObjects);
+	}, []);
+
+	useEffect(() => {
 		const { offsetWidth: width, offsetHeight: height } = mainRef.current;
 		const containerRatio = width / height;
 
@@ -182,7 +190,6 @@ const New = () => {
 		const diffLength = vectorLength(diffVector);
 
 		if (newLength === 0) {
-			onObjectDelete(id);
 			return;
 		}
 
