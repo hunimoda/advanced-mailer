@@ -1,6 +1,7 @@
 .object {
 	position: absolute;
 	transform-origin: top left;
+	touch-action: none;
 }
 
 .content {

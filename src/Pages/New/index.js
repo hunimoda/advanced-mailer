@@ -30,18 +30,18 @@ const INIT_SHEET = {
 				zIndex: 1,
 			},
 		},
-		another: {
-			selected: false,
-			type: "image",
-			value: "https://place-hold.it/300x500",
-			style: {
-				left: 0.1,
-				top: 0.5,
-				height: 0.5,
-				width: 0.4,
-				zIndex: 2,
-			},
-		},
+		// another: {
+		// 	selected: false,
+		// 	type: "image",
+		// 	value: "https://place-hold.it/300x500",
+		// 	style: {
+		// 		left: 0.1,
+		// 		top: 0.5,
+		// 		height: 0.5,
+		// 		width: 0.4,
+		// 		zIndex: 2,
+		// 	},
+		// },
 	},
 };
 
@@ -81,6 +81,7 @@ const reducer = (state, { type, payload }) => {
 				backgroundColor: "rgba(0, 0, 0, 0.3)",
 				transform: {
 					scale: 0.04,
+					rotate: 0,
 				},
 				zIndex: ++maxZIndex,
 			},
@@ -102,6 +103,7 @@ const reducer = (state, { type, payload }) => {
 				backgroundColor: "rgba(0, 0, 0, 0.3)",
 				transform: {
 					scale: 0.04,
+					rotate: 0,
 				},
 				zIndex: ++maxZIndex,
 			},
@@ -115,6 +117,12 @@ const reducer = (state, { type, payload }) => {
 		delete newObjects[payload]; // payload = id
 	} else if (type === "UPDATE_Z_INDEX") {
 		newObjects[payload].style.zIndex = ++maxZIndex; // payload = id
+	} else if (type === "RESIZE_OBJECT") {
+		const { id, scale, angle } = payload;
+
+		newObjects[id].style.width *= scale;
+		newObjects[id].style.height *= scale;
+		newObjects[id].style.transform.rotate += angle;
 	}
 
 	return newObjects;
@@ -122,6 +130,7 @@ const reducer = (state, { type, payload }) => {
 
 const New = () => {
 	const mainRef = useRef();
+	const sheetRef = useRef();
 
 	const [sheetSize, setSheetSize] = useState(null);
 	const [aspectRatio, setAspectRatio] = useState(INIT_SHEET.aspectRatio);
@@ -147,8 +156,60 @@ const New = () => {
 	const onObjectMove = (id, disposition) =>
 		dispatch({ type: "MOVE_OBJECT", payload: { id, disposition } });
 
-	const onObjectDelete = (id) =>
+	const onObjectResize = (id, position, oldPosition) => {
+		const vectorDifference = (position1, position2) => {
+			return {
+				x: position1.x - position2.x,
+				y: position1.y - position2.y,
+			};
+		};
+		const vectorLength = (disposition) =>
+			Math.sqrt(Math.pow(disposition.x, 2) + Math.pow(disposition.y, 2));
+
+		const { left: sheetLeft, top: sheetTop } =
+			sheetRef.current.getBoundingClientRect();
+		const centerPosition = {
+			x: objects[id].style.left * sheetSize.width + sheetLeft,
+			y: objects[id].style.top * sheetSize.height + sheetTop,
+		};
+
+		const newVector = vectorDifference(position, centerPosition);
+		const oldVector = vectorDifference(oldPosition, centerPosition);
+		const diffVector = vectorDifference(newVector, oldVector);
+
+		const newLength = vectorLength(newVector);
+		const oldLength = vectorLength(oldVector);
+		const diffLength = vectorLength(diffVector);
+
+		if (newLength === 0) {
+			console.log("ZERO!");
+			return;
+		}
+
+		const scale = newLength / oldLength;
+		const angle =
+			(Math.acos(
+				(-Math.pow(diffLength, 2) +
+					Math.pow(newLength, 2) +
+					Math.pow(oldLength, 2)) /
+					(2 * newLength * oldLength)
+			) *
+				180) /
+			Math.PI;
+		const direction = Math.sign(
+			newVector.y * oldVector.x - newVector.x * oldVector.y
+		);
+
+		dispatch({
+			type: "RESIZE_OBJECT",
+			payload: { id, scale, angle: direction * angle },
+		});
+	};
+
+	const onObjectDelete = (id) => {
 		dispatch({ type: "DELETE_OBJECT", payload: id });
+		setSelectedId(null);
+	};
 
 	const onObjectSelect = (id) => {
 		if (id !== selectedId) {
@@ -162,7 +223,11 @@ const New = () => {
 			<TopHeader />
 			<main ref={mainRef} className={classes.main}>
 				{sheetSize && (
-					<Sheet size={sheetSize} backgroundColor={backgroundColor}>
+					<Sheet
+						ref={sheetRef}
+						size={sheetSize}
+						backgroundColor={backgroundColor}
+					>
 						{Object.entries(objects).map(([id, object]) => (
 							<InnerObject
 								key={id}
@@ -170,6 +235,7 @@ const New = () => {
 								object={object}
 								sheetSize={sheetSize}
 								onMove={onObjectMove}
+								onResize={onObjectResize}
 								onDelete={onObjectDelete}
 								onSelect={onObjectSelect}
 								selected={id === selectedId}

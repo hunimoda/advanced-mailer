@@ -83,6 +83,7 @@ const InnerObject = ({
 	object,
 	sheetSize,
 	onMove,
+	onResize,
 	onDelete,
 	onSelect,
 	selected,
@@ -91,6 +92,36 @@ const InnerObject = ({
 	const [objectStyle, contentStyle, scale] = processStyle(style, sheetSize);
 
 	const content = createContentJsx(type, value, contentStyle);
+
+	const onTouchStart = (event) => {
+		onSelect(id);
+
+		const { clientX: x, clientY: y } = event.touches[0];
+
+		prevCoord = { x, y };
+	};
+
+	const onTouchMove = (event) => {
+		event.stopPropagation();
+
+		if (selected) {
+			const { clientX: x, clientY: y } = event.touches[0];
+			const targetType = event.currentTarget.dataset.type;
+
+			if (targetType === "object") {
+				const left = (x - prevCoord.x) / sheetSize.width;
+				const top = (y - prevCoord.y) / sheetSize.height;
+
+				onMove(id, { left, top });
+			} else if (targetType === "resize") {
+				onResize(id, { x, y }, prevCoord);
+			}
+
+			prevCoord = { x, y };
+		}
+	};
+
+	const onTouchEnd = () => (prevCoord = null);
 
 	const modifier = (
 		<>
@@ -114,40 +145,19 @@ const InnerObject = ({
 				<i className="fas fa-times" />
 			</button>
 			<span
+				data-type="resize"
 				className={classes.resize}
 				style={{ transform: `scale(${1 / scale}) translate(50%, 50%)` }}
-				onTouchMove={(event) => event.stopPropagation()}
+				onTouchMove={onTouchMove}
 			>
 				<i className="fas fa-arrows-alt-h" />
 			</span>
 		</>
 	);
 
-	const onTouchStart = (event) => {
-		onSelect(id);
-
-		const { screenX: x, screenY: y } = event.touches[0];
-
-		prevCoord = { x, y };
-	};
-
-	const onTouchMove = (event) => {
-		if (selected) {
-			const { screenX: x, screenY: y } = event.touches[0];
-
-			const left = (x - prevCoord.x) / sheetSize.width;
-			const top = (y - prevCoord.y) / sheetSize.height;
-
-			onMove(id, { left, top });
-
-			prevCoord = { x, y };
-		}
-	};
-
-	const onTouchEnd = () => (prevCoord = null);
-
 	return (
 		<div
+			data-type="object"
 			className={classes.object}
 			style={objectStyle}
 			onTouchStart={onTouchStart}
