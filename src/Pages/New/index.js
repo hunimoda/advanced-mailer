@@ -233,7 +233,7 @@ const New = () => {
 		const newHeightInPixels =
 			Math.max(radialLength, 30) * Math.sin(objectAngleInRadians);
 
-		const thresholdAngle = 0.5;
+		const THRESHOLD_ANGLE = 1;
 		const normalizedAngle = (radialAngle - objectAngle + 360) % 360;
 
 		dispatch({
@@ -243,8 +243,8 @@ const New = () => {
 				width: newWidthInPixels / sheetSize.width,
 				height: newHeightInPixels / sheetSize.height,
 				angle:
-					thresholdAngle < normalizedAngle &&
-					normalizedAngle < 360 - thresholdAngle
+					THRESHOLD_ANGLE < normalizedAngle &&
+					normalizedAngle < 360 - THRESHOLD_ANGLE
 						? normalizedAngle
 						: 0,
 			},

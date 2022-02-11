@@ -78,6 +78,7 @@ const createContentJsx = (type, value, contentStyle) => {
 };
 
 let prevCoord = null;
+let clickedAfterSelected = null;
 
 const InnerObject = ({
 	id,
@@ -101,7 +102,12 @@ const InnerObject = ({
 
 	const onTouchStart = (event) => {
 		event.stopPropagation();
-		onSelect(id);
+
+		if (selected) {
+			clickedAfterSelected = true;
+		} else {
+			onSelect(id);
+		}
 
 		const { clientX: x, clientY: y } = event.touches[0];
 
@@ -110,6 +116,7 @@ const InnerObject = ({
 
 	const onTouchMove = (event) => {
 		event.stopPropagation();
+		clickedAfterSelected = false;
 
 		if (selected) {
 			const { clientX: x, clientY: y } = event.touches[0];
@@ -132,7 +139,14 @@ const InnerObject = ({
 		}
 	};
 
-	const onTouchEnd = () => (prevCoord = null);
+	const onTouchEnd = () => {
+		if (clickedAfterSelected) {
+			setIsAspectRatioFixed((prev) => !prev);
+		}
+
+		clickedAfterSelected = null;
+		prevCoord = null;
+	};
 
 	const modifier = (
 		<>
