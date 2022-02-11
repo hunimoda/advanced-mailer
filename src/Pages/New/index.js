@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useReducer } from "react";
+import { useRef, useState, useEffect, useReducer, useCallback } from "react";
 import TopHeader from "../../Components/New/TopHeader";
 import Sheet from "../../Components/Sheet";
 import InnerObject from "../../Components/Letter/InnerObject";
@@ -142,24 +142,46 @@ const New = () => {
 	const [objects, dispatch] = useReducer(reducer, INIT_SHEET.objects);
 
 	useEffect(() => {
-		const deselectAllObjects = () => setSelectedId(null);
+		const resizeObserver = new ResizeObserver((entries) => {
+			const mainEntry = entries[0];
 
-		window.addEventListener("touchstart", deselectAllObjects);
+			let width = null;
+			let height = null;
 
-		return () => window.removeEventListener("touchstart", deselectAllObjects);
-	}, []);
+			if (mainEntry.contentBoxSize) {
+				const contentBoxSize = Array.isArray(mainEntry.contentBoxSize)
+					? mainEntry.contentBoxSize[0]
+					: mainEntry.contentBoxSize;
 
-	useEffect(() => {
-		const { offsetWidth: width, offsetHeight: height } = mainRef.current;
-		const containerRatio = width / height;
+				width = contentBoxSize.inlineSize;
+				height = contentBoxSize.blockSize;
+			} else {
+				const contentRect = mainEntry.contentRect;
 
-		const sheetWidth =
-			aspectRatio > containerRatio ? width : height * aspectRatio;
-		const sheetHeight =
-			aspectRatio > containerRatio ? width / aspectRatio : height;
+				width = contentRect.width;
+				height = contentRect.height;
+			}
 
-		setSheetSize({ width: sheetWidth, height: sheetHeight });
+			const containerRatio = width / height;
+
+			const sheetWidth =
+				aspectRatio > containerRatio ? width : height * aspectRatio;
+			const sheetHeight =
+				aspectRatio > containerRatio ? width / aspectRatio : height;
+
+			setSheetSize({ width: sheetWidth, height: sheetHeight });
+		});
+
+		const mainElem = mainRef.current;
+		resizeObserver.observe(mainElem);
+
+		return () => resizeObserver.unobserve(mainElem);
 	}, [aspectRatio]);
+
+	useEffect(
+		() => window.addEventListener("touchstart", () => setSelectedId(null)),
+		[]
+	);
 
 	const onObjectMove = (id, disposition) =>
 		dispatch({ type: "MOVE_OBJECT", payload: { id, disposition } });
