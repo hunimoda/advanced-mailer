@@ -1,9 +1,26 @@
 import classes from "./index.module.css";
 
-const ToolBox = ({ onAspectRatioChange, onSheetColorChange }) => {
+const ToolBox = ({
+	onAspectRatioChange,
+	onSheetColorChange,
+	dispatch,
+	aspectRatio,
+}) => {
 	const onChangeAspectRatioClick = () => {
 		onAspectRatioChange(Number(window.prompt("종횡비")));
 	};
+
+	const onAddTextClick = () => dispatch({ type: "ADD_TEXT" });
+
+	const onAddImageClick = () =>
+		dispatch({
+			type: "ADD_IMAGE",
+			payload: {
+				src: "	https://place-hold.it/300x500",
+				imageRatio: 0.6,
+				sheetRatio: aspectRatio,
+			},
+		});
 
 	return (
 		<footer className={classes.footer}>
@@ -19,11 +36,11 @@ const ToolBox = ({ onAspectRatioChange, onSheetColorChange }) => {
 					type="color"
 					onChange={(event) => onSheetColorChange(event.target.value)}
 				/>
-				<button className={classes.button}>
-					<i className="fas fa-times" />
+				<button className={classes.button} onClick={onAddTextClick}>
+					+T
 				</button>
-				<button className={classes.button}>
-					<i className="fas fa-times" />
+				<button className={classes.button} onClick={onAddImageClick}>
+					+Img
 				</button>
 				<button className={classes.button}>
 					<i className="fas fa-times" />

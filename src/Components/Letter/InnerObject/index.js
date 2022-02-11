@@ -79,6 +79,13 @@ const createContentJsx = (type, value, contentStyle) => {
 
 let prevCoord = null;
 let clickedAfterSelected = null;
+let timer = null;
+const TOUCH_DURATION = 1000;
+
+const onLongTouch = () => {
+	clickedAfterSelected = false;
+	alert("Show object settings");
+};
 
 const InnerObject = ({
 	id,
@@ -102,7 +109,8 @@ const InnerObject = ({
 
 	const onTouchStart = (event) => {
 		event.stopPropagation();
-		console.log(event.target);
+
+		timer = setTimeout(onLongTouch, TOUCH_DURATION);
 
 		if (selected) {
 			clickedAfterSelected = true;
@@ -118,6 +126,10 @@ const InnerObject = ({
 	const onTouchMove = (event) => {
 		event.stopPropagation();
 		clickedAfterSelected = false;
+
+		if (timer) {
+			clearTimeout(timer);
+		}
 
 		if (selected) {
 			const { clientX: x, clientY: y } = event.touches[0];
@@ -143,6 +155,9 @@ const InnerObject = ({
 	const onTouchEnd = () => {
 		if (clickedAfterSelected) {
 			setIsAspectRatioFixed((prev) => !prev);
+		}
+		if (timer) {
+			clearTimeout(timer);
 		}
 
 		clickedAfterSelected = null;
