@@ -233,13 +233,20 @@ const New = () => {
 		const newHeightInPixels =
 			Math.max(radialLength, 30) * Math.sin(objectAngleInRadians);
 
+		const thresholdAngle = 0.5;
+		const normalizedAngle = (radialAngle - objectAngle + 360) % 360;
+
 		dispatch({
 			type: "RESIZE_OBJECT",
 			payload: {
 				id,
 				width: newWidthInPixels / sheetSize.width,
 				height: newHeightInPixels / sheetSize.height,
-				angle: radialAngle - objectAngle,
+				angle:
+					thresholdAngle < normalizedAngle &&
+					normalizedAngle < 360 - thresholdAngle
+						? normalizedAngle
+						: 0,
 			},
 		});
 	};

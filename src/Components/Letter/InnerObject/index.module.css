@@ -21,6 +21,10 @@
 	left: 0;
 }
 
+.border--aligned {
+	border-color: lightgreen;
+}
+
 .delete,
 .resize,
 .resizeWidthBtn,

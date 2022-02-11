@@ -137,7 +137,9 @@ const InnerObject = ({
 	const modifier = (
 		<>
 			<div
-				className={classes.border}
+				className={`${classes.border} ${
+					!style.transform.rotate ? classes["border--aligned"] : ""
+				}`}
 				style={{
 					borderWidth: `${1 / scale}px`,
 					transform: `translate(-${1 / scale}px, -${1 / scale}px)`,
