@@ -23,8 +23,8 @@
 
 .delete,
 .resize,
-.changeWidthBtn,
-.changeHeightBtn {
+.resizeWidthBtn,
+.resizeHeightBtn {
 	display: block;
 	background: rgba(255, 255, 255, 0.5);
 
@@ -58,14 +58,14 @@
 	transform: rotate(-45deg);
 }
 
-.changeWidthBtn {
+.resizeWidthBtn {
 	position: absolute;
 	top: 50%;
 	right: 0;
 	transform-origin: top right;
 }
 
-.changeHeightBtn {
+.resizeHeightBtn {
 	position: absolute;
 	bottom: 0;
 	right: 50%;

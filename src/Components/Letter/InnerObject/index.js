@@ -85,6 +85,7 @@ const InnerObject = ({
 	sheetSize,
 	onMove,
 	onResize,
+	onResizeLength,
 	onDelete,
 	onSelect,
 	selected,
@@ -119,8 +120,12 @@ const InnerObject = ({
 				const top = (y - prevCoord.y) / sheetSize.height;
 
 				onMove(id, { left, top });
-			} else if (targetType === "resize") {
+			} else if (targetType === "resize-and-rotate") {
 				onResize(id, { x, y });
+			} else if (targetType === "resize-width") {
+				onResizeLength(id, { x, y }, false);
+			} else if (targetType === "resize-height") {
+				onResizeLength(id, { x, y }, true);
 			}
 
 			prevCoord = { x, y };
@@ -146,11 +151,11 @@ const InnerObject = ({
 				onClick={() => onDelete(id)}
 				onTouchMove={(event) => event.stopPropagation()}
 			>
-				<i className="fas fa-trash-alt" />
+				<i className="fas fa-times" />
 			</button>
 			{isAspectRatioFixed ? (
 				<span
-					data-type="resize"
+					data-type="resize-and-rotate"
 					className={classes.resize}
 					style={{ transform: `scale(${1 / scale}) translate(50%, 50%)` }}
 					onTouchMove={onTouchMove}
@@ -160,14 +165,18 @@ const InnerObject = ({
 			) : (
 				<>
 					<button
-						className={classes.changeWidthBtn}
+						data-type="resize-width"
+						className={classes.resizeWidthBtn}
 						style={{ transform: `scale(${1 / scale}) translate(50%, -50%)` }}
+						onTouchMove={onTouchMove}
 					>
 						<i className="fas fa-arrows-alt-h" />
 					</button>
 					<button
-						className={classes.changeHeightBtn}
+						data-type="resize-height"
+						className={classes.resizeHeightBtn}
 						style={{ transform: `scale(${1 / scale}) translate(50%, 50%)` }}
+						onTouchMove={onTouchMove}
 					>
 						<i className="fas fa-arrows-alt-v" />
 					</button>

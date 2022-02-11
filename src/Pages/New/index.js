@@ -24,7 +24,7 @@ const INIT_SHEET = {
 				top: 0.1,
 				transform: {
 					scale: 0.02,
-					rotate: 10,
+					rotate: -10,
 				},
 				width: 0.8,
 				zIndex: 1,
@@ -126,6 +126,10 @@ const reducer = (state, { type, payload }) => {
 		newObjects[id].style.width = width;
 		newObjects[id].style.height = height;
 		newObjects[id].style.transform.rotate = angle;
+	} else if (type === "RESIZE_OBJECT_LENGTH") {
+		const { id, length, side } = payload;
+
+		newObjects[id].style[side] = length;
 	}
 
 	return newObjects;
@@ -189,13 +193,18 @@ const New = () => {
 	const onObjectMove = (id, disposition) =>
 		dispatch({ type: "MOVE_OBJECT", payload: { id, disposition } });
 
-	const onObjectResize = (id, position) => {
+	const getCenterPosition = (id) => {
 		const { left: sheetLeft, top: sheetTop } =
 			sheetRef.current.getBoundingClientRect();
-		const centerPosition = {
+
+		return {
 			x: objects[id].style.left * sheetSize.width + sheetLeft,
 			y: objects[id].style.top * sheetSize.height + sheetTop,
 		};
+	};
+
+	const onObjectResize = (id, position) => {
+		const centerPosition = getCenterPosition(id);
 
 		const radialVector = {
 			x: position.x - centerPosition.x,
@@ -235,6 +244,45 @@ const New = () => {
 		});
 	};
 
+	const dotProduct = (vector1, vector2) => {
+		return vector1.x * vector2.x + vector1.y * vector2.y;
+	};
+
+	const onObjectResizeLength = (id, position, isResizeHeight) => {
+		const rotateAngle = objects[id].style.transform.rotate;
+		const normalVector = {
+			x: Math.cos(((rotateAngle + (isResizeHeight ? 90 : 0)) * Math.PI) / 180),
+			y: Math.sin(((rotateAngle + (isResizeHeight ? 90 : 0)) * Math.PI) / 180),
+		};
+
+		const centerPosition = getCenterPosition(id);
+		const lineConstant = -dotProduct(normalVector, centerPosition);
+
+		const signedDistance = dotProduct(normalVector, position) + lineConstant;
+
+		const referencePointAngleInRadians = ((45 + rotateAngle) * Math.PI) / 180;
+		const referencePoint = {
+			x: centerPosition.x + Math.cos(referencePointAngleInRadians),
+			y: centerPosition.y + Math.sin(referencePointAngleInRadians),
+		};
+		const realSign = Math.sign(
+			dotProduct(normalVector, referencePoint) + lineConstant
+		);
+
+		if (Math.sign(signedDistance) === realSign) {
+			dispatch({
+				type: "RESIZE_OBJECT_LENGTH",
+				payload: {
+					id,
+					length:
+						Math.max(30, Math.abs(signedDistance)) /
+						(isResizeHeight ? sheetSize.height : sheetSize.width),
+					side: isResizeHeight ? "height" : "width",
+				},
+			});
+		}
+	};
+
 	const onObjectDelete = (id) => {
 		dispatch({ type: "DELETE_OBJECT", payload: id });
 		setSelectedId(null);
@@ -265,6 +313,7 @@ const New = () => {
 								sheetSize={sheetSize}
 								onMove={onObjectMove}
 								onResize={onObjectResize}
+								onResizeLength={onObjectResizeLength}
 								onDelete={onObjectDelete}
 								onSelect={onObjectSelect}
 								selected={id === selectedId}
