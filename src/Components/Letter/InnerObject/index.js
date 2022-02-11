@@ -1,3 +1,4 @@
+import { useState } from "react";
 import classes from "./index.module.css";
 
 const OBJECT_STYLE_PROPS = [
@@ -91,6 +92,10 @@ const InnerObject = ({
 	const { type, value, style } = object;
 	const [objectStyle, contentStyle, scale] = processStyle(style, sheetSize);
 
+	const [isAspectRatioFixed, setIsAspectRatioFixed] = useState(
+		type === "image" ? true : false
+	);
+
 	const content = createContentJsx(type, value, contentStyle);
 
 	const onTouchStart = (event) => {
@@ -133,26 +138,41 @@ const InnerObject = ({
 					transform: `translate(-${1 / scale}px, -${1 / scale}px)`,
 				}}
 			/>
-			<div
-				className={classes.center}
-				style={{ transform: `scale(${1 / scale}) translate(-50%, -50%)` }}
-			/>
 			<button
 				className={classes.delete}
-				style={{ transform: `scale(${1 / scale}) translate(50%, -50%)` }}
+				style={{
+					transform: `scale(${1 / scale}) translate(-50%, -50%)`,
+				}}
 				onClick={() => onDelete(id)}
 				onTouchMove={(event) => event.stopPropagation()}
 			>
-				<i className="fas fa-times" />
+				<i className="fas fa-trash-alt" />
 			</button>
-			<span
-				data-type="resize"
-				className={classes.resize}
-				style={{ transform: `scale(${1 / scale}) translate(50%, 50%)` }}
-				onTouchMove={onTouchMove}
-			>
-				<i className="fas fa-arrows-alt-h" />
-			</span>
+			{isAspectRatioFixed ? (
+				<span
+					data-type="resize"
+					className={classes.resize}
+					style={{ transform: `scale(${1 / scale}) translate(50%, 50%)` }}
+					onTouchMove={onTouchMove}
+				>
+					<i className="fas fa-arrows-alt-h" />
+				</span>
+			) : (
+				<>
+					<button
+						className={classes.changeWidthBtn}
+						style={{ transform: `scale(${1 / scale}) translate(50%, -50%)` }}
+					>
+						<i className="fas fa-arrows-alt-h" />
+					</button>
+					<button
+						className={classes.changeHeightBtn}
+						style={{ transform: `scale(${1 / scale}) translate(50%, 50%)` }}
+					>
+						<i className="fas fa-arrows-alt-v" />
+					</button>
+				</>
+			)}
 		</>
 	);
 

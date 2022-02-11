@@ -21,21 +21,13 @@
 	left: 0;
 }
 
-.center {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 10px;
-	height: 10px;
-	border-radius: 100px;
-	background: red;
-	transform-origin: top left;
-}
-
 .delete,
-.resize {
+.resize,
+.changeWidthBtn,
+.changeHeightBtn {
 	display: block;
-	background: white;
+	background: rgba(255, 255, 255, 0.5);
+
 	border: none;
 	width: 30px;
 	height: 30px;
@@ -50,8 +42,9 @@
 .delete {
 	position: absolute;
 	top: 0;
-	right: 0;
-	transform-origin: top right;
+	left: 0;
+	transform-origin: top left;
+	color: tomato;
 }
 
 .resize {
@@ -63,4 +56,18 @@
 
 .resize i {
 	transform: rotate(-45deg);
+}
+
+.changeWidthBtn {
+	position: absolute;
+	top: 50%;
+	right: 0;
+	transform-origin: top right;
+}
+
+.changeHeightBtn {
+	position: absolute;
+	bottom: 0;
+	right: 50%;
+	transform-origin: bottom right;
 }

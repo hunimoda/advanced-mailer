@@ -30,18 +30,21 @@ const INIT_SHEET = {
 				zIndex: 1,
 			},
 		},
-		// another: {
-		// 	selected: false,
-		// 	type: "image",
-		// 	value: "https://place-hold.it/300x500",
-		// 	style: {
-		// 		left: 0.1,
-		// 		top: 0.5,
-		// 		height: 0.5,
-		// 		width: 0.4,
-		// 		zIndex: 2,
-		// 	},
-		// },
+		another: {
+			selected: false,
+			type: "image",
+			value: "https://place-hold.it/300x500",
+			style: {
+				left: 0.1,
+				top: 0.5,
+				height: 0.5,
+				width: 0.4,
+				zIndex: 2,
+				transform: {
+					rotate: 0,
+				},
+			},
+		},
 	},
 };
 
