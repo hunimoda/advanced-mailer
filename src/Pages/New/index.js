@@ -118,11 +118,11 @@ const reducer = (state, { type, payload }) => {
 	} else if (type === "UPDATE_Z_INDEX") {
 		newObjects[payload].style.zIndex = ++maxZIndex; // payload = id
 	} else if (type === "RESIZE_OBJECT") {
-		const { id, scale, angle } = payload;
+		const { id, width, height, angle } = payload;
 
-		newObjects[id].style.width *= scale;
-		newObjects[id].style.height *= scale;
-		newObjects[id].style.transform.rotate += angle;
+		newObjects[id].style.width = width;
+		newObjects[id].style.height = height;
+		newObjects[id].style.transform.rotate = angle;
 	}
 
 	return newObjects;
@@ -164,16 +164,7 @@ const New = () => {
 	const onObjectMove = (id, disposition) =>
 		dispatch({ type: "MOVE_OBJECT", payload: { id, disposition } });
 
-	const onObjectResize = (id, position, oldPosition) => {
-		const vectorDifference = (position1, position2) => {
-			return {
-				x: position1.x - position2.x,
-				y: position1.y - position2.y,
-			};
-		};
-		const vectorLength = (disposition) =>
-			Math.sqrt(Math.pow(disposition.x, 2) + Math.pow(disposition.y, 2));
-
+	const onObjectResize = (id, position) => {
 		const { left: sheetLeft, top: sheetTop } =
 			sheetRef.current.getBoundingClientRect();
 		const centerPosition = {
@@ -181,35 +172,41 @@ const New = () => {
 			y: objects[id].style.top * sheetSize.height + sheetTop,
 		};
 
-		const newVector = vectorDifference(position, centerPosition);
-		const oldVector = vectorDifference(oldPosition, centerPosition);
-		const diffVector = vectorDifference(newVector, oldVector);
+		const radialVector = {
+			x: position.x - centerPosition.x,
+			y: position.y - centerPosition.y,
+		};
+		const radialLength = Math.sqrt(
+			Math.pow(radialVector.x, 2) + Math.pow(radialVector.y, 2)
+		);
 
-		const newLength = vectorLength(newVector);
-		const oldLength = vectorLength(oldVector);
-		const diffLength = vectorLength(diffVector);
-
-		if (newLength === 0) {
+		if (radialLength === 0) {
 			return;
 		}
 
-		const scale = newLength / oldLength;
-		const angle =
-			(Math.acos(
-				(-Math.pow(diffLength, 2) +
-					Math.pow(newLength, 2) +
-					Math.pow(oldLength, 2)) /
-					(2 * newLength * oldLength)
-			) *
-				180) /
+		const radialAngle =
+			((Math.sign(radialVector.y) || 1) *
+				(Math.acos(radialVector.x / radialLength) * 180)) /
 			Math.PI;
-		const direction = Math.sign(
-			newVector.y * oldVector.x - newVector.x * oldVector.y
+		const objectAngleInRadians = Math.atan(
+			(objects[id].style.height * sheetSize.height) /
+				(objects[id].style.width * sheetSize.width)
 		);
+		const objectAngle = (objectAngleInRadians * 180) / Math.PI;
+
+		const newWidthInPixels =
+			Math.max(radialLength, 30) * Math.cos(objectAngleInRadians);
+		const newHeightInPixels =
+			Math.max(radialLength, 30) * Math.sin(objectAngleInRadians);
 
 		dispatch({
 			type: "RESIZE_OBJECT",
-			payload: { id, scale, angle: direction * angle },
+			payload: {
+				id,
+				width: newWidthInPixels / sheetSize.width,
+				height: newHeightInPixels / sheetSize.height,
+				angle: radialAngle - objectAngle,
+			},
 		});
 	};
 

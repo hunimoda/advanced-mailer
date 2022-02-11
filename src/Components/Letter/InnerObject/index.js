@@ -1,4 +1,3 @@
-import { useState } from "react";
 import classes from "./index.module.css";
 
 const OBJECT_STYLE_PROPS = [
@@ -116,7 +115,7 @@ const InnerObject = ({
 
 				onMove(id, { left, top });
 			} else if (targetType === "resize") {
-				onResize(id, { x, y }, prevCoord);
+				onResize(id, { x, y });
 			}
 
 			prevCoord = { x, y };
