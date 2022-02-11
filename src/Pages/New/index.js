@@ -302,6 +302,14 @@ const New = () => {
 		}
 	};
 
+	const onToolBoxSelect = (event) => {
+		const id = event.currentTarget.id;
+
+		if (id === "aspect-ratio") {
+			console.log("wow");
+		}
+	};
+
 	return (
 		<>
 			<TopHeader />
@@ -329,7 +337,10 @@ const New = () => {
 					</Sheet>
 				)}
 			</main>
-			<ToolBox />
+			<ToolBox
+				onAspectRatioChange={setAspectRatio}
+				onSheetColorChange={setBackgroundColor}
+			/>
 		</>
 	);
 };

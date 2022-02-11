@@ -11,7 +11,7 @@
 	display: flex;
 }
 
-.toolbox button {
+.toolbox .button {
 	width: var(--header-height);
 	height: var(--header-height);
 	border-radius: 100px;
@@ -19,10 +19,16 @@
 	border: none;
 	font-size: 24px;
 	flex-shrink: 0;
+	text-align: center;
+	line-height: var(--header-height);
 	color: white;
 	background: transparent;
 }
 
-.toolbox button:active {
+.toolbox .button:active {
 	background: #535353;
+}
+
+.toolbox input {
+	display: none;
 }

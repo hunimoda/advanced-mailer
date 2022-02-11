@@ -102,6 +102,7 @@ const InnerObject = ({
 
 	const onTouchStart = (event) => {
 		event.stopPropagation();
+		console.log(event.target);
 
 		if (selected) {
 			clickedAfterSelected = true;
