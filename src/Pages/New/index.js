@@ -142,6 +142,7 @@ const New = () => {
 	const [backgroundColor, setBackgroundColor] = useState(
 		INIT_SHEET.backgroundColor
 	);
+	const [backgroundImage, setBackgroundImage] = useState(null);
 	const [selectedId, setSelectedId] = useState("temp");
 
 	const [objects, dispatch] = useReducer(reducer, INIT_SHEET.objects);
@@ -314,6 +315,18 @@ const New = () => {
 		image.src = dataUrl;
 	};
 
+	const onAddSheetBgImage = (dataUrl) => {
+		const image = new Image();
+
+		image.onload = () => {
+			const imageRatio = image.width / image.height;
+
+			setAspectRatio(imageRatio);
+			setBackgroundImage(dataUrl);
+		};
+		image.src = dataUrl;
+	};
+
 	return (
 		<>
 			<TopHeader />
@@ -323,6 +336,7 @@ const New = () => {
 						ref={sheetRef}
 						size={sheetSize}
 						backgroundColor={backgroundColor}
+						backgroundImage={backgroundImage}
 					>
 						{Object.entries(objects).map(([id, object]) => (
 							<InnerObject
@@ -345,6 +359,7 @@ const New = () => {
 				onAspectRatioChange={setAspectRatio}
 				onSheetColorChange={setBackgroundColor}
 				onAddGalleryImage={onAddGalleryImage}
+				onAddSheetBgImage={onAddSheetBgImage}
 				dispatch={dispatch}
 				aspectRatio={aspectRatio}
 			/>

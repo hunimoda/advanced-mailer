@@ -4,6 +4,7 @@ const ToolBox = ({
 	onAspectRatioChange,
 	onSheetColorChange,
 	onAddGalleryImage,
+	onAddSheetBgImage,
 	dispatch,
 	aspectRatio,
 }) => {
@@ -35,9 +36,30 @@ const ToolBox = ({
 		reader.readAsDataURL(file);
 	};
 
+	const onAddSheetBgImageChange = (event) => {
+		const {
+			target: { files },
+		} = event;
+		const file = files[0];
+		const reader = new FileReader();
+
+		reader.onloadend = (readerEvent) =>
+			onAddSheetBgImage(readerEvent.currentTarget.result);
+		reader.readAsDataURL(file);
+	};
+
 	return (
 		<footer className={classes.footer}>
 			<div className={classes.toolbox}>
+				<label className={classes.button} htmlFor="addSheetBgImage">
+					Bg
+				</label>
+				<input
+					id="addSheetBgImage"
+					type="file"
+					accept="image/*"
+					onChange={onAddSheetBgImageChange}
+				/>
 				<button className={classes.button} onClick={onChangeAspectRatioClick}>
 					AR
 				</button>
