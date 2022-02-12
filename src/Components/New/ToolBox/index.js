@@ -3,6 +3,7 @@ import classes from "./index.module.css";
 const ToolBox = ({
 	onAspectRatioChange,
 	onSheetColorChange,
+	onAddGalleryImage,
 	dispatch,
 	aspectRatio,
 }) => {
@@ -21,6 +22,18 @@ const ToolBox = ({
 				sheetRatio: aspectRatio,
 			},
 		});
+
+	const onAddGalleryImageChange = (event) => {
+		const {
+			target: { files },
+		} = event;
+		const file = files[0];
+		const reader = new FileReader();
+
+		reader.onloadend = (readerEvent) =>
+			onAddGalleryImage(readerEvent.currentTarget.result);
+		reader.readAsDataURL(file);
+	};
 
 	return (
 		<footer className={classes.footer}>
@@ -42,6 +55,15 @@ const ToolBox = ({
 				<button className={classes.button} onClick={onAddImageClick}>
 					+Img
 				</button>
+				<label className={classes.button} htmlFor="addGalleryImage">
+					Gal
+				</label>
+				<input
+					id="addGalleryImage"
+					type="file"
+					accept="image/*"
+					onChange={onAddGalleryImageChange}
+				/>
 				<button className={classes.button}>
 					<i className="fas fa-times" />
 				</button>

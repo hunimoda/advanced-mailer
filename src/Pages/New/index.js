@@ -300,6 +300,20 @@ const New = () => {
 		}
 	};
 
+	const onAddGalleryImage = (dataUrl) => {
+		const image = new Image();
+
+		image.onload = () => {
+			const imageRatio = image.width / image.height;
+
+			dispatch({
+				type: "ADD_IMAGE",
+				payload: { src: dataUrl, imageRatio, sheetRatio: aspectRatio },
+			});
+		};
+		image.src = dataUrl;
+	};
+
 	return (
 		<>
 			<TopHeader />
@@ -330,6 +344,7 @@ const New = () => {
 			<ToolBox
 				onAspectRatioChange={setAspectRatio}
 				onSheetColorChange={setBackgroundColor}
+				onAddGalleryImage={onAddGalleryImage}
 				dispatch={dispatch}
 				aspectRatio={aspectRatio}
 			/>
