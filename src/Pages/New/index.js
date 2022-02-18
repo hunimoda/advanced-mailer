@@ -128,6 +128,10 @@ const reducer = (state, { type, payload }) => {
 		const { id, length, side } = payload;
 
 		newObjects[id].style[side] = length;
+	} else if (type === "CHANGE_COLOR") {
+		const { id, color } = payload;
+
+		newObjects[id].style.color = color;
 	}
 
 	return newObjects;
@@ -327,6 +331,10 @@ const New = () => {
 		image.src = dataUrl;
 	};
 
+	const onObjectColorChange = (id, color) => {
+		dispatch({ type: "CHANGE_COLOR", payload: { id, color } });
+	};
+
 	return (
 		<>
 			<TopHeader />
@@ -349,6 +357,7 @@ const New = () => {
 								onResizeLength={onObjectResizeLength}
 								onDelete={onObjectDelete}
 								onSelect={onObjectSelect}
+								onColorChange={onObjectColorChange}
 								selected={id === selectedId}
 							/>
 						))}

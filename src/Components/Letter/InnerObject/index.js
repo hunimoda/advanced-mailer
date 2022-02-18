@@ -92,6 +92,7 @@ const InnerObject = ({
 	onResizeLength,
 	onDelete,
 	onSelect,
+	onColorChange,
 	selected,
 }) => {
 	const { type, value, style } = object;
@@ -110,6 +111,8 @@ const InnerObject = ({
 	};
 
 	const onTouchStart = (event) => {
+		console.log(event.target);
+
 		event.stopPropagation();
 
 		timer = setTimeout(onLongTouch, TOUCH_DURATION);
@@ -166,6 +169,8 @@ const InnerObject = ({
 		prevCoord = null;
 	};
 
+	const onSettingsClose = () => setShowObjectSettings(false);
+
 	const modifier = (
 		<>
 			<div
@@ -219,6 +224,10 @@ const InnerObject = ({
 		</>
 	);
 
+	const onTextColorChange = (event) => {
+		onColorChange(id, event.target.value);
+	};
+
 	return (
 		<div
 			data-type="object"
@@ -231,7 +240,16 @@ const InnerObject = ({
 			{selected && modifier}
 			{content}
 			{showObjectSettings && (
-				<Modal onClose={() => setShowObjectSettings(false)}>Test</Modal>
+				<Modal onClose={onSettingsClose}>
+					<ul className={classes.settingsList}>
+						<li>
+							<h4>글꼴 색</h4>
+							<input type="color" onChange={onTextColorChange} />
+						</li>
+						<li>여백</li>
+						<li>모서리 둥글기</li>
+					</ul>
+				</Modal>
 			)}
 		</div>
 	);
