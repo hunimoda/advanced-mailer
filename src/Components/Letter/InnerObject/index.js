@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Modal from "../../../UI/Modal";
 import classes from "./index.module.css";
 
 const OBJECT_STYLE_PROPS = [
@@ -82,11 +83,6 @@ let clickedAfterSelected = null;
 let timer = null;
 const TOUCH_DURATION = 1000;
 
-const onLongTouch = () => {
-	clickedAfterSelected = false;
-	alert("Show object settings");
-};
-
 const InnerObject = ({
 	id,
 	object,
@@ -104,8 +100,14 @@ const InnerObject = ({
 	const [isAspectRatioFixed, setIsAspectRatioFixed] = useState(
 		type === "image" ? true : false
 	);
+	const [showObjectSettings, setShowObjectSettings] = useState(false);
 
 	const content = createContentJsx(type, value, contentStyle);
+
+	const onLongTouch = () => {
+		clickedAfterSelected = false;
+		setShowObjectSettings(true);
+	};
 
 	const onTouchStart = (event) => {
 		event.stopPropagation();
@@ -228,6 +230,9 @@ const InnerObject = ({
 		>
 			{selected && modifier}
 			{content}
+			{showObjectSettings && (
+				<Modal onClose={() => setShowObjectSettings(false)}>Test</Modal>
+			)}
 		</div>
 	);
 };
