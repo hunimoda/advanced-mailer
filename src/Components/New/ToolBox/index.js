@@ -1,16 +1,15 @@
+import { useDispatch } from "react-redux";
+import { letterActions } from "../../../Context/letter";
 import classes from "./index.module.css";
 
-const ToolBox = ({
-	onAspectRatioChange,
-	onSheetColorChange,
-	onAddGalleryImage,
-	onAddSheetBgImage,
-	dispatch,
-	aspectRatio,
-}) => {
-	const onChangeAspectRatioClick = () => {
-		onAspectRatioChange(Number(window.prompt("종횡비")));
-	};
+const ToolBox = ({ onAddGalleryImage, onAddSheetBgImage, aspectRatio }) => {
+	const dispatch = useDispatch();
+
+	const onChangeAspectRatioClick = () =>
+		dispatch(letterActions.resizeSheet(Number(window.prompt("종횡비"))));
+
+	const onChangeSheetColor = (event) =>
+		dispatch(letterActions.setSheetBgColor(event.target.value));
 
 	const onAddTextClick = () => dispatch({ type: "ADD_TEXT" });
 
@@ -61,7 +60,7 @@ const ToolBox = ({
 					onChange={onAddSheetBgImageChange}
 				/>
 				<button className={classes.button} onClick={onChangeAspectRatioClick}>
-					AR
+					{aspectRatio.toFixed(2)}
 				</button>
 				<label className={classes.button} htmlFor="changeSheetColor">
 					C
@@ -69,7 +68,7 @@ const ToolBox = ({
 				<input
 					id="changeSheetColor"
 					type="color"
-					onChange={(event) => onSheetColorChange(event.target.value)}
+					onChange={onChangeSheetColor}
 				/>
 				<button className={classes.button} onClick={onAddTextClick}>
 					+T

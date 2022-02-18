@@ -1,50 +1,11 @@
-import { useRef, useState, useEffect, useReducer, useCallback } from "react";
+import { useRef, useState, useEffect, useReducer } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { letterActions } from "../../Context/letter";
 import TopHeader from "../../Components/New/TopHeader";
 import Sheet from "../../Components/Sheet";
 import InnerObject from "../../Components/Letter/InnerObject";
 import ToolBox from "../../Components/New/ToolBox";
 import classes from "./index.module.css";
-
-const INIT_SHEET = {
-	aspectRatio: 0.75,
-	backgroundColor: "pink",
-	objects: {
-		// temp: {
-		// 	type: "text",
-		// 	value:
-		// 		"오늘은 3.1절입니다.\n독립열사들의 정신을 기리며\n조국을 수호합시다!",
-		// 	style: {
-		// 		backgroundColor: "white",
-		// 		fontFamily: "monospace",
-		// 		height: 0.2,
-		// 		left: 0.1,
-		// 		lineHeight: 1.5,
-		// 		textAlign: "center",
-		// 		top: 0.1,
-		// 		transform: {
-		// 			scale: 0.02,
-		// 			rotate: -10,
-		// 		},
-		// 		width: 0.8,
-		// 		zIndex: 1,
-		// 	},
-		// },
-		// another: {
-		// 	type: "image",
-		// 	value: "https://place-hold.it/300x500",
-		// 	style: {
-		// 		left: 0.1,
-		// 		top: 0.5,
-		// 		height: 0.5,
-		// 		width: 0.4,
-		// 		zIndex: 2,
-		// 		transform: {
-		// 			rotate: 0,
-		// 		},
-		// 	},
-		// },
-	},
-};
 
 const generateObjectId = () => {
 	const idxArray = [];
@@ -141,15 +102,18 @@ const New = () => {
 	const mainRef = useRef();
 	const sheetRef = useRef();
 
-	const [sheetSize, setSheetSize] = useState(null);
-	const [aspectRatio, setAspectRatio] = useState(INIT_SHEET.aspectRatio);
-	const [backgroundColor, setBackgroundColor] = useState(
-		INIT_SHEET.backgroundColor
+	const dispatch = useDispatch();
+	const aspectRatio = useSelector((state) => state.letter.sheet.aspectRatio);
+	const sheetBgColor = useSelector(
+		(state) => state.letter.sheet.backgroundColor
 	);
-	const [backgroundImage, setBackgroundImage] = useState(null);
-	const [selectedId, setSelectedId] = useState("temp");
+	const sheetBgImage = useSelector(
+		(state) => state.letter.sheet.backgroundImage
+	);
+	const objects = useSelector((state) => state.letter.objects);
 
-	const [objects, dispatch] = useReducer(reducer, INIT_SHEET.objects);
+	const [sheetSize, setSheetSize] = useState(null);
+	const [selectedId, setSelectedId] = useState("temp");
 
 	useEffect(() => {
 		const resizeObserver = new ResizeObserver((entries) => {
@@ -325,8 +289,8 @@ const New = () => {
 		image.onload = () => {
 			const imageRatio = image.width / image.height;
 
-			setAspectRatio(imageRatio);
-			setBackgroundImage(dataUrl);
+			dispatch(letterActions.resizeSheet(imageRatio));
+			dispatch(letterActions.setSheetBgImage(dataUrl));
 		};
 		image.src = dataUrl;
 	};
@@ -343,8 +307,8 @@ const New = () => {
 					<Sheet
 						ref={sheetRef}
 						size={sheetSize}
-						backgroundColor={backgroundColor}
-						backgroundImage={backgroundImage}
+						backgroundColor={sheetBgColor}
+						backgroundImage={sheetBgImage}
 					>
 						{Object.entries(objects).map(([id, object]) => (
 							<InnerObject
@@ -365,8 +329,6 @@ const New = () => {
 				)}
 			</main>
 			<ToolBox
-				onAspectRatioChange={setAspectRatio}
-				onSheetColorChange={setBackgroundColor}
 				onAddGalleryImage={onAddGalleryImage}
 				onAddSheetBgImage={onAddSheetBgImage}
 				dispatch={dispatch}
