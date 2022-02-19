@@ -1,51 +1,43 @@
 import { useDispatch } from "react-redux";
-import { letterActions } from "../../../Context/letter";
+import {
+	letterActions,
+	addImageObjectBySrc,
+	setSheetBgImageResize,
+} from "../../../Context/letter";
 import classes from "./index.module.css";
 
-const ToolBox = ({ onAddGalleryImage, onAddSheetBgImage, aspectRatio }) => {
+const ToolBox = () => {
 	const dispatch = useDispatch();
 
-	const onChangeAspectRatioClick = () =>
+	const dispatchImageAction = (event, callback) => {
+		const {
+			target: { files },
+		} = event;
+		const file = files[0];
+		const reader = new FileReader();
+
+		reader.onloadend = (readerEvent) =>
+			dispatch(callback(readerEvent.currentTarget.result));
+		reader.readAsDataURL(file);
+	};
+
+	const onAddSheetBgImageChange = (event) =>
+		dispatchImageAction(event, setSheetBgImageResize);
+
+	const onResizeSheetClick = () =>
 		dispatch(letterActions.resizeSheet(Number(window.prompt("종횡비"))));
 
-	const onChangeSheetColor = (event) =>
+	const onSheetColorChange = (event) =>
 		dispatch(letterActions.setSheetBgColor(event.target.value));
 
-	const onAddTextClick = () => dispatch({ type: "ADD_TEXT" });
+	const onAddTextClick = () =>
+		dispatch(letterActions.addTextObject("Hello World"));
 
 	const onAddImageClick = () =>
-		dispatch({
-			type: "ADD_IMAGE",
-			payload: {
-				src: "	https://place-hold.it/300x500",
-				imageRatio: 0.6,
-				sheetRatio: aspectRatio,
-			},
-		});
+		dispatch(addImageObjectBySrc("https://place-hold.it/300x500"));
 
-	const onAddGalleryImageChange = (event) => {
-		const {
-			target: { files },
-		} = event;
-		const file = files[0];
-		const reader = new FileReader();
-
-		reader.onloadend = (readerEvent) =>
-			onAddGalleryImage(readerEvent.currentTarget.result);
-		reader.readAsDataURL(file);
-	};
-
-	const onAddSheetBgImageChange = (event) => {
-		const {
-			target: { files },
-		} = event;
-		const file = files[0];
-		const reader = new FileReader();
-
-		reader.onloadend = (readerEvent) =>
-			onAddSheetBgImage(readerEvent.currentTarget.result);
-		reader.readAsDataURL(file);
-	};
+	const onAddGalleryImageChange = (event) =>
+		dispatchImageAction(event, addImageObjectBySrc);
 
 	return (
 		<footer className={classes.footer}>
@@ -59,8 +51,8 @@ const ToolBox = ({ onAddGalleryImage, onAddSheetBgImage, aspectRatio }) => {
 					accept="image/*"
 					onChange={onAddSheetBgImageChange}
 				/>
-				<button className={classes.button} onClick={onChangeAspectRatioClick}>
-					{aspectRatio.toFixed(2)}
+				<button className={classes.button} onClick={onResizeSheetClick}>
+					AR
 				</button>
 				<label className={classes.button} htmlFor="changeSheetColor">
 					C
@@ -68,7 +60,7 @@ const ToolBox = ({ onAddGalleryImage, onAddSheetBgImage, aspectRatio }) => {
 				<input
 					id="changeSheetColor"
 					type="color"
-					onChange={onChangeSheetColor}
+					onChange={onSheetColorChange}
 				/>
 				<button className={classes.button} onClick={onAddTextClick}>
 					+T

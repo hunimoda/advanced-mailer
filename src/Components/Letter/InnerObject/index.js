@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { letterActions } from "../../../Context/letter";
 import Modal from "../../../UI/Modal";
 import classes from "./index.module.css";
 
@@ -83,18 +85,12 @@ let clickedAfterSelected = null;
 let timer = null;
 const TOUCH_DURATION = 1000;
 
-const InnerObject = ({
-	id,
-	object,
-	sheetSize,
-	onMove,
-	onResize,
-	onResizeLength,
-	onDelete,
-	onSelect,
-	onColorChange,
-	selected,
-}) => {
+const InnerObject = ({ id, sheetSize, onSelectChange, selected }) => {
+	const dispatch = useDispatch();
+	const object = useSelector((state) => state.letter.objects[id]);
+
+	const objectRef = useRef();
+
 	const { type, value, style } = object;
 	const [objectStyle, contentStyle, scale] = processStyle(style, sheetSize);
 
@@ -105,52 +101,153 @@ const InnerObject = ({
 
 	const content = createContentJsx(type, value, contentStyle);
 
+	const moveObject = (left, top) =>
+		dispatch(letterActions.moveObject({ id, left, top }));
+
+	const getCenterPosition = () => {
+		const { left: sheetLeft, top: sheetTop } =
+			objectRef.current.parentElement.getBoundingClientRect();
+
+		return {
+			x: object.style.left * sheetSize.width + sheetLeft,
+			y: object.style.top * sheetSize.height + sheetTop,
+		};
+	};
+
+	const resizeObjectFixedAspectRatio = (x, y) => {
+		const centerPosition = getCenterPosition();
+
+		const diagonalVector = {
+			x: x - centerPosition.x,
+			y: y - centerPosition.y,
+		};
+		const diagonalLength = Math.sqrt(
+			Math.pow(diagonalVector.x, 2) + Math.pow(diagonalVector.y, 2)
+		);
+
+		if (diagonalLength === 0) {
+			return;
+		}
+
+		const diagonalAngle =
+			(Math.sign(diagonalVector.y) || 1) *
+			Math.acos(diagonalVector.x / diagonalLength);
+		const objectAngle = Math.atan(
+			(object.style.height * sheetSize.height) /
+				(object.style.width * sheetSize.width)
+		);
+
+		const width =
+			(Math.max(diagonalLength, 30) * Math.cos(objectAngle)) / sheetSize.width;
+		const height =
+			(Math.max(diagonalLength, 30) * Math.sin(objectAngle)) / sheetSize.height;
+
+		const THRESHOLD_DEGREE = 1;
+		const rotateDegree =
+			(((diagonalAngle - objectAngle) * 180) / Math.PI + 360) % 360;
+
+		dispatch(
+			letterActions.resizeObjectFixedAspectRatio({
+				id,
+				width,
+				height,
+				angle:
+					THRESHOLD_DEGREE < rotateDegree &&
+					rotateDegree < 360 - THRESHOLD_DEGREE
+						? rotateDegree
+						: 0,
+			})
+		);
+	};
+
+	const resizeObjectSide = (x, y, side) => {
+		const dotProduct = (vector1, vector2) =>
+			vector1.x * vector2.x + vector1.y * vector2.y;
+
+		const rotateAngle = (object.style.transform.rotate * Math.PI) / 180;
+		const correctedAngle = rotateAngle + (side === "height" ? Math.PI / 2 : 0);
+		const normalVector = {
+			x: Math.cos(correctedAngle),
+			y: Math.sin(correctedAngle),
+		};
+
+		const centerPosition = getCenterPosition();
+		const lineConstant = -dotProduct(normalVector, centerPosition);
+
+		const signedDistance = dotProduct(normalVector, { x, y }) + lineConstant;
+
+		const referencePointAngle = rotateAngle + Math.PI / 4;
+		const referencePoint = {
+			x: centerPosition.x + Math.cos(referencePointAngle),
+			y: centerPosition.y + Math.sin(referencePointAngle),
+		};
+		const realSign = Math.sign(
+			dotProduct(normalVector, referencePoint) + lineConstant
+		);
+
+		if (Math.sign(signedDistance) === realSign) {
+			dispatch(
+				letterActions.resizeObjectSide({
+					id,
+					length:
+						Math.max(30, Math.abs(signedDistance)) /
+						(side === "height" ? sheetSize.height : sheetSize.width),
+					side,
+				})
+			);
+		}
+	};
+
+	const deleteObject = () => {
+		dispatch(letterActions.deleteObject(id));
+		onSelectChange(id, false);
+	};
+
+	// const onColorChange = (id, color) => {
+	// 	dispatch({ type: "CHANGE_COLOR", payload: { id, color } });
+	// };
+
 	const onLongTouch = () => {
 		clickedAfterSelected = false;
 		setShowObjectSettings(true);
 	};
 
 	const onTouchStart = (event) => {
-		console.log(event.target);
-
 		event.stopPropagation();
 
 		timer = setTimeout(onLongTouch, TOUCH_DURATION);
 
-		if (selected) {
-			clickedAfterSelected = true;
+		if (!selected) {
+			onSelectChange(id, true);
+			dispatch(letterActions.moveObjectToFront(id));
 		} else {
-			onSelect(id);
+			clickedAfterSelected = true;
 		}
 
-		const { clientX: x, clientY: y } = event.touches[0];
-
-		prevCoord = { x, y };
+		prevCoord = { x: event.touches[0].clientX, y: event.touches[0].clientY };
 	};
 
 	const onTouchMove = (event) => {
 		event.stopPropagation();
-		clickedAfterSelected = false;
 
-		if (timer) {
-			clearTimeout(timer);
-		}
+		clearTimeout(timer);
+		clickedAfterSelected = false;
 
 		if (selected) {
 			const { clientX: x, clientY: y } = event.touches[0];
 			const targetType = event.currentTarget.dataset.type;
 
 			if (targetType === "object") {
-				const left = (x - prevCoord.x) / sheetSize.width;
-				const top = (y - prevCoord.y) / sheetSize.height;
-
-				onMove(id, { left, top });
+				moveObject(
+					(x - prevCoord.x) / sheetSize.width,
+					(y - prevCoord.y) / sheetSize.height
+				);
 			} else if (targetType === "resize-and-rotate") {
-				onResize(id, { x, y });
+				resizeObjectFixedAspectRatio(x, y);
 			} else if (targetType === "resize-width") {
-				onResizeLength(id, { x, y }, false);
+				resizeObjectSide(x, y, "width");
 			} else if (targetType === "resize-height") {
-				onResizeLength(id, { x, y }, true);
+				resizeObjectSide(x, y, "height");
 			}
 
 			prevCoord = { x, y };
@@ -158,11 +255,10 @@ const InnerObject = ({
 	};
 
 	const onTouchEnd = () => {
+		clearTimeout(timer);
+
 		if (clickedAfterSelected) {
 			setIsAspectRatioFixed((prev) => !prev);
-		}
-		if (timer) {
-			clearTimeout(timer);
 		}
 
 		clickedAfterSelected = null;
@@ -187,7 +283,7 @@ const InnerObject = ({
 				style={{
 					transform: `scale(${1 / scale}) translate(-50%, -50%)`,
 				}}
-				onClick={() => onDelete(id)}
+				onClick={deleteObject}
 				onTouchMove={(event) => event.stopPropagation()}
 			>
 				<i className="fas fa-times" />
@@ -225,11 +321,12 @@ const InnerObject = ({
 	);
 
 	const onTextColorChange = (event) => {
-		onColorChange(id, event.target.value);
+		// onColorChange(id, event.target.value);
 	};
 
 	return (
 		<div
+			ref={objectRef}
 			data-type="object"
 			className={classes.object}
 			style={objectStyle}

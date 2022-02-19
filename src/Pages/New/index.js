@@ -1,108 +1,15 @@
-import { useRef, useState, useEffect, useReducer } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { letterActions } from "../../Context/letter";
+import { useRef, useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import TopHeader from "../../Components/New/TopHeader";
 import Sheet from "../../Components/Sheet";
 import InnerObject from "../../Components/Letter/InnerObject";
 import ToolBox from "../../Components/New/ToolBox";
 import classes from "./index.module.css";
 
-const generateObjectId = () => {
-	const idxArray = [];
-	const ID_CHARS =
-		"-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
-
-	let timestamp = Date.now();
-
-	while (timestamp > 0) {
-		idxArray.unshift(timestamp % 64);
-		timestamp = Math.floor(timestamp / 64);
-	}
-
-	for (let i = 0; i < 16; i++) {
-		idxArray.push(Math.floor(Math.random() * 64));
-	}
-
-	return idxArray.map((idx) => ID_CHARS[idx]).join("");
-};
-
-let maxZIndex = 0;
-
-const reducer = (state, { type, payload }) => {
-	const newObjects = JSON.parse(JSON.stringify(state));
-
-	if (type === "ADD_TEXT") {
-		newObjects[generateObjectId()] = {
-			type: "text",
-			value: "예시 텍스트",
-			style: {
-				width: 0.5,
-				height: 0.1,
-				top: 0.45,
-				left: 0.25,
-				backgroundColor: "rgba(0, 0, 0, 0.3)",
-				transform: {
-					scale: 0.04,
-					rotate: 0,
-				},
-				zIndex: ++maxZIndex,
-			},
-		};
-	} else if (type === "ADD_IMAGE") {
-		const { src, imageRatio, sheetRatio } = payload;
-
-		const width = Math.min(1, imageRatio / sheetRatio) / 2;
-		const height = Math.min(1, sheetRatio / imageRatio) / 2;
-
-		newObjects[generateObjectId()] = {
-			type: "image",
-			value: src,
-			style: {
-				width,
-				height,
-				top: 0.5 - height / 2,
-				left: 0.5 - width / 2,
-				backgroundColor: "rgba(0, 0, 0, 0.3)",
-				transform: {
-					scale: 0.04,
-					rotate: 0,
-				},
-				zIndex: ++maxZIndex,
-			},
-		};
-	} else if (type === "MOVE_OBJECT") {
-		const { id, disposition } = payload;
-
-		newObjects[id].style.top += disposition.top;
-		newObjects[id].style.left += disposition.left;
-	} else if (type === "DELETE_OBJECT") {
-		delete newObjects[payload]; // payload = id
-	} else if (type === "UPDATE_Z_INDEX") {
-		newObjects[payload].style.zIndex = ++maxZIndex; // payload = id
-	} else if (type === "RESIZE_OBJECT") {
-		const { id, width, height, angle } = payload;
-
-		newObjects[id].style.width = width;
-		newObjects[id].style.height = height;
-		newObjects[id].style.transform.rotate = angle;
-	} else if (type === "RESIZE_OBJECT_LENGTH") {
-		const { id, length, side } = payload;
-
-		newObjects[id].style[side] = length;
-	} else if (type === "CHANGE_COLOR") {
-		const { id, color } = payload;
-
-		newObjects[id].style.color = color;
-	}
-
-	return newObjects;
-};
-
 const New = () => {
 	const mainRef = useRef();
 	const sheetRef = useRef();
 
-	const dispatch = useDispatch();
 	const aspectRatio = useSelector((state) => state.letter.sheet.aspectRatio);
 	const sheetBgColor = useSelector(
 		(state) => state.letter.sheet.backgroundColor
@@ -157,147 +64,7 @@ const New = () => {
 		[]
 	);
 
-	const onObjectMove = (id, disposition) =>
-		dispatch({ type: "MOVE_OBJECT", payload: { id, disposition } });
-
-	const getCenterPosition = (id) => {
-		const { left: sheetLeft, top: sheetTop } =
-			sheetRef.current.getBoundingClientRect();
-
-		return {
-			x: objects[id].style.left * sheetSize.width + sheetLeft,
-			y: objects[id].style.top * sheetSize.height + sheetTop,
-		};
-	};
-
-	const onObjectResize = (id, position) => {
-		const centerPosition = getCenterPosition(id);
-
-		const radialVector = {
-			x: position.x - centerPosition.x,
-			y: position.y - centerPosition.y,
-		};
-		const radialLength = Math.sqrt(
-			Math.pow(radialVector.x, 2) + Math.pow(radialVector.y, 2)
-		);
-
-		if (radialLength === 0) {
-			return;
-		}
-
-		const radialAngle =
-			((Math.sign(radialVector.y) || 1) *
-				(Math.acos(radialVector.x / radialLength) * 180)) /
-			Math.PI;
-		const objectAngleInRadians = Math.atan(
-			(objects[id].style.height * sheetSize.height) /
-				(objects[id].style.width * sheetSize.width)
-		);
-		const objectAngle = (objectAngleInRadians * 180) / Math.PI;
-
-		const newWidthInPixels =
-			Math.max(radialLength, 30) * Math.cos(objectAngleInRadians);
-		const newHeightInPixels =
-			Math.max(radialLength, 30) * Math.sin(objectAngleInRadians);
-
-		const THRESHOLD_ANGLE = 1;
-		const normalizedAngle = (radialAngle - objectAngle + 360) % 360;
-
-		dispatch({
-			type: "RESIZE_OBJECT",
-			payload: {
-				id,
-				width: newWidthInPixels / sheetSize.width,
-				height: newHeightInPixels / sheetSize.height,
-				angle:
-					THRESHOLD_ANGLE < normalizedAngle &&
-					normalizedAngle < 360 - THRESHOLD_ANGLE
-						? normalizedAngle
-						: 0,
-			},
-		});
-	};
-
-	const dotProduct = (vector1, vector2) => {
-		return vector1.x * vector2.x + vector1.y * vector2.y;
-	};
-
-	const onObjectResizeLength = (id, position, isResizeHeight) => {
-		const rotateAngle = objects[id].style.transform.rotate;
-		const normalVector = {
-			x: Math.cos(((rotateAngle + (isResizeHeight ? 90 : 0)) * Math.PI) / 180),
-			y: Math.sin(((rotateAngle + (isResizeHeight ? 90 : 0)) * Math.PI) / 180),
-		};
-
-		const centerPosition = getCenterPosition(id);
-		const lineConstant = -dotProduct(normalVector, centerPosition);
-
-		const signedDistance = dotProduct(normalVector, position) + lineConstant;
-
-		const referencePointAngleInRadians = ((45 + rotateAngle) * Math.PI) / 180;
-		const referencePoint = {
-			x: centerPosition.x + Math.cos(referencePointAngleInRadians),
-			y: centerPosition.y + Math.sin(referencePointAngleInRadians),
-		};
-		const realSign = Math.sign(
-			dotProduct(normalVector, referencePoint) + lineConstant
-		);
-
-		if (Math.sign(signedDistance) === realSign) {
-			dispatch({
-				type: "RESIZE_OBJECT_LENGTH",
-				payload: {
-					id,
-					length:
-						Math.max(30, Math.abs(signedDistance)) /
-						(isResizeHeight ? sheetSize.height : sheetSize.width),
-					side: isResizeHeight ? "height" : "width",
-				},
-			});
-		}
-	};
-
-	const onObjectDelete = (id) => {
-		dispatch({ type: "DELETE_OBJECT", payload: id });
-		setSelectedId(null);
-	};
-
-	const onObjectSelect = (id) => {
-		if (id !== selectedId) {
-			setSelectedId(id);
-			dispatch({ type: "UPDATE_Z_INDEX", payload: id });
-		}
-	};
-
-	const onAddGalleryImage = (dataUrl) => {
-		const image = new Image();
-
-		image.onload = () => {
-			const imageRatio = image.width / image.height;
-
-			dispatch({
-				type: "ADD_IMAGE",
-				payload: { src: dataUrl, imageRatio, sheetRatio: aspectRatio },
-			});
-		};
-		image.src = dataUrl;
-	};
-
-	const onAddSheetBgImage = (dataUrl) => {
-		const image = new Image();
-
-		image.onload = () => {
-			const imageRatio = image.width / image.height;
-
-			dispatch(letterActions.resizeSheet(imageRatio));
-			dispatch(letterActions.setSheetBgImage(dataUrl));
-		};
-		image.src = dataUrl;
-	};
-
-	const onObjectColorChange = (id, color) => {
-		dispatch({ type: "CHANGE_COLOR", payload: { id, color } });
-	};
+	const onSelectChange = (id, select) => setSelectedId(select ? id : null);
 
 	return (
 		<>
@@ -314,26 +81,15 @@ const New = () => {
 							<InnerObject
 								key={id}
 								id={id}
-								object={object}
 								sheetSize={sheetSize}
-								onMove={onObjectMove}
-								onResize={onObjectResize}
-								onResizeLength={onObjectResizeLength}
-								onDelete={onObjectDelete}
-								onSelect={onObjectSelect}
-								onColorChange={onObjectColorChange}
+								onSelectChange={onSelectChange}
 								selected={id === selectedId}
 							/>
 						))}
 					</Sheet>
 				)}
 			</main>
-			<ToolBox
-				onAddGalleryImage={onAddGalleryImage}
-				onAddSheetBgImage={onAddSheetBgImage}
-				dispatch={dispatch}
-				aspectRatio={aspectRatio}
-			/>
+			<ToolBox />
 		</>
 	);
 };
