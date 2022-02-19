@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { letterActions } from "../../../Context/letter";
 import Modal from "../../../UI/Modal";
+import Sheet from "../../Sheet";
 import classes from "./index.module.css";
 
 const OBJECT_STYLE_PROPS = [
@@ -85,19 +86,29 @@ let clickedAfterSelected = null;
 let timer = null;
 const TOUCH_DURATION = 1000;
 
-const InnerObject = ({ id, sheetSize, onSelectChange, selected }) => {
+const InnerObject = ({
+	id,
+	sheetSize,
+	onSelectChange,
+	selected,
+	forceStyle,
+}) => {
 	const dispatch = useDispatch();
 	const object = useSelector((state) => state.letter.objects[id]);
 
 	const objectRef = useRef();
 
 	const { type, value, style } = object;
-	const [objectStyle, contentStyle, scale] = processStyle(style, sheetSize);
+	const [objectStyle, contentStyle, scale] = processStyle(
+		forceStyle ?? style,
+		sheetSize
+	);
 
 	const [isAspectRatioFixed, setIsAspectRatioFixed] = useState(
 		type === "image" ? true : false
 	);
 	const [showObjectSettings, setShowObjectSettings] = useState(false);
+	const [previewStyle, setPreviewStyle] = useState(style);
 
 	const content = createContentJsx(type, value, contentStyle);
 
@@ -202,10 +213,6 @@ const InnerObject = ({ id, sheetSize, onSelectChange, selected }) => {
 		dispatch(letterActions.deleteObject(id));
 		onSelectChange(id, false);
 	};
-
-	// const onColorChange = (id, color) => {
-	// 	dispatch({ type: "CHANGE_COLOR", payload: { id, color } });
-	// };
 
 	const onLongTouch = () => {
 		clickedAfterSelected = false;
@@ -320,52 +327,88 @@ const InnerObject = ({ id, sheetSize, onSelectChange, selected }) => {
 		</>
 	);
 
-	const onTextColorChange = (event) => {
-		// onColorChange(id, event.target.value);
+	const onColorChange = (event) => {
+		setPreviewStyle((style) => {
+			return { ...style, color: event.target.value };
+		});
+	};
+
+	const onFontFamilyChange = (event) => {
+		setPreviewStyle((style) => {
+			return { ...style, fontFamily: event.target.value };
+		});
+	};
+
+	const onFontSizeChange = (event) => {
+		setPreviewStyle((style) => {
+			return { ...style, transform: { scale: Number(event.target.value) } };
+		});
 	};
 
 	return (
-		<div
-			ref={objectRef}
-			data-type="object"
-			className={classes.object}
-			style={objectStyle}
-			onTouchStart={onTouchStart}
-			onTouchMove={onTouchMove}
-			onTouchEnd={onTouchEnd}
-		>
-			{selected && modifier}
-			{content}
+		<>
+			<div
+				ref={objectRef}
+				data-type="object"
+				className={classes.object}
+				style={objectStyle}
+				onTouchStart={onTouchStart}
+				onTouchMove={onTouchMove}
+				onTouchEnd={onTouchEnd}
+			>
+				{selected && modifier}
+				{content}
+			</div>
+
 			{showObjectSettings && (
 				<Modal className={classes.objectSettings} onClose={onSettingsClose}>
-					<div className={classes.preview}>
+					<div
+						className={classes.previewContainer}
+						style={{ height: style.height * sheetSize.height }}
+					>
 						<div
-							className={classes.previewObjectSpace}
+							className={classes.preview}
 							style={{
-								width: `${style.width * sheetSize.width}px`,
-								height: `${style.height * sheetSize.height}px`,
+								width: style.width * sheetSize.width,
+								height: style.height * sheetSize.height,
 							}}
 						>
-							<div
-								className={classes.object}
-								style={{
-									...objectStyle,
-									top: `30px`,
-									left: `30px`,
-									transform: `scale(${style.transform.scale})`,
+							<InnerObject
+								id={id}
+								sheetSize={sheetSize}
+								forceStyle={{
+									...previewStyle,
+									top: 0,
+									left: 0,
 								}}
-							>
-								{content}
-							</div>
+							/>
 						</div>
 					</div>
 					<ul className={classes.settingsList}>
 						<li>
 							<h4>글자 색</h4>
-							<input type="color" onChange={onTextColorChange} />
+							<input type="color" onChange={onColorChange} />
 						</li>
-						<li>폰트</li>
-						<li>크기</li>
+						<li>
+							<h4>폰트</h4>
+							<select name="font" onChange={onFontFamilyChange}>
+								<option value="Arial">Arial</option>
+								<option value="Arial Black">Arial Black</option>
+								<option value="Verdana">Verdana</option>
+								<option value="Tahoma">Tahoma</option>
+								<option value="Trebuchet MS">Trebuchet MS</option>
+							</select>
+						</li>
+						<li>
+							<h4>크기</h4>
+							<input
+								type="range"
+								min="0.005"
+								max="0.1"
+								step="0.005"
+								onChange={onFontSizeChange}
+							/>
+						</li>
 						<li>그림자</li>
 						<li>선 간격</li>
 						<li>글자 간격</li>
@@ -376,7 +419,7 @@ const InnerObject = ({ id, sheetSize, onSelectChange, selected }) => {
 					</ul>
 				</Modal>
 			)}
-		</div>
+		</>
 	);
 };
 
