@@ -75,35 +75,3 @@
 	right: 50%;
 	transform-origin: bottom right;
 }
-
-.objectSettings {
-	width: calc(100vw - 2 * var(--main-padding));
-	background: yellow;
-}
-
-.previewContainer {
-	margin: var(--main-padding);
-	padding: 20px;
-	max-height: 200px;
-	overflow: scroll;
-	border-radius: 10px;
-	background-image: url(/public/transparent.png);
-}
-
-.preview {
-	position: relative;
-}
-
-.previewObjectSpace {
-	position: relative;
-	padding: 30px;
-	margin: 0 auto;
-	background: white;
-	min-width: calc(100% - 60px);
-}
-
-.settingsList {
-	list-style: none;
-	max-height: 100px;
-	overflow-y: scroll;
-}
