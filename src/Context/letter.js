@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const INIT_LETTER = {
 	backgroundImage: null,
 	sheet: {
+		size: null,
 		aspectRatio: 0.75,
 		backgroundColor: "white",
 		backgroundImage: null,
@@ -43,6 +44,9 @@ export const letterSlice = createSlice({
 	name: "letter",
 	initialState: INIT_LETTER,
 	reducers: {
+		setSheetSize: (state, action) => {
+			state.sheet.size = action.payload;
+		},
 		resizeSheet: (state, action) => {
 			state.sheet.aspectRatio = action.payload;
 		},

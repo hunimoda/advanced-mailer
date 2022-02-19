@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { letterActions } from "../../Context/letter";
 import TopHeader from "../../Components/New/TopHeader";
 import Sheet from "../../Components/Sheet";
 import InnerObject from "../../Components/Letter/InnerObject";
@@ -9,11 +10,12 @@ import classes from "./index.module.css";
 const New = () => {
 	const mainRef = useRef();
 
+	const dispatch = useDispatch();
+
 	const aspectRatio = useSelector((state) => state.letter.sheet.aspectRatio);
 	const objects = useSelector((state) => state.letter.objects);
 
-	const [sheetSize, setSheetSize] = useState(null);
-	const [selectedId, setSelectedId] = useState("temp");
+	const [selectedId, setSelectedId] = useState(null);
 
 	useEffect(() => {
 		const resizeObserver = new ResizeObserver((entries) => {
@@ -43,14 +45,16 @@ const New = () => {
 			const sheetHeight =
 				aspectRatio > containerRatio ? width / aspectRatio : height;
 
-			setSheetSize({ width: sheetWidth, height: sheetHeight });
+			dispatch(
+				letterActions.setSheetSize({ width: sheetWidth, height: sheetHeight })
+			);
 		});
 
 		const mainElem = mainRef.current;
 		resizeObserver.observe(mainElem);
 
 		return () => resizeObserver.unobserve(mainElem);
-	}, [aspectRatio]);
+	}, [dispatch, aspectRatio]);
 
 	useEffect(
 		() => window.addEventListener("touchstart", () => setSelectedId(null)),
@@ -63,19 +67,16 @@ const New = () => {
 		<>
 			<TopHeader />
 			<main ref={mainRef} className={classes.main}>
-				{sheetSize && (
-					<Sheet size={sheetSize}>
-						{Object.entries(objects).map(([id, object]) => (
-							<InnerObject
-								key={id}
-								id={id}
-								sheetSize={sheetSize}
-								onSelectChange={onSelectChange}
-								selected={id === selectedId}
-							/>
-						))}
-					</Sheet>
-				)}
+				<Sheet>
+					{Object.entries(objects).map(([id, object]) => (
+						<InnerObject
+							key={id}
+							id={id}
+							onSelectChange={onSelectChange}
+							selected={id === selectedId}
+						/>
+					))}
+				</Sheet>
 			</main>
 			<ToolBox />
 		</>

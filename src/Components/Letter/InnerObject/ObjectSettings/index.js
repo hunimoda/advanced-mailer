@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { letterActions } from "../../../../Context/letter";
 import Modal from "../../../../UI/Modal";
 import InnerObject from "..";
 import classes from "./index.module.css";
 
-const ObjectSettings = ({ id, onClose, style, sheetSize }) => {
+const ObjectSettings = ({ id, onClose, style }) => {
 	const dispatch = useDispatch();
+	const sheetSize = useSelector((state) => state.letter.sheet.size);
 
 	const [previewStyle, setPreviewStyle] = useState(style);
 
@@ -44,11 +45,13 @@ const ObjectSettings = ({ id, onClose, style, sheetSize }) => {
 					<InnerObject
 						id={id}
 						sheetSize={sheetSize}
-						forceStyle={{
+						forcedStyle={{
 							...previewStyle,
 							top: 0,
 							left: 0,
+							transform: { scale: previewStyle.transform.scale },
 						}}
+						readOnly={true}
 					/>
 				</div>
 			</div>

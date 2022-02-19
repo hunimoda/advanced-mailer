@@ -2,83 +2,8 @@ import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { letterActions } from "../../../Context/letter";
 import ObjectSettings from "./ObjectSettings";
+import { processStyle } from "./helper";
 import classes from "./index.module.css";
-
-const OBJECT_STYLE_PROPS = [
-	"top",
-	"left",
-	"width",
-	"height",
-	"zIndex",
-	"transform",
-];
-
-const convertTransformValue = (value) => {
-	let convertedValue = "";
-
-	Object.entries(value).forEach(([transformProp, transformValue]) => {
-		if (transformProp === "rotate") {
-			convertedValue += ` rotate(${transformValue}deg)`;
-		} else if (transformProp === "scale") {
-			convertedValue += ` scale(${transformValue})`;
-		}
-	});
-
-	return convertedValue;
-};
-
-const convertStyleValue = (prop, value, sheetSize, scale) => {
-	if (prop === "height") {
-		value = `${(sheetSize.height * value) / (scale ?? 1)}px`;
-	} else if (prop === "width") {
-		value = `${(sheetSize.width * value) / (scale ?? 1)}px`;
-	} else if (["top", "left"].includes(prop)) {
-		value = `${value * 100}%`;
-	} else if (prop === "transform") {
-		value = convertTransformValue(value);
-	}
-
-	return value;
-};
-
-const processStyle = (style, sheetSize) => {
-	const objectStyle = {};
-	const contentStyle = { fontSize: `${sheetSize.height}px` };
-	const scale = style.transform?.scale;
-
-	Object.entries(style).forEach(([prop, value]) => {
-		const convertedValue = convertStyleValue(prop, value, sheetSize, scale);
-
-		if (OBJECT_STYLE_PROPS.includes(prop)) {
-			objectStyle[prop] = convertedValue;
-		} else {
-			contentStyle[prop] = convertedValue;
-		}
-	});
-
-	return [objectStyle, contentStyle, scale ?? 1];
-};
-
-const createContentJsx = (type, value, contentStyle) => {
-	if (type === "image") {
-		return (
-			<img
-				className={classes.content}
-				src={value}
-				alt=""
-				style={contentStyle}
-			/>
-		);
-	} else if (type === "text") {
-		return (
-			<p className={classes.content} style={contentStyle}>
-				{value}
-			</p>
-		);
-	}
-
-	return null;
-};
 
 let prevCoord = null;
 let clickedAfterSelected = null;
@@ -87,32 +12,29 @@ const TOUCH_DURATION = 1000;
 
 const InnerObject = ({
 	id,
-	sheetSize,
 	onSelectChange,
 	selected,
-	forceStyle,
+	forcedStyle,
+	readOnly,
 }) => {
 	const dispatch = useDispatch();
+	const sheetSize = useSelector((state) => state.letter.sheet.size);
 	const object = useSelector((state) => state.letter.objects[id]);
 
-	const objectRef = useRef();
-
-	const { type, value, style } = object;
-	const [objectStyle, contentStyle, scale] = processStyle(
-		forceStyle ?? style,
+	const [containerStyle, contentStyle, scale] = processStyle(
+		forcedStyle ?? object.style,
 		sheetSize
 	);
 
 	const [isAspectRatioFixed, setIsAspectRatioFixed] = useState(
-		type === "image" ? true : false
+		object.type === "image" ? true : false
 	);
 	const [showObjectSettings, setShowObjectSettings] = useState(false);
-
-	const content = createContentJsx(type, value, contentStyle);
 
 	const moveObject = (left, top) =>
 		dispatch(letterActions.moveObject({ id, left, top }));
 
+	const objectRef = useRef();
 	const getCenterPosition = () => {
 		const { left: sheetLeft, top: sheetTop } =
 			objectRef.current.parentElement.getBoundingClientRect();
@@ -218,6 +140,10 @@ const InnerObject = ({
 	};
 
 	const onTouchStart = (event) => {
+		if (readOnly) {
+			return;
+		}
+
 		event.stopPropagation();
 
 		timer = setTimeout(onLongTouch, TOUCH_DURATION);
@@ -233,6 +159,10 @@ const InnerObject = ({
 	};
 
 	const onTouchMove = (event) => {
+		if (readOnly) {
+			return;
+		}
+
 		event.stopPropagation();
 
 		clearTimeout(timer);
@@ -260,6 +190,10 @@ const InnerObject = ({
 	};
 
 	const onTouchEnd = () => {
+		if (readOnly) {
+			return;
+		}
+
 		clearTimeout(timer);
 
 		if (clickedAfterSelected) {
@@ -276,7 +210,7 @@ const InnerObject = ({
 		<>
 			<div
 				className={`${classes.border} ${
-					!style.transform.rotate ? classes["border--aligned"] : ""
+					!object.style.transform.rotate ? classes["border--aligned"] : ""
 				}`}
 				style={{
 					borderWidth: `${1 / scale}px`,
@@ -325,26 +259,46 @@ const InnerObject = ({
 		</>
 	);
 
+	const getContentJsx = () => {
+		if (object.type === "image") {
+			return (
+				<img
+					className={classes.content}
+					style={contentStyle}
+					src={object.value}
+					alt=""
+				/>
+			);
+		} else if (object.type === "text") {
+			return (
+				<p className={classes.content} style={contentStyle}>
+					{object.value}
+				</p>
+			);
+		}
+
+		return null;
+	};
+
 	return (
 		<>
 			<div
 				ref={objectRef}
 				data-type="object"
 				className={classes.object}
-				style={objectStyle}
+				style={containerStyle}
 				onTouchStart={onTouchStart}
 				onTouchMove={onTouchMove}
 				onTouchEnd={onTouchEnd}
 			>
 				{selected && modifier}
-				{content}
+				{getContentJsx()}
 			</div>
 			{showObjectSettings && (
 				<ObjectSettings
 					id={id}
 					onClose={onSettingsClose}
-					style={style}
-					sheetSize={sheetSize}
+					style={object.style}
 				/>
 			)}
 		</>
