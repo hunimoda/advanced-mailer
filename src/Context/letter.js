@@ -118,6 +118,11 @@ export const letterSlice = createSlice({
 		moveObjectToFront: (state, action) => {
 			state.objects[action.payload].style.zIndex = ++maxZIndex;
 		},
+		setAllStyleAtOnce: (state, action) => {
+			const { id, style } = action.payload;
+
+			state.objects[id].style = style;
+		},
 	},
 });
 

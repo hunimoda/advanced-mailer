@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { letterActions } from "../../../Context/letter";
 import Modal from "../../../UI/Modal";
-import Sheet from "../../Sheet";
 import classes from "./index.module.css";
 
 const OBJECT_STYLE_PROPS = [
@@ -327,21 +326,21 @@ const InnerObject = ({
 		</>
 	);
 
-	const onColorChange = (event) => {
+	const onSettingsChange = (event) => {
 		setPreviewStyle((style) => {
-			return { ...style, color: event.target.value };
-		});
-	};
+			const newStyle = JSON.parse(JSON.stringify(style));
+			const {
+				dataset: { property },
+				value,
+			} = event.target;
 
-	const onFontFamilyChange = (event) => {
-		setPreviewStyle((style) => {
-			return { ...style, fontFamily: event.target.value };
-		});
-	};
+			if (property === "scale") {
+				newStyle.transform.scale = Number(value);
+			} else {
+				newStyle[property] = value;
+			}
 
-	const onFontSizeChange = (event) => {
-		setPreviewStyle((style) => {
-			return { ...style, transform: { scale: Number(event.target.value) } };
+			return newStyle;
 		});
 	};
 
@@ -387,11 +386,19 @@ const InnerObject = ({
 					<ul className={classes.settingsList}>
 						<li>
 							<h4>글자 색</h4>
-							<input type="color" onChange={onColorChange} />
+							<input
+								data-property="color"
+								type="color"
+								onChange={onSettingsChange}
+							/>
 						</li>
 						<li>
 							<h4>폰트</h4>
-							<select name="font" onChange={onFontFamilyChange}>
+							<select
+								data-property="fontFamily"
+								name="font"
+								onChange={onSettingsChange}
+							>
 								<option value="Arial">Arial</option>
 								<option value="Arial Black">Arial Black</option>
 								<option value="Verdana">Verdana</option>
@@ -402,21 +409,40 @@ const InnerObject = ({
 						<li>
 							<h4>크기</h4>
 							<input
+								data-property="scale"
 								type="range"
 								min="0.005"
 								max="0.1"
 								step="0.005"
-								onChange={onFontSizeChange}
+								onChange={onSettingsChange}
 							/>
 						</li>
 						<li>그림자</li>
 						<li>선 간격</li>
-						<li>글자 간격</li>
-						<li>배경</li>
+						<li>
+							<h4>배경 색</h4>
+							<input
+								data-property="background"
+								type="color"
+								onChange={onSettingsChange}
+							/>
+						</li>
 						<li>테두리</li>
 						<li>여백</li>
 						<li>정렬</li>
 					</ul>
+					<footer>
+						<button>취소</button>
+						<button
+							onClick={() =>
+								dispatch(
+									letterActions.setAllStyleAtOnce({ id, style: previewStyle })
+								)
+							}
+						>
+							적용
+						</button>
+					</footer>
 				</Modal>
 			)}
 		</>
