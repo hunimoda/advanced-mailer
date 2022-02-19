@@ -8,15 +8,8 @@ import classes from "./index.module.css";
 
 const New = () => {
 	const mainRef = useRef();
-	const sheetRef = useRef();
 
 	const aspectRatio = useSelector((state) => state.letter.sheet.aspectRatio);
-	const sheetBgColor = useSelector(
-		(state) => state.letter.sheet.backgroundColor
-	);
-	const sheetBgImage = useSelector(
-		(state) => state.letter.sheet.backgroundImage
-	);
 	const objects = useSelector((state) => state.letter.objects);
 
 	const [sheetSize, setSheetSize] = useState(null);
@@ -71,12 +64,7 @@ const New = () => {
 			<TopHeader />
 			<main ref={mainRef} className={classes.main}>
 				{sheetSize && (
-					<Sheet
-						ref={sheetRef}
-						size={sheetSize}
-						backgroundColor={sheetBgColor}
-						backgroundImage={sheetBgImage}
-					>
+					<Sheet size={sheetSize}>
 						{Object.entries(objects).map(([id, object]) => (
 							<InnerObject
 								key={id}

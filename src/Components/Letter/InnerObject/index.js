@@ -337,14 +337,42 @@ const InnerObject = ({ id, sheetSize, onSelectChange, selected }) => {
 			{selected && modifier}
 			{content}
 			{showObjectSettings && (
-				<Modal onClose={onSettingsClose}>
+				<Modal className={classes.objectSettings} onClose={onSettingsClose}>
+					<div className={classes.preview}>
+						<div
+							className={classes.previewObjectSpace}
+							style={{
+								width: `${style.width * sheetSize.width}px`,
+								height: `${style.height * sheetSize.height}px`,
+							}}
+						>
+							<div
+								className={classes.object}
+								style={{
+									...objectStyle,
+									top: `30px`,
+									left: `30px`,
+									transform: `scale(${style.transform.scale})`,
+								}}
+							>
+								{content}
+							</div>
+						</div>
+					</div>
 					<ul className={classes.settingsList}>
 						<li>
-							<h4>글꼴 색</h4>
+							<h4>글자 색</h4>
 							<input type="color" onChange={onTextColorChange} />
 						</li>
+						<li>폰트</li>
+						<li>크기</li>
+						<li>그림자</li>
+						<li>선 간격</li>
+						<li>글자 간격</li>
+						<li>배경</li>
+						<li>테두리</li>
 						<li>여백</li>
-						<li>모서리 둥글기</li>
+						<li>정렬</li>
 					</ul>
 				</Modal>
 			)}

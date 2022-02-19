@@ -76,10 +76,26 @@
 	transform-origin: bottom right;
 }
 
+.objectSettings {
+	width: calc(100vw - var(--main-padding));
+	background: yellow;
+}
+
+.preview {
+	max-height: 150px;
+	overflow: scroll;
+}
+
+.previewObjectSpace {
+	position: relative;
+	padding: 30px;
+	margin: 0 auto;
+	background: white;
+	min-width: calc(100% - 60px);
+}
+
 .settingsList {
 	list-style: none;
-	background: yellow;
-	width: calc(100vw - var(--main-padding));
-	max-height: 200px;
+	max-height: 100px;
 	overflow-y: scroll;
 }
