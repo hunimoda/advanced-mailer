@@ -1,8 +1,9 @@
 import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { letterActions } from "../../../Context/letter";
-import ObjectSettings from "./ObjectSettings";
 import { processStyle } from "./helper";
+import Modifier from "./Modifier";
+import ObjectSettings from "./ObjectSettings";
 import classes from "./index.module.css";
 
 let prevCoord = null;
@@ -139,13 +140,12 @@ const InnerObject = ({
 		setShowObjectSettings(true);
 	};
 
-	const onTouchStart = (event) => {
+	const onObjectTouchStart = (event) => {
 		if (readOnly) {
 			return;
 		}
 
 		event.stopPropagation();
-
 		timer = setTimeout(onLongTouch, TOUCH_DURATION);
 
 		if (!selected) {
@@ -159,29 +159,23 @@ const InnerObject = ({
 	};
 
 	const onTouchMove = (event) => {
-		if (readOnly) {
-			return;
-		}
-
-		event.stopPropagation();
-
-		clearTimeout(timer);
-		clickedAfterSelected = false;
-
 		if (selected) {
-			const { clientX: x, clientY: y } = event.touches[0];
-			const targetType = event.currentTarget.dataset.type;
+			clearTimeout(timer);
+			clickedAfterSelected = false;
 
-			if (targetType === "object") {
+			const { clientX: x, clientY: y } = event.touches[0];
+			const action = event.currentTarget.dataset.action;
+
+			if (action === "move") {
 				moveObject(
 					(x - prevCoord.x) / sheetSize.width,
 					(y - prevCoord.y) / sheetSize.height
 				);
-			} else if (targetType === "resize-and-rotate") {
+			} else if (action === "resize-fixed-ratio") {
 				resizeObjectFixedAspectRatio(x, y);
-			} else if (targetType === "resize-width") {
+			} else if (action === "resize-width") {
 				resizeObjectSide(x, y, "width");
-			} else if (targetType === "resize-height") {
+			} else if (action === "resize-height") {
 				resizeObjectSide(x, y, "height");
 			}
 
@@ -189,75 +183,17 @@ const InnerObject = ({
 		}
 	};
 
-	const onTouchEnd = () => {
-		if (readOnly) {
-			return;
-		}
-
-		clearTimeout(timer);
-
+	const onObjectTouchEnd = () => {
 		if (clickedAfterSelected) {
 			setIsAspectRatioFixed((prev) => !prev);
 		}
 
+		clearTimeout(timer);
 		clickedAfterSelected = null;
 		prevCoord = null;
 	};
 
 	const onSettingsClose = () => setShowObjectSettings(false);
-
-	const modifier = (
-		<>
-			<div
-				className={`${classes.border} ${
-					!object.style.transform.rotate ? classes["border--aligned"] : ""
-				}`}
-				style={{
-					borderWidth: `${1 / scale}px`,
-					transform: `translate(-${1 / scale}px, -${1 / scale}px)`,
-				}}
-			/>
-			<button
-				className={classes.delete}
-				style={{
-					transform: `scale(${1 / scale}) translate(-50%, -50%)`,
-				}}
-				onClick={deleteObject}
-				onTouchMove={(event) => event.stopPropagation()}
-			>
-				<i className="fas fa-times" />
-			</button>
-			{isAspectRatioFixed ? (
-				<span
-					data-type="resize-and-rotate"
-					className={classes.resize}
-					style={{ transform: `scale(${1 / scale}) translate(50%, 50%)` }}
-					onTouchMove={onTouchMove}
-				>
-					<i className="fas fa-arrows-alt-h" />
-				</span>
-			) : (
-				<>
-					<button
-						data-type="resize-width"
-						className={classes.resizeWidthBtn}
-						style={{ transform: `scale(${1 / scale}) translate(50%, -50%)` }}
-						onTouchMove={onTouchMove}
-					>
-						<i className="fas fa-arrows-alt-h" />
-					</button>
-					<button
-						data-type="resize-height"
-						className={classes.resizeHeightBtn}
-						style={{ transform: `scale(${1 / scale}) translate(50%, 50%)` }}
-						onTouchMove={onTouchMove}
-					>
-						<i className="fas fa-arrows-alt-v" />
-					</button>
-				</>
-			)}
-		</>
-	);
 
 	const getContentJsx = () => {
 		if (object.type === "image") {
@@ -284,14 +220,22 @@ const InnerObject = ({
 		<>
 			<div
 				ref={objectRef}
-				data-type="object"
+				data-action="move"
 				className={classes.object}
 				style={containerStyle}
-				onTouchStart={onTouchStart}
+				onTouchStart={onObjectTouchStart}
 				onTouchMove={onTouchMove}
-				onTouchEnd={onTouchEnd}
+				onTouchEnd={onObjectTouchEnd}
 			>
-				{selected && modifier}
+				{selected && (
+					<Modifier
+						onTouchMove={onTouchMove}
+						isFixed={isAspectRatioFixed}
+						onDelete={deleteObject}
+						scale={scale}
+						isAligned={!object.style.transform.rotate}
+					/>
+				)}
 				{getContentJsx()}
 			</div>
 			{showObjectSettings && (

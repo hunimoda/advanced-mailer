@@ -66,16 +66,18 @@ const ObjectSettings = ({ id, onClose, style }) => {
 				</li>
 				<li>
 					<h4>폰트</h4>
-					<select
-						data-property="fontFamily"
-						name="font"
-						onChange={onSettingsChange}
-					>
+					<select data-property="fontFamily" onChange={onSettingsChange}>
 						<option value="Arial">Arial</option>
 						<option value="Arial Black">Arial Black</option>
 						<option value="Verdana">Verdana</option>
 						<option value="Tahoma">Tahoma</option>
 						<option value="Trebuchet MS">Trebuchet MS</option>
+						<option value="Impact">Impact</option>
+						<option value="Times New Roman">Times New Roman</option>
+						<option value="Didot">Didot</option>
+						<option value="Georgia">Georgia</option>
+						<option value="American Typewriter">American Typewriter</option>
+						<option value="Andale Mono">Andale Mono</option>
 					</select>
 				</li>
 				<li>
