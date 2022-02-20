@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { letterActions } from "../../../../Context/letter";
 import Modal from "../../../../UI/Modal";
 import InnerObject from "..";
+import Group from "./Group";
 import classes from "./index.module.css";
 
 const ObjectSettings = ({ id, onClose, style }) => {
@@ -29,8 +30,16 @@ const ObjectSettings = ({ id, onClose, style }) => {
 		});
 	};
 
+	const onApplySettingsClick = () => {
+		dispatch(letterActions.setAllStyleAtOnce({ id, style: previewStyle }));
+		onClose();
+	};
+
 	return (
-		<Modal className={classes.objectSettings} onClose={onClose}>
+		<Modal
+			className={classes.objectSettings}
+			backdropColor="rgba(0, 0, 0, 0.6)"
+		>
 			<div
 				className={classes.previewContainer}
 				style={{ height: style.height * sheetSize.height }}
@@ -56,17 +65,28 @@ const ObjectSettings = ({ id, onClose, style }) => {
 				</div>
 			</div>
 			<ul className={classes.settingsList}>
-				<li>
-					<h4>글자 색</h4>
+				<li className={classes.settingItem}>
+					<h4 className={classes.settingProperty}>글자 색</h4>
+					<label
+						htmlFor="text-color"
+						className={`${classes.settingValue} ${classes.colorBtn}`}
+						style={{ backgroundColor: previewStyle.color }}
+					></label>
 					<input
+						id="text-color"
 						data-property="color"
 						type="color"
+						className={classes.hidden}
 						onChange={onSettingsChange}
 					/>
 				</li>
-				<li>
-					<h4>폰트</h4>
-					<select data-property="fontFamily" onChange={onSettingsChange}>
+				<li className={classes.settingItem}>
+					<h4 className={classes.settingProperty}>폰트</h4>
+					<select
+						className={classes.settingValue}
+						data-property="fontFamily"
+						onChange={onSettingsChange}
+					>
 						<option value="Arial">Arial</option>
 						<option value="Arial Black">Arial Black</option>
 						<option value="Verdana">Verdana</option>
@@ -80,42 +100,79 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						<option value="Andale Mono">Andale Mono</option>
 					</select>
 				</li>
-				<li>
-					<h4>크기</h4>
+				<li className={classes.settingItem}>
+					<h4 className={classes.settingProperty}>크기</h4>
 					<input
 						data-property="scale"
 						type="range"
 						min="0.005"
 						max="0.1"
 						step="0.005"
+						className={classes.settingValue}
 						onChange={onSettingsChange}
 					/>
 				</li>
-				<li>그림자</li>
-				<li>선 간격</li>
-				<li>
-					<h4>배경 색</h4>
+				<li className={classes.settingItem}>
+					<h4 className={classes.settingProperty}>배경 색</h4>
+					<label
+						htmlFor="text-bg-color"
+						className={`${classes.settingValue} ${classes.colorBtn}`}
+						style={{ backgroundColor: previewStyle.backgroundColor }}
+					></label>
 					<input
-						data-property="background"
+						id="text-bg-color"
+						data-property="backgroundColor"
 						type="color"
+						className={classes.hidden}
 						onChange={onSettingsChange}
 					/>
 				</li>
+				<li>
+					<h4>그림자</h4>
+					<Group
+						value="0px 0px 7px #5183ef"
+						format="0px 0px {1}px {2}"
+						onChange={onSettingsChange}
+						property="textShadow"
+					>
+						<li className={classes.settingItem}>
+							<h4 className={classes.settingProperty}>그림자 색</h4>
+							<label
+								htmlFor="text-shadow-color"
+								className={`${classes.settingValue} ${classes.colorBtn}`}
+								// style={{ backgroundColor: previewStyle.backgroundColor }}
+							></label>
+							<input
+								id="text-shadow-color"
+								data-index="2"
+								type="color"
+								className={classes.hidden}
+								// onChange={onSettingsChange}
+							/>
+						</li>
+						<li className={classes.settingItem}>
+							<h4 className={classes.settingProperty}>그림자 크기</h4>
+							<input
+								data-index="1"
+								type="range"
+								min="0"
+								max="10"
+								step="1"
+								className={classes.settingValue}
+								data-multiplier={1 / previewStyle.transform.scale}
+								// onChange={onSettingsChange}
+							/>
+						</li>
+					</Group>
+				</li>
+				<li>선 간격</li>
 				<li>테두리</li>
 				<li>여백</li>
 				<li>정렬</li>
 			</ul>
 			<footer>
-				<button>취소</button>
-				<button
-					onClick={() =>
-						dispatch(
-							letterActions.setAllStyleAtOnce({ id, style: previewStyle })
-						)
-					}
-				>
-					적용
-				</button>
+				<button onClick={onClose}>취소</button>
+				<button onClick={onApplySettingsClick}>적용</button>
 			</footer>
 		</Modal>
 	);
