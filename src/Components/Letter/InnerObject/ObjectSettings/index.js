@@ -139,7 +139,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					title="배경 색"
 					type="color"
 					initValue={previewStyle.backgroundColor}
-					property="backgroundColor"
+					property="backgroundColor.rgb"
 					onChange={onSettingsChange}
 				/>
 				<SettingItem
