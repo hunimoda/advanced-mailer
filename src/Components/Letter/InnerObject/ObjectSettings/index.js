@@ -218,14 +218,25 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					max="2"
 					step="0.01"
 				/>
-				<SettingItem
-					title="정렬"
-					type="select"
-					options={["left", "center", "right"]}
-					initValue={previewStyle.textAlign}
-					property="textAlign"
-					onChange={onSettingsChange}
-				/>
+				<div>
+					<h4>정렬</h4>
+					<SettingItem
+						title="가로 방향"
+						type="select"
+						options={["left", "center", "right"]}
+						initValue={previewStyle.textAlign}
+						property="textAlign"
+						onChange={onSettingsChange}
+					/>
+					<SettingItem
+						title="세로 방향"
+						type="select"
+						options={["start", "center", "end"]}
+						initValue={previewStyle.justifyContent}
+						property="justifyContent"
+						onChange={onSettingsChange}
+					/>
+				</div>
 				<SettingItem
 					title="여백"
 					type="range"
