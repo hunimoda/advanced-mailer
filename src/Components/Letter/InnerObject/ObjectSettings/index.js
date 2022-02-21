@@ -34,12 +34,13 @@ const ObjectSettings = ({ id, onClose, style }) => {
 				value,
 			} = event.target;
 
+			const typeCorrectedValue = isNaN(+value) ? value : +value;
 			const complexPropMatch = property.match(/([a-z]+)\.([a-z]+)/i);
 
 			if (complexPropMatch) {
-				newStyle[complexPropMatch[1]][complexPropMatch[2]] = value;
+				newStyle[complexPropMatch[1]][complexPropMatch[2]] = typeCorrectedValue;
 			} else {
-				newStyle[property] = value;
+				newStyle[property] = typeCorrectedValue;
 			}
 
 			return newStyle;
@@ -105,7 +106,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					onChange={onSettingsChange}
 					min="0.02"
 					max="0.1"
-					step="0.001"
+					step="0.0008"
 				/>
 				<SettingItem
 					title="배경 색"
@@ -129,7 +130,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					onChange={onSettingsChange}
 					min="0"
 					max="0.3"
-					step="0.01"
+					step="0.003"
 				/>
 				<SettingItem
 					title="테두리 색"
@@ -146,7 +147,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					onChange={onSettingsChange}
 					min="0.00"
 					max="0.05"
-					step="0.001"
+					step="0.0005"
 				/>
 				<li>선 간격</li>
 				<li>여백</li>

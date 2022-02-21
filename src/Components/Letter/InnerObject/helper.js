@@ -31,7 +31,9 @@ const convertStyleValue = (prop, value, sheetSize, scale) => {
 	} else if (prop === "transform") {
 		value = convertTransformValue(value);
 	} else if (prop === "textShadow") {
-		value = `0px 0px ${value.size * sheetSize.height}px ${value.color}`;
+		value = value.size
+			? `0px 0px ${value.size * sheetSize.height}px ${value.color}`
+			: null;
 	} else if (prop === "border") {
 		value = `${(value.width * sheetSize.height) / (scale ?? 1)}px solid ${
 			value.color

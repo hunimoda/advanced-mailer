@@ -65,12 +65,13 @@ export const letterSlice = createSlice({
 					height: 0.1,
 					top: 0.45,
 					left: 0.25,
-					color: "black",
-					backgroundColor: "rgba(0, 0, 0, 0.3)",
 					transform: {
 						scale: 0.04,
 						rotate: 0,
 					},
+					color: "black",
+					fontFamily: "Arial",
+					backgroundColor: "white",
 					textShadow: {
 						color: "transparent",
 						size: 0,
