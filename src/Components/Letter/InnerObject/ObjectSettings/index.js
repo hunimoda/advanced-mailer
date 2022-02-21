@@ -100,91 +100,113 @@ const ObjectSettings = ({ id, onClose, style }) => {
 				className={`${settingsListClass} ${classes.settingsList}`}
 				onScroll={onSettingsListScroll}
 			>
+				<div>
+					<h4>글꼴</h4>
+					<SettingItem
+						title="색상"
+						type="color"
+						initValue={previewStyle.color.rgb}
+						property="color.rgb"
+						onChange={onSettingsChange}
+					/>
+					<SettingItem
+						title="투명도"
+						type="range"
+						initValue={previewStyle.color.transparency}
+						property="color.transparency"
+						onChange={onSettingsChange}
+						min="0"
+						max="1"
+						step="0.01"
+					/>
+					<SettingItem
+						title="모양"
+						type="select"
+						options={SUPPORTED_FONTS}
+						initValue={previewStyle.fontFamily}
+						property="fontFamily"
+						onChange={onSettingsChange}
+					/>
+					<SettingItem
+						title="크기"
+						type="range"
+						initValue={previewStyle.transform.scale}
+						property="transform.scale"
+						onChange={onSettingsChange}
+						min="0.02"
+						max="0.1"
+						step="0.0008"
+					/>
+				</div>
+				<div>
+					<h4>배경</h4>
+					<SettingItem
+						title="색상"
+						type="color"
+						initValue={previewStyle.backgroundColor}
+						property="backgroundColor.rgb"
+						onChange={onSettingsChange}
+					/>
+					<SettingItem
+						title="투명도"
+						type="range"
+						initValue={previewStyle.backgroundColor.transparency}
+						property="backgroundColor.transparency"
+						onChange={onSettingsChange}
+						min="0"
+						max="1"
+						step="0.01"
+					/>
+				</div>
+				<div>
+					<h4>네온 효과</h4>
+					<SettingItem
+						title="색상"
+						type="color"
+						initValue={previewStyle.textShadow.color}
+						property="textShadow.color"
+						onChange={onSettingsChange}
+					/>
+					<SettingItem
+						title="세기"
+						type="range"
+						initValue={previewStyle.textShadow.size}
+						property="textShadow.size"
+						onChange={onSettingsChange}
+						min="0"
+						max="0.3"
+						step="0.003"
+					/>
+				</div>
+				<div>
+					<h4>테두리</h4>
+					<SettingItem
+						title="색상"
+						type="color"
+						initValue={previewStyle.border.color}
+						property="border.color"
+						onChange={onSettingsChange}
+					/>
+					<SettingItem
+						title="두께"
+						type="range"
+						initValue={previewStyle.border.width}
+						property="border.width"
+						onChange={onSettingsChange}
+						min="0.00"
+						max="0.05"
+						step="0.0005"
+					/>
+				</div>
 				<SettingItem
-					title="글자 색"
-					type="color"
-					initValue={previewStyle.color.rgb}
-					property="color.rgb"
-					onChange={onSettingsChange}
-				/>
-				<SettingItem
-					title="글자 투명도"
+					title="모서리 둥글기"
 					type="range"
-					initValue={previewStyle.color.transparency}
-					property="color.transparency"
+					initValue={previewStyle.borderRadius}
+					property="borderRadius"
 					onChange={onSettingsChange}
 					min="0"
 					max="1"
 					step="0.01"
-				/>
-				<SettingItem
-					title="폰트"
-					type="select"
-					options={SUPPORTED_FONTS}
-					initValue={previewStyle.fontFamily}
-					property="fontFamily"
-					onChange={onSettingsChange}
-				/>
-				<SettingItem
-					title="글자 크기"
-					type="range"
-					initValue={previewStyle.transform.scale}
-					property="transform.scale"
-					onChange={onSettingsChange}
-					min="0.02"
-					max="0.1"
-					step="0.0008"
-				/>
-				<SettingItem
-					title="배경 색"
-					type="color"
-					initValue={previewStyle.backgroundColor}
-					property="backgroundColor.rgb"
-					onChange={onSettingsChange}
-				/>
-				<SettingItem
-					title="배경 투명도"
-					type="range"
-					initValue={previewStyle.backgroundColor.transparency}
-					property="backgroundColor.transparency"
-					onChange={onSettingsChange}
-					min="0"
-					max="1"
-					step="0.01"
-				/>
-				<SettingItem
-					title="그림자 색"
-					type="color"
-					initValue={previewStyle.textShadow.color}
-					property="textShadow.color"
-					onChange={onSettingsChange}
-				/>
-				<SettingItem
-					title="그림자 크기"
-					type="range"
-					initValue={previewStyle.textShadow.size}
-					property="textShadow.size"
-					onChange={onSettingsChange}
-					min="0"
-					max="0.3"
-					step="0.003"
-				/>
-				<SettingItem
-					title="테두리 색"
-					type="color"
-					initValue={previewStyle.border.color}
-					property="border.color"
-					onChange={onSettingsChange}
-				/>
-				<SettingItem
-					title="테두리 두께"
-					type="range"
-					initValue={previewStyle.border.width}
-					property="border.width"
-					onChange={onSettingsChange}
-					min="0.00"
-					max="0.05"
-					step="0.0005"
 				/>
 				<SettingItem
 					title="선 간격"

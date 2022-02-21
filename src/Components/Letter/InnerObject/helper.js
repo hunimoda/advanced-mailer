@@ -21,7 +21,7 @@ const convertTransformValue = (value) => {
 	return convertedValue;
 };
 
-const convertStyleValue = (prop, value, sheetSize, scale) => {
+const convertStyleValue = (style, prop, value, sheetSize, scale) => {
 	if (prop === "height") {
 		value = `${(sheetSize.height * value) / (scale ?? 1)}px`;
 	} else if (prop === "width") {
@@ -47,6 +47,12 @@ const convertStyleValue = (prop, value, sheetSize, scale) => {
 		value = `${(value.width * sheetSize.height) / (scale ?? 1)}px solid ${
 			value.color
 		}`;
+	} else if (prop === "borderRadius") {
+		const objectWidthPx = style.width * sheetSize.width;
+		const objectheightPx = style.height * sheetSize.height;
+		const minSideLengthPx = Math.min(objectWidthPx, objectheightPx);
+
+		value = `${(value * minSideLengthPx) / (scale ?? 1)}px`;
 	} else if (prop === "padding") {
 		value = `${(value * sheetSize.height) / (scale ?? 1)}px`;
 	}
@@ -60,7 +66,13 @@ export const processStyle = (style, sheetSize) => {
 	const scale = style.transform?.scale;
 
 	Object.entries(style).forEach(([prop, value]) => {
-		const convertedValue = convertStyleValue(prop, value, sheetSize, scale);
+		const convertedValue = convertStyleValue(
+			style,
+			prop,
+			value,
+			sheetSize,
+			scale
+		);
 
 		if (OBJECT_STYLE_PROPS.includes(prop)) {
 			containerStyle[prop] = convertedValue;

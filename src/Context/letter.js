@@ -86,6 +86,7 @@ export const letterSlice = createSlice({
 						color: "transparent",
 						width: 0,
 					},
+					borderRadius: 0,
 					lineHeight: 1,
 					textAlign: "left",
 					padding: 0,
