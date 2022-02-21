@@ -25,6 +25,21 @@ const ObjectSettings = ({ id, onClose, style }) => {
 	const sheetSize = useSelector((state) => state.letter.sheet.size);
 
 	const [previewStyle, setPreviewStyle] = useState(style);
+	const [settingsListClass, setSettingsListClass] = useState(
+		`${classes.settingsList} ${classes.settingsListTop}`
+	);
+
+	const onSettingsListScroll = (event) => {
+		const { offsetHeight, scrollTop, scrollHeight } = event.target;
+
+		if (scrollTop === 0) {
+			setSettingsListClass(classes["settingsList--top"]);
+		} else if (offsetHeight + scrollTop >= scrollHeight) {
+			setSettingsListClass(classes["settingsList--bottom"]);
+		} else {
+			setSettingsListClass("");
+		}
+	};
 
 	const onSettingsChange = (event) => {
 		setPreviewStyle((prevStyle) => {
@@ -52,7 +67,6 @@ const ObjectSettings = ({ id, onClose, style }) => {
 		onClose();
 	};
 
-	console.log(previewStyle);
 	return (
 		<Modal
 			className={classes.objectSettings}
@@ -82,7 +96,10 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					/>
 				</div>
 			</div>
-			<ul className={classes.settingsList}>
+			<ul
+				className={`${settingsListClass} ${classes.settingsList}`}
+				onScroll={onSettingsListScroll}
+			>
 				<SettingItem
 					title="글자 색"
 					type="color"
@@ -198,7 +215,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					step="0.0005"
 				/>
 			</ul>
-			<footer>
+			<footer className={classes.controlFooter}>
 				<button onClick={onClose}>취소</button>
 				<button onClick={onApplySettingsClick}>적용</button>
 			</footer>
