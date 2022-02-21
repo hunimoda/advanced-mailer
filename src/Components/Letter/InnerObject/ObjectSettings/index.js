@@ -103,9 +103,9 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					initValue={previewStyle.transform.scale}
 					property="transform.scale"
 					onChange={onSettingsChange}
-					min="0.01"
+					min="0.02"
 					max="0.1"
-					step="0.01"
+					step="0.001"
 				/>
 				<SettingItem
 					title="배경 색"
@@ -128,8 +128,8 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					property="textShadow.size"
 					onChange={onSettingsChange}
 					min="0"
-					max="10"
-					step="1"
+					max="0.3"
+					step="0.01"
 				/>
 				<SettingItem
 					title="테두리 색"
@@ -144,9 +144,9 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					initValue={previewStyle.border.width}
 					property="border.width"
 					onChange={onSettingsChange}
-					min="0"
-					max="10"
-					step="1"
+					min="0.00"
+					max="0.05"
+					step="0.001"
 				/>
 				<li>선 간격</li>
 				<li>여백</li>

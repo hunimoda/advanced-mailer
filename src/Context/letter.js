@@ -67,17 +67,17 @@ export const letterSlice = createSlice({
 					left: 0.25,
 					color: "black",
 					backgroundColor: "rgba(0, 0, 0, 0.3)",
-					textShadow: {
-						color: "transparent",
-						size: 0,
-					},
 					transform: {
 						scale: 0.04,
 						rotate: 0,
 					},
+					textShadow: {
+						color: "transparent",
+						size: 0,
+					},
 					border: {
-						color: "yellow",
-						width: 10,
+						color: "transparent",
+						width: 0,
 					},
 					zIndex: ++maxZIndex,
 				},
