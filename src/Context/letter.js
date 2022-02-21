@@ -82,6 +82,7 @@ export const letterSlice = createSlice({
 					},
 					lineHeight: 1,
 					textAlign: "left",
+					padding: 0,
 					zIndex: ++maxZIndex,
 				},
 			};

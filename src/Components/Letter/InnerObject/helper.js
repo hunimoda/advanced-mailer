@@ -38,13 +38,15 @@ const convertStyleValue = (prop, value, sheetSize, scale) => {
 		value = `${(value.width * sheetSize.height) / (scale ?? 1)}px solid ${
 			value.color
 		}`;
+	} else if (prop === "padding") {
+		value = `${(value * sheetSize.height) / (scale ?? 1)}px`;
 	}
 
 	return value;
 };
 
 export const processStyle = (style, sheetSize) => {
-	const objectStyle = {};
+	const containerStyle = {};
 	const contentStyle = { fontSize: `${sheetSize.height}px` };
 	const scale = style.transform?.scale;
 
@@ -52,11 +54,11 @@ export const processStyle = (style, sheetSize) => {
 		const convertedValue = convertStyleValue(prop, value, sheetSize, scale);
 
 		if (OBJECT_STYLE_PROPS.includes(prop)) {
-			objectStyle[prop] = convertedValue;
+			containerStyle[prop] = convertedValue;
 		} else {
 			contentStyle[prop] = convertedValue;
 		}
 	});
 
-	return [objectStyle, contentStyle, scale ?? 1];
+	return [containerStyle, contentStyle, scale ?? 1];
 };

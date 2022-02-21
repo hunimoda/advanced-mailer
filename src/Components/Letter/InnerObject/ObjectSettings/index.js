@@ -167,7 +167,16 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					property="textAlign"
 					onChange={onSettingsChange}
 				/>
-				<li>여백</li>
+				<SettingItem
+					title="여백"
+					type="range"
+					initValue={previewStyle.padding}
+					property="padding"
+					onChange={onSettingsChange}
+					min="0"
+					max="0.05"
+					step="0.0005"
+				/>
 			</ul>
 			<footer>
 				<button onClick={onClose}>취소</button>

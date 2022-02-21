@@ -32,6 +32,11 @@ const InnerObject = ({
 	);
 	const [showObjectSettings, setShowObjectSettings] = useState(false);
 
+	const MIN_SIDE_LENGTH = Math.max(
+		(object.style.padding + object.style.border.width) * 2 * sheetSize.height,
+		30
+	);
+
 	const moveObject = (left, top) =>
 		dispatch(letterActions.moveObject({ id, left, top }));
 
@@ -69,10 +74,16 @@ const InnerObject = ({
 				(object.style.width * sheetSize.width)
 		);
 
+		const minDiagonalLength =
+			MIN_SIDE_LENGTH /
+			Math.cos(Math.max(objectAngle, Math.PI / 2 - objectAngle));
+
 		const width =
-			(Math.max(diagonalLength, 30) * Math.cos(objectAngle)) / sheetSize.width;
+			(Math.max(diagonalLength, minDiagonalLength) * Math.cos(objectAngle)) /
+			sheetSize.width;
 		const height =
-			(Math.max(diagonalLength, 30) * Math.sin(objectAngle)) / sheetSize.height;
+			(Math.max(diagonalLength, minDiagonalLength) * Math.sin(objectAngle)) /
+			sheetSize.height;
 
 		const THRESHOLD_DEGREE = 1;
 		const rotateDegree =
@@ -122,7 +133,7 @@ const InnerObject = ({
 				letterActions.resizeObjectSide({
 					id,
 					length:
-						Math.max(30, Math.abs(signedDistance)) /
+						Math.max(MIN_SIDE_LENGTH, Math.abs(signedDistance)) /
 						(side === "height" ? sheetSize.height : sheetSize.width),
 					side,
 				})
