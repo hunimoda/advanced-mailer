@@ -7,6 +7,9 @@ const OBJECT_STYLE_PROPS = [
 	"transform",
 ];
 
+const convertTextShadowValue = (value, scale) =>
+	`0px 0px ${value.size / scale}px ${value.color}`;
+
 const convertBorderValue = (value, scale) =>
 	`${value.width / scale}px solid ${value.color}`;
 
@@ -33,6 +36,8 @@ const convertStyleValue = (prop, value, sheetSize, scale) => {
 		value = `${value * 100}%`;
 	} else if (prop === "transform") {
 		value = convertTransformValue(value);
+	} else if (prop === "textShadow") {
+		value = convertTextShadowValue(value, scale);
 	} else if (prop === "border") {
 		value = convertBorderValue(value, scale);
 	}

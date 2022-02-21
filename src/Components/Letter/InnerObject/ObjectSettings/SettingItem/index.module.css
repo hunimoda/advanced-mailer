@@ -1,0 +1,32 @@
+.settingItem {
+	display: flex;
+	align-items: center;
+	height: 60px;
+	margin-left: 20px;
+}
+
+.settingItem h4 {
+	font-size: 16px;
+}
+
+.settingValue {
+	margin-left: 20px;
+}
+
+.colorBtn {
+	display: block;
+	width: 30px;
+	height: 30px;
+	border: 5px solid white;
+	box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 3px, rgba(0, 0, 0, 0.4) 0px 1px 2px;
+	border-radius: 100px;
+}
+
+.settingItem input[type="color"] {
+	display: none;
+}
+
+.settingItem input[type="range"] {
+	flex-grow: 1;
+	margin-right: 20px;
+}
