@@ -20,8 +20,10 @@ const ObjectSettings = ({ id, onClose, style }) => {
 				value,
 			} = event.target;
 
-			if (property === "scale") {
-				newStyle.transform.scale = Number(value);
+			const complexPropMatch = property.match(/([a-z]+)\.([a-z]+)/i);
+
+			if (complexPropMatch) {
+				newStyle[complexPropMatch[1]][complexPropMatch[2]] = value;
 			} else {
 				newStyle[property] = value;
 			}
@@ -103,7 +105,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 				<li className={classes.settingItem}>
 					<h4 className={classes.settingProperty}>크기</h4>
 					<input
-						data-property="scale"
+						data-property="transform.scale"
 						type="range"
 						min="0.005"
 						max="0.1"
@@ -127,10 +129,10 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						onChange={onSettingsChange}
 					/>
 				</li>
-				<li>
-					<h4>그림자</h4>
+				<li className={classes.groupSettingItem}>
+					<h4 className={classes.groupSettingProperty}>그림자</h4>
 					<Group
-						value="0px 0px 7px #5183ef"
+						value={previewStyle.textShadow}
 						format="0px 0px {1}px {2}"
 						onChange={onSettingsChange}
 						property="textShadow"
@@ -166,7 +168,37 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					</Group>
 				</li>
 				<li>선 간격</li>
-				<li>테두리</li>
+				<li className={classes.groupSettingItem}>
+					<h4 className={classes.groupSettingProperty}>테두리</h4>
+					<ul>
+						<li className={classes.settingItem}>
+							<h4 className={classes.settingProperty}>색</h4>
+							<label
+								htmlFor="border-color"
+								className={`${classes.settingValue} ${classes.colorBtn}`}
+								style={{ backgroundColor: previewStyle.border.color }}
+							></label>
+							<input
+								id="border-color"
+								type="color"
+								className={classes.hidden}
+								data-property="border.color"
+								onChange={onSettingsChange}
+							/>
+						</li>
+						<li className={classes.settingItem}>
+							<h4 className={classes.settingProperty}>두께</h4>
+							<input
+								type="range"
+								min="0"
+								max="10"
+								step="1"
+								className={classes.settingValue}
+								// onChange={onSettingsChange}
+							/>
+						</li>
+					</ul>
+				</li>
 				<li>여백</li>
 				<li>정렬</li>
 			</ul>

@@ -34,16 +34,38 @@
 .settingItem {
 	display: flex;
 	align-items: center;
-	height: 80px;
+	padding: 15px 0px;
 	margin-left: 20px;
 }
 
 .settingProperty {
-	font-size: 18px;
+	font-size: 16px;
 }
 
 .settingValue {
 	margin-left: 20px;
+}
+
+input[type="range"].settingValue {
+	flex-grow: 1;
+	margin-right: 20px;
+}
+
+.groupSettingItem {
+	padding: 15px 0px;
+	margin-left: 20px;
+}
+
+.groupSettingProperty {
+	font-size: 16px;
+}
+
+.groupSettingItem .settingItem {
+	padding: 10px 0;
+}
+
+.groupSettingItem .settingProperty {
+	font-size: 14px;
 }
 
 .colorBtn {

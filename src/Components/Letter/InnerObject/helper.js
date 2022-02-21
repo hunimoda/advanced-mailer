@@ -7,6 +7,9 @@ const OBJECT_STYLE_PROPS = [
 	"transform",
 ];
 
+const convertBorderValue = (value, scale) =>
+	`${value.width / scale}px solid ${value.color}`;
+
 const convertTransformValue = (value) => {
 	let convertedValue = "";
 
@@ -30,6 +33,8 @@ const convertStyleValue = (prop, value, sheetSize, scale) => {
 		value = `${value * 100}%`;
 	} else if (prop === "transform") {
 		value = convertTransformValue(value);
+	} else if (prop === "border") {
+		value = convertBorderValue(value, scale);
 	}
 
 	return value;
