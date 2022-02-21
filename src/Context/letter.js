@@ -80,6 +80,8 @@ export const letterSlice = createSlice({
 						color: "transparent",
 						width: 0,
 					},
+					lineHeight: 1,
+					textAlign: "left",
 					zIndex: ++maxZIndex,
 				},
 			};

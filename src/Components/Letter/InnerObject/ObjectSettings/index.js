@@ -149,9 +149,25 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					max="0.05"
 					step="0.0005"
 				/>
-				<li>선 간격</li>
+				<SettingItem
+					title="선 간격"
+					type="range"
+					initValue={previewStyle.lineHeight}
+					property="lineHeight"
+					onChange={onSettingsChange}
+					min="1"
+					max="2"
+					step="0.01"
+				/>
+				<SettingItem
+					title="정렬"
+					type="select"
+					options={["left", "center", "right"]}
+					initValue={previewStyle.textAlign}
+					property="textAlign"
+					onChange={onSettingsChange}
+				/>
 				<li>여백</li>
-				<li>정렬</li>
 			</ul>
 			<footer>
 				<button onClick={onClose}>취소</button>
