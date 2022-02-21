@@ -129,11 +129,24 @@ const InnerObject = ({
 		);
 
 		if (Math.sign(signedDistance) === realSign) {
+			let calculatedLengthPx = Math.max(
+				MIN_SIDE_LENGTH,
+				Math.abs(signedDistance)
+			);
+			const referenceLengthPx =
+				side === "height"
+					? object.style.width * sheetSize.width
+					: object.style.height * sheetSize.height;
+
+			if (Math.abs(calculatedLengthPx - referenceLengthPx) < 3) {
+				calculatedLengthPx = referenceLengthPx;
+			}
+
 			dispatch(
 				letterActions.resizeObjectSide({
 					id,
 					length:
-						Math.max(MIN_SIDE_LENGTH, Math.abs(signedDistance)) /
+						calculatedLengthPx /
 						(side === "height" ? sheetSize.height : sheetSize.width),
 					side,
 				})
@@ -227,6 +240,11 @@ const InnerObject = ({
 		return null;
 	};
 
+	console.log(
+		object.style.width * sheetSize.width,
+		object.style.height * sheetSize.height
+	);
+
 	return (
 		<>
 			<div
@@ -245,6 +263,12 @@ const InnerObject = ({
 						onDelete={deleteObject}
 						scale={scale}
 						isAligned={!object.style.transform.rotate}
+						isSquare={
+							Math.abs(
+								object.style.width * sheetSize.width -
+									object.style.height * sheetSize.height
+							) < 1
+						}
 					/>
 				)}
 				{getContentJsx()}

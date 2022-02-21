@@ -30,6 +30,29 @@
 		rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
+.topIndicator,
+.leftIndicator {
+	background: white;
+	border: 1px dotted #0f0;
+	width: 10px;
+	height: 10px;
+	border-radius: 10px;
+}
+
+.topIndicator {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform-origin: top left;
+}
+
+.leftIndicator {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	transform-origin: top left;
+}
+
 .delete {
 	position: absolute;
 	top: 0;

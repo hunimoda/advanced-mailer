@@ -110,11 +110,15 @@ export const letterSlice = createSlice({
 					height,
 					top: 0.5 - height / 2,
 					left: 0.5 - width / 2,
-					backgroundColor: "rgba(0, 0, 0, 0.3)",
 					transform: {
 						scale: 0.04,
 						rotate: 0,
 					},
+					border: {
+						color: "transparent",
+						width: 0,
+					},
+					padding: 0,
 					zIndex: ++maxZIndex,
 				},
 			};

@@ -1,6 +1,13 @@
 import classes from "./index.module.css";
 
-const Modifier = ({ onTouchMove, isFixed, onDelete, scale, isAligned }) => {
+const Modifier = ({
+	onTouchMove,
+	isFixed,
+	onDelete,
+	scale,
+	isAligned,
+	isSquare,
+}) => {
 	return (
 		<>
 			<div
@@ -22,6 +29,18 @@ const Modifier = ({ onTouchMove, isFixed, onDelete, scale, isAligned }) => {
 			>
 				<i className="fas fa-times" />
 			</button>
+			{isSquare && (
+				<>
+					<div
+						className={classes.topIndicator}
+						style={{ transform: `scale(${1 / scale}) translate(-50%, -50%)` }}
+					/>
+					<div
+						className={classes.leftIndicator}
+						style={{ transform: `scale(${1 / scale}) translate(-50%, -50%)` }}
+					/>
+				</>
+			)}
 			{isFixed ? (
 				<span
 					data-action="resize-fixed-ratio"
