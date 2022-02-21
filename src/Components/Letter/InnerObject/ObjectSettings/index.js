@@ -197,27 +197,17 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						max="0.05"
 						step="0.0005"
 					/>
+					<SettingItem
+						title="둥글기"
+						type="range"
+						initValue={previewStyle.borderRadius}
+						property="borderRadius"
+						onChange={onSettingsChange}
+						min="0"
+						max="1"
+						step="0.01"
+					/>
 				</div>
-				<SettingItem
-					title="모서리 둥글기"
-					type="range"
-					initValue={previewStyle.borderRadius}
-					property="borderRadius"
-					onChange={onSettingsChange}
-					min="0"
-					max="1"
-					step="0.01"
-				/>
-				<SettingItem
-					title="선 간격"
-					type="range"
-					initValue={previewStyle.lineHeight}
-					property="lineHeight"
-					onChange={onSettingsChange}
-					min="1"
-					max="2"
-					step="0.01"
-				/>
 				<div>
 					<h4>정렬</h4>
 					<SettingItem
@@ -237,6 +227,16 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						onChange={onSettingsChange}
 					/>
 				</div>
+				<SettingItem
+					title="선 간격"
+					type="range"
+					initValue={previewStyle.lineHeight}
+					property="lineHeight"
+					onChange={onSettingsChange}
+					min="1"
+					max="2"
+					step="0.01"
+				/>
 				<SettingItem
 					title="여백"
 					type="range"

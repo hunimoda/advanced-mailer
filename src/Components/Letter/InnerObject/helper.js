@@ -49,10 +49,10 @@ const convertStyleValue = (style, prop, value, sheetSize, scale) => {
 		}`;
 	} else if (prop === "borderRadius") {
 		const objectWidthPx = style.width * sheetSize.width;
-		const objectheightPx = style.height * sheetSize.height;
-		const minSideLengthPx = Math.min(objectWidthPx, objectheightPx);
+		const objectHeightPx = style.height * sheetSize.height;
+		const minSideLengthPx = Math.min(objectWidthPx, objectHeightPx);
 
-		value = `${(value * minSideLengthPx) / (scale ?? 1)}px`;
+		value = `${(value * minSideLengthPx) / (scale ?? 1) / 2}px`;
 	} else if (prop === "padding") {
 		value = `${(value * sheetSize.height) / (scale ?? 1)}px`;
 	}
