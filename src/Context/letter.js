@@ -69,9 +69,15 @@ export const letterSlice = createSlice({
 						scale: 0.04,
 						rotate: 0,
 					},
-					color: "black",
+					color: {
+						rgb: "#000000",
+						transparency: 0,
+					},
 					fontFamily: "Arial",
-					backgroundColor: "white",
+					backgroundColor: {
+						rgb: "#ffffff",
+						transparency: 1,
+					},
 					textShadow: {
 						color: "transparent",
 						size: 0,

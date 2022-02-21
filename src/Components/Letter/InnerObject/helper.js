@@ -30,6 +30,15 @@ const convertStyleValue = (prop, value, sheetSize, scale) => {
 		value = `${value * 100}%`;
 	} else if (prop === "transform") {
 		value = convertTransformValue(value);
+	} else if (prop === "color" || prop === "backgroundColor") {
+		const rgbMatch = value.rgb
+			.match(/#([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})/i)
+			.slice(1, 4)
+			.map((hex) => parseInt(hex, 16));
+
+		value = `rgba(${rgbMatch[0]}, ${rgbMatch[1]}, ${rgbMatch[2]}, ${
+			1 - value.transparency
+		})`;
 	} else if (prop === "textShadow") {
 		value = value.size
 			? `0px 0px ${value.size * sheetSize.height}px ${value.color}`

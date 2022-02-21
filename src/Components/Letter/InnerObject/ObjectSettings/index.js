@@ -86,9 +86,19 @@ const ObjectSettings = ({ id, onClose, style }) => {
 				<SettingItem
 					title="글자 색"
 					type="color"
-					initValue={previewStyle.color}
-					property="color"
+					initValue={previewStyle.color.rgb}
+					property="color.rgb"
 					onChange={onSettingsChange}
+				/>
+				<SettingItem
+					title="글자 투명도"
+					type="range"
+					initValue={previewStyle.color.transparency}
+					property="color.transparency"
+					onChange={onSettingsChange}
+					min="0"
+					max="1"
+					step="0.01"
 				/>
 				<SettingItem
 					title="폰트"
@@ -114,6 +124,16 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					initValue={previewStyle.backgroundColor}
 					property="backgroundColor"
 					onChange={onSettingsChange}
+				/>
+				<SettingItem
+					title="배경 투명도"
+					type="range"
+					initValue={previewStyle.backgroundColor.transparency}
+					property="backgroundColor.transparency"
+					onChange={onSettingsChange}
+					min="0"
+					max="1"
+					step="0.01"
 				/>
 				<SettingItem
 					title="그림자 색"
