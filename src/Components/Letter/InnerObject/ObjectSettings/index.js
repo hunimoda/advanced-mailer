@@ -100,7 +100,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 				className={`${settingsListClass} ${classes.settingsList}`}
 				onScroll={onSettingsListScroll}
 			>
-				<div>
+				<div className={classes.group}>
 					<h4>글꼴</h4>
 					<SettingItem
 						title="색상"
@@ -138,7 +138,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						step="0.0008"
 					/>
 				</div>
-				<div>
+				<div className={classes.group}>
 					<h4>배경</h4>
 					<SettingItem
 						title="색상"
@@ -158,7 +158,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						step="0.01"
 					/>
 				</div>
-				<div>
+				<div className={classes.group}>
 					<h4>네온 효과</h4>
 					<SettingItem
 						title="색상"
@@ -178,7 +178,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						step="0.003"
 					/>
 				</div>
-				<div>
+				<div className={classes.group}>
 					<h4>테두리</h4>
 					<SettingItem
 						title="색상"
@@ -208,7 +208,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						step="0.01"
 					/>
 				</div>
-				<div>
+				<div className={classes.group}>
 					<h4>정렬</h4>
 					<SettingItem
 						title="가로 방향"
@@ -227,26 +227,29 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						onChange={onSettingsChange}
 					/>
 				</div>
-				<SettingItem
-					title="선 간격"
-					type="range"
-					initValue={previewStyle.lineHeight}
-					property="lineHeight"
-					onChange={onSettingsChange}
-					min="1"
-					max="2"
-					step="0.01"
-				/>
-				<SettingItem
-					title="여백"
-					type="range"
-					initValue={previewStyle.padding}
-					property="padding"
-					onChange={onSettingsChange}
-					min="0"
-					max="0.05"
-					step="0.0005"
-				/>
+				<div className={classes.group}>
+					<h4>기타</h4>
+					<SettingItem
+						title="선 간격"
+						type="range"
+						initValue={previewStyle.lineHeight}
+						property="lineHeight"
+						onChange={onSettingsChange}
+						min="1"
+						max="2"
+						step="0.01"
+					/>
+					<SettingItem
+						title="여백"
+						type="range"
+						initValue={previewStyle.padding}
+						property="padding"
+						onChange={onSettingsChange}
+						min="0"
+						max="0.05"
+						step="0.0005"
+					/>
+				</div>
 			</ul>
 			<footer className={classes.controlFooter}>
 				<button onClick={onClose}>취소</button>
