@@ -58,7 +58,7 @@ const SettingItem = (props) => {
 		};
 
 		controlJsx = (
-			<ul>
+			<ul className={classes.customSelect}>
 				{props.options.map((option) => {
 					let parentClassName = classes.customOption;
 					const id = objectToOrderedString(option.value);

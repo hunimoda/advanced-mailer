@@ -86,3 +86,26 @@
 .selectedBoxShadow {
 	color: red;
 }
+
+.selectedAlignment > .alignButton {
+	color: black;
+}
+
+.alignButton {
+	text-align: center;
+	margin-right: 15px;
+	color: #ccc;
+}
+
+.alignButton i {
+	font-size: 24px;
+}
+
+.alignButton p {
+	font-size: 14px;
+	margin-top: 6px;
+}
+
+.rotated90Degrees {
+	transform: rotate(90deg);
+}

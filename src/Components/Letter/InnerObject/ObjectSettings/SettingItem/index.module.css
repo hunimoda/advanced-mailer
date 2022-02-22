@@ -3,10 +3,12 @@
 	align-items: center;
 	height: 60px;
 	margin-left: 20px;
+	overflow: hidden;
 }
 
 .settingItem h4 {
 	font-size: 16px;
+	white-space: nowrap;
 }
 
 .settingValue {
@@ -31,6 +33,20 @@
 	margin-right: 20px;
 }
 
+.customSelect {
+	display: flex;
+	align-items: center;
+	flex-grow: 1;
+	min-width: 0;
+	overflow-x: scroll;
+	height: 100%;
+	padding: 30px 5px;
+	margin-left: 20px;
+	margin-right: var(--main-padding);
+}
+
 .customOption {
 	list-style: none;
+	flex-shrink: 0;
+	min-width: 60px;
 }

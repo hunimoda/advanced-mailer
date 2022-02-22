@@ -74,13 +74,14 @@ const ObjectSettings = ({ id, onClose, style }) => {
 		>
 			<div
 				className={classes.previewContainer}
-				style={{ height: style.height * sheetSize.height }}
+				style={{ height: style.height * sheetSize.height + 2 }}
 			>
 				<div
 					className={classes.preview}
 					style={{
 						width: style.width * sheetSize.width,
 						height: style.height * sheetSize.height,
+						border: "1px dotted #aaa",
 					}}
 				>
 					<InnerObject
@@ -216,7 +217,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						options={[
 							{
 								jsx: (
-									<div>
+									<div className={classes.alignButton}>
 										<i className="fas fa-align-left" />
 										<p>왼쪽</p>
 									</div>
@@ -225,7 +226,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 							},
 							{
 								jsx: (
-									<div>
+									<div className={classes.alignButton}>
 										<i className="fas fa-align-center" />
 										<p>가운데</p>
 									</div>
@@ -234,7 +235,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 							},
 							{
 								jsx: (
-									<div>
+									<div className={classes.alignButton}>
 										<i className="fas fa-align-right" />
 										<p>오른쪽</p>
 									</div>
@@ -243,7 +244,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 							},
 						]}
 						initValue={previewStyle.textAlign}
-						selectedClass={classes.selectedBoxShadow}
+						selectedClass={classes.selectedAlignment}
 						property="textAlign"
 						onChange={onSettingsChange}
 					/>
@@ -252,20 +253,41 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						type="custom-select"
 						options={[
 							{
-								jsx: <span>위</span>,
+								jsx: (
+									<div className={classes.alignButton}>
+										<i
+											className={`fas fa-align-left ${classes.rotated90Degrees}`}
+										/>
+										<p>위</p>
+									</div>
+								),
 								value: "start",
 							},
 							{
-								jsx: <span>가운데</span>,
+								jsx: (
+									<div className={classes.alignButton}>
+										<i
+											className={`fas fa-align-center ${classes.rotated90Degrees}`}
+										/>
+										<p>가운데</p>
+									</div>
+								),
 								value: "center",
 							},
 							{
-								jsx: <span>아래</span>,
+								jsx: (
+									<div className={classes.alignButton}>
+										<i
+											className={`fas fa-align-right ${classes.rotated90Degrees}`}
+										/>
+										<p>아래</p>
+									</div>
+								),
 								value: "end",
 							},
 						]}
 						initValue={previewStyle.justifyContent}
-						selectedClass={classes.selectedBoxShadow}
+						selectedClass={classes.selectedAlignment}
 						property="justifyContent"
 						onChange={onSettingsChange}
 					/>
