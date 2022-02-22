@@ -83,10 +83,6 @@
 	background: green;
 }
 
-.selectedBoxShadow {
-	color: red;
-}
-
 .selectedAlignment > .alignButton {
 	color: black;
 }
@@ -108,4 +104,20 @@
 
 .rotated90Degrees {
 	transform: rotate(90deg);
+}
+
+.boxShadowExample {
+	width: 50px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	color: #ccc;
+	border: 1px dotted #eee;
+	margin: 0 8px;
+	font-size: 14px;
+}
+
+.selectedBoxShadow > .boxShadowExample {
+	color: rgb(100, 214, 100);
+	background: rgb(225, 245, 225);
 }

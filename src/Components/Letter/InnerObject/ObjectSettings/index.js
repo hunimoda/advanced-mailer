@@ -306,15 +306,36 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						type="custom-select"
 						options={[
 							{
-								jsx: <span>없음</span>,
+								jsx: (
+									<div
+										className={classes.boxShadowExample}
+										style={{ boxShadow: "transparent 0px 0px 0px" }}
+									>
+										없음
+									</div>
+								),
 								value: { color: "transparent", dimension: [0, 0, 0] },
 							},
 							{
-								jsx: <span>종이</span>,
+								jsx: (
+									<div
+										className={classes.boxShadowExample}
+										style={{ boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px" }}
+									>
+										옅게
+									</div>
+								),
 								value: { color: "rgba(0, 0, 0, 0.16)", dimension: [0, 1, 4] },
 							},
 							{
-								jsx: <span>진한</span>,
+								jsx: (
+									<div
+										className={classes.boxShadowExample}
+										style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
+									>
+										진하게
+									</div>
+								),
 								value: { color: "rgba(0, 0, 0, 0.35)", dimension: [0, 5, 15] },
 							},
 						]}
