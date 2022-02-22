@@ -212,17 +212,60 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					<h4>정렬</h4>
 					<SettingItem
 						title="가로 방향"
-						type="select"
-						options={["left", "center", "right"]}
+						type="custom-select"
+						options={[
+							{
+								jsx: (
+									<div>
+										<i className="fas fa-align-left" />
+										<p>왼쪽</p>
+									</div>
+								),
+								value: "left",
+							},
+							{
+								jsx: (
+									<div>
+										<i className="fas fa-align-center" />
+										<p>가운데</p>
+									</div>
+								),
+								value: "center",
+							},
+							{
+								jsx: (
+									<div>
+										<i className="fas fa-align-right" />
+										<p>오른쪽</p>
+									</div>
+								),
+								value: "right",
+							},
+						]}
 						initValue={previewStyle.textAlign}
+						selectedClass={classes.selectedBoxShadow}
 						property="textAlign"
 						onChange={onSettingsChange}
 					/>
 					<SettingItem
 						title="세로 방향"
-						type="select"
-						options={["start", "center", "end"]}
+						type="custom-select"
+						options={[
+							{
+								jsx: <span>위</span>,
+								value: "start",
+							},
+							{
+								jsx: <span>가운데</span>,
+								value: "center",
+							},
+							{
+								jsx: <span>아래</span>,
+								value: "end",
+							},
+						]}
 						initValue={previewStyle.justifyContent}
+						selectedClass={classes.selectedBoxShadow}
 						property="justifyContent"
 						onChange={onSettingsChange}
 					/>
@@ -240,6 +283,10 @@ const ObjectSettings = ({ id, onClose, style }) => {
 							{
 								jsx: <span>종이</span>,
 								value: { color: "rgba(0, 0, 0, 0.16)", dimension: [0, 1, 4] },
+							},
+							{
+								jsx: <span>진한</span>,
+								value: { color: "rgba(0, 0, 0, 0.35)", dimension: [0, 5, 15] },
 							},
 						]}
 						initValue={previewStyle.boxShadow}
