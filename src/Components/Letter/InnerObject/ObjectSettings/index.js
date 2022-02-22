@@ -23,6 +23,7 @@ const SUPPORTED_FONTS = [
 const ObjectSettings = ({ id, onClose, style }) => {
 	const dispatch = useDispatch();
 	const sheetSize = useSelector((state) => state.letter.sheet.size);
+	const objectType = useSelector((state) => state.letter.objects[id].type);
 
 	const [previewStyle, setPreviewStyle] = useState(style);
 	const [settingsListClass, setSettingsListClass] = useState(
@@ -124,64 +125,68 @@ const ObjectSettings = ({ id, onClose, style }) => {
 				className={`${settingsListClass} ${classes.settingsList}`}
 				onScroll={onSettingsListScroll}
 			>
-				<div className={classes.group}>
-					<h4>글꼴</h4>
-					<SettingItem
-						title="색상"
-						type="color"
-						initValue={previewStyle.color.rgb}
-						property="color.rgb"
-						onChange={onSettingsChange}
-					/>
-					<SettingItem
-						title="투명도"
-						type="range"
-						initValue={previewStyle.color.transparency}
-						property="color.transparency"
-						onChange={onSettingsChange}
-						min="0"
-						max="1"
-						step="0.01"
-					/>
-					<SettingItem
-						title="모양"
-						type="select"
-						options={SUPPORTED_FONTS}
-						initValue={previewStyle.fontFamily}
-						property="fontFamily"
-						onChange={onSettingsChange}
-					/>
-					<SettingItem
-						title="크기"
-						type="range"
-						initValue={previewStyle.transform.scale}
-						property="transform.scale"
-						onChange={onSettingsChange}
-						min="0.02"
-						max="0.1"
-						step="0.0008"
-					/>
-				</div>
-				<div className={classes.group}>
-					<h4>네온 효과</h4>
-					<SettingItem
-						title="색상"
-						type="color"
-						initValue={previewStyle.textShadow.color}
-						property="textShadow.color"
-						onChange={onSettingsChange}
-					/>
-					<SettingItem
-						title="세기"
-						type="range"
-						initValue={previewStyle.textShadow.size}
-						property="textShadow.size"
-						onChange={onSettingsChange}
-						min="0"
-						max="0.3"
-						step="0.003"
-					/>
-				</div>
+				{objectType === "text" && (
+					<>
+						<div className={classes.group}>
+							<h4>글꼴</h4>
+							<SettingItem
+								title="색상"
+								type="color"
+								initValue={previewStyle.color.rgb}
+								property="color.rgb"
+								onChange={onSettingsChange}
+							/>
+							<SettingItem
+								title="투명도"
+								type="range"
+								initValue={previewStyle.color.transparency}
+								property="color.transparency"
+								onChange={onSettingsChange}
+								min="0"
+								max="1"
+								step="0.01"
+							/>
+							<SettingItem
+								title="모양"
+								type="select"
+								options={SUPPORTED_FONTS}
+								initValue={previewStyle.fontFamily}
+								property="fontFamily"
+								onChange={onSettingsChange}
+							/>
+							<SettingItem
+								title="크기"
+								type="range"
+								initValue={previewStyle.transform.scale}
+								property="transform.scale"
+								onChange={onSettingsChange}
+								min="0.02"
+								max="0.1"
+								step="0.0008"
+							/>
+						</div>
+						<div className={classes.group}>
+							<h4>네온 효과</h4>
+							<SettingItem
+								title="색상"
+								type="color"
+								initValue={previewStyle.textShadow.color}
+								property="textShadow.color"
+								onChange={onSettingsChange}
+							/>
+							<SettingItem
+								title="세기"
+								type="range"
+								initValue={previewStyle.textShadow.size}
+								property="textShadow.size"
+								onChange={onSettingsChange}
+								min="0"
+								max="0.3"
+								step="0.003"
+							/>
+						</div>
+					</>
+				)}
 				<div className={classes.group}>
 					<h4>배경</h4>
 					<SettingItem
@@ -232,89 +237,91 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						step="0.01"
 					/>
 				</div>
-				<div className={classes.group}>
-					<h4>정렬</h4>
-					<SettingItem
-						title="가로 방향"
-						type="custom-select"
-						options={[
-							{
-								jsx: (
-									<div className={classes.alignButton}>
-										<i className="fas fa-align-left" />
-										<p>왼쪽</p>
-									</div>
-								),
-								value: "left",
-							},
-							{
-								jsx: (
-									<div className={classes.alignButton}>
-										<i className="fas fa-align-center" />
-										<p>가운데</p>
-									</div>
-								),
-								value: "center",
-							},
-							{
-								jsx: (
-									<div className={classes.alignButton}>
-										<i className="fas fa-align-right" />
-										<p>오른쪽</p>
-									</div>
-								),
-								value: "right",
-							},
-						]}
-						initValue={previewStyle.textAlign}
-						selectedClass={classes.selectedAlignment}
-						property="textAlign"
-						onChange={onSettingsChange}
-					/>
-					<SettingItem
-						title="세로 방향"
-						type="custom-select"
-						options={[
-							{
-								jsx: (
-									<div className={classes.alignButton}>
-										<i
-											className={`fas fa-align-left ${classes.rotated90Degrees}`}
-										/>
-										<p>위</p>
-									</div>
-								),
-								value: "start",
-							},
-							{
-								jsx: (
-									<div className={classes.alignButton}>
-										<i
-											className={`fas fa-align-center ${classes.rotated90Degrees}`}
-										/>
-										<p>가운데</p>
-									</div>
-								),
-								value: "center",
-							},
-							{
-								jsx: (
-									<div className={classes.alignButton}>
-										<i
-											className={`fas fa-align-right ${classes.rotated90Degrees}`}
-										/>
-										<p>아래</p>
-									</div>
-								),
-								value: "end",
-							},
-						]}
-						initValue={previewStyle.justifyContent}
-						selectedClass={classes.selectedAlignment}
-						property="justifyContent"
-						onChange={onSettingsChange}
-					/>
-				</div>
+				{objectType === "text" && (
+					<div className={classes.group}>
+						<h4>정렬</h4>
+						<SettingItem
+							title="가로 방향"
+							type="custom-select"
+							options={[
+								{
+									jsx: (
+										<div className={classes.alignButton}>
+											<i className="fas fa-align-left" />
+											<p>왼쪽</p>
+										</div>
+									),
+									value: "left",
+								},
+								{
+									jsx: (
+										<div className={classes.alignButton}>
+											<i className="fas fa-align-center" />
+											<p>가운데</p>
+										</div>
+									),
+									value: "center",
+								},
+								{
+									jsx: (
+										<div className={classes.alignButton}>
+											<i className="fas fa-align-right" />
+											<p>오른쪽</p>
+										</div>
+									),
+									value: "right",
+								},
+							]}
+							initValue={previewStyle.textAlign}
+							selectedClass={classes.selectedAlignment}
+							property="textAlign"
+							onChange={onSettingsChange}
+						/>
+						<SettingItem
+							title="세로 방향"
+							type="custom-select"
+							options={[
+								{
+									jsx: (
+										<div className={classes.alignButton}>
+											<i
+												className={`fas fa-align-left ${classes.rotated90Degrees}`}
+											/>
+											<p>위</p>
+										</div>
+									),
+									value: "start",
+								},
+								{
+									jsx: (
+										<div className={classes.alignButton}>
+											<i
+												className={`fas fa-align-center ${classes.rotated90Degrees}`}
+											/>
+											<p>가운데</p>
+										</div>
+									),
+									value: "center",
+								},
+								{
+									jsx: (
+										<div className={classes.alignButton}>
+											<i
+												className={`fas fa-align-right ${classes.rotated90Degrees}`}
+											/>
+											<p>아래</p>
+										</div>
+									),
+									value: "end",
+								},
+							]}
+							initValue={previewStyle.justifyContent}
+							selectedClass={classes.selectedAlignment}
+							property="justifyContent"
+							onChange={onSettingsChange}
+						/>
+					</div>
+				)}
 				<div className={classes.group}>
 					<h4>기타</h4>
 					<SettingItem
@@ -360,16 +367,18 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						property="boxShadow"
 						onChange={onSettingsChange}
 					/>
-					<SettingItem
-						title="선 간격"
-						type="range"
-						initValue={previewStyle.lineHeight}
-						property="lineHeight"
-						onChange={onSettingsChange}
-						min="1"
-						max="2"
-						step="0.01"
-					/>
+					{objectType === "text" && (
+						<SettingItem
+							title="선 간격"
+							type="range"
+							initValue={previewStyle.lineHeight}
+							property="lineHeight"
+							onChange={onSettingsChange}
+							min="1"
+							max="2"
+							step="0.01"
+						/>
+					)}
 					<SettingItem
 						title="여백"
 						type="range"
