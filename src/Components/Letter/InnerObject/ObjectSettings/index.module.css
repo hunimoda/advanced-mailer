@@ -82,3 +82,7 @@
 .controlFooter button:last-child {
 	background: green;
 }
+
+.selectedBoxShadow {
+	color: red;
+}

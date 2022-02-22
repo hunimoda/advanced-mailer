@@ -3,6 +3,15 @@ import classes from "./index.module.css";
 const SettingItem = (props) => {
 	const { title, type, initValue, property, onChange } = props;
 
+	const onCustomOptionClick = (event) => {
+		onChange({
+			target: {
+				dataset: { property },
+				value: JSON.parse(event.currentTarget.dataset.value),
+			},
+		});
+	};
+
 	let controlJsx = <></>;
 
 	if (type === "color") {
@@ -35,6 +44,41 @@ const SettingItem = (props) => {
 					</option>
 				))}
 			</select>
+		);
+	} else if (type === "custom-select") {
+		const objectToOrderedString = (object) => {
+			const orderedObject = Object.keys(object)
+				.sort()
+				.reduce((obj, key) => {
+					obj[key] = object[key];
+					return obj;
+				}, {});
+
+			return JSON.stringify(orderedObject);
+		};
+
+		controlJsx = (
+			<ul>
+				{props.options.map((option) => {
+					let parentClassName = classes.customOption;
+					const id = objectToOrderedString(option.value);
+
+					if (id === objectToOrderedString(initValue)) {
+						parentClassName += ` ${props.selectedClass}`;
+					}
+
+					return (
+						<li
+							onClick={onCustomOptionClick}
+							key={id}
+							data-value={JSON.stringify(option.value)}
+							className={parentClassName}
+						>
+							{option.jsx}
+						</li>
+					);
+				})}
+			</ul>
 		);
 	} else if (type === "range") {
 		controlJsx = (

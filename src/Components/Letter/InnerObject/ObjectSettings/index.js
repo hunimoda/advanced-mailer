@@ -139,26 +139,6 @@ const ObjectSettings = ({ id, onClose, style }) => {
 					/>
 				</div>
 				<div className={classes.group}>
-					<h4>배경</h4>
-					<SettingItem
-						title="색상"
-						type="color"
-						initValue={previewStyle.backgroundColor}
-						property="backgroundColor.rgb"
-						onChange={onSettingsChange}
-					/>
-					<SettingItem
-						title="투명도"
-						type="range"
-						initValue={previewStyle.backgroundColor.transparency}
-						property="backgroundColor.transparency"
-						onChange={onSettingsChange}
-						min="0"
-						max="1"
-						step="0.01"
-					/>
-				</div>
-				<div className={classes.group}>
 					<h4>네온 효과</h4>
 					<SettingItem
 						title="색상"
@@ -176,6 +156,26 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						min="0"
 						max="0.3"
 						step="0.003"
+					/>
+				</div>
+				<div className={classes.group}>
+					<h4>배경</h4>
+					<SettingItem
+						title="색상"
+						type="color"
+						initValue={previewStyle.backgroundColor}
+						property="backgroundColor.rgb"
+						onChange={onSettingsChange}
+					/>
+					<SettingItem
+						title="투명도"
+						type="range"
+						initValue={previewStyle.backgroundColor.transparency}
+						property="backgroundColor.transparency"
+						onChange={onSettingsChange}
+						min="0"
+						max="1"
+						step="0.01"
 					/>
 				</div>
 				<div className={classes.group}>
@@ -229,6 +229,24 @@ const ObjectSettings = ({ id, onClose, style }) => {
 				</div>
 				<div className={classes.group}>
 					<h4>기타</h4>
+					<SettingItem
+						title="그림자"
+						type="custom-select"
+						options={[
+							{
+								jsx: <span>없음</span>,
+								value: { color: "transparent", dimension: [0, 0, 0] },
+							},
+							{
+								jsx: <span>종이</span>,
+								value: { color: "rgba(0, 0, 0, 0.16)", dimension: [0, 1, 4] },
+							},
+						]}
+						initValue={previewStyle.boxShadow}
+						selectedClass={classes.selectedBoxShadow}
+						property="boxShadow"
+						onChange={onSettingsChange}
+					/>
 					<SettingItem
 						title="선 간격"
 						type="range"

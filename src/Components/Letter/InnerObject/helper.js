@@ -43,6 +43,10 @@ const convertStyleValue = (style, prop, value, sheetSize, scale) => {
 		value = value.size
 			? `0px 0px ${value.size * sheetSize.height}px ${value.color}`
 			: null;
+	} else if (prop === "boxShadow") {
+		const scaledDimension = value.dimension.map((px) => px / scale);
+
+		value = `${value.color} ${scaledDimension[0]}px ${scaledDimension[1]}px ${scaledDimension[2]}px`;
 	} else if (prop === "border") {
 		value = `${(value.width * sheetSize.height) / (scale ?? 1)}px solid ${
 			value.color

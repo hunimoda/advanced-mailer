@@ -240,11 +240,6 @@ const InnerObject = ({
 		return null;
 	};
 
-	console.log(
-		object.style.width * sheetSize.width,
-		object.style.height * sheetSize.height
-	);
-
 	return (
 		<>
 			<div

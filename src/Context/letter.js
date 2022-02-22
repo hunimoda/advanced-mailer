@@ -90,6 +90,10 @@ export const letterSlice = createSlice({
 					lineHeight: 1,
 					justifyContent: "center",
 					textAlign: "center",
+					boxShadow: {
+						color: "transparent",
+						dimension: [0, 0, 0],
+					},
 					padding: 0,
 					zIndex: ++maxZIndex,
 				},
