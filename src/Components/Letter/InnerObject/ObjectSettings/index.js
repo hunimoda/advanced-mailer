@@ -82,6 +82,13 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						width: style.width * sheetSize.width,
 						height: style.height * sheetSize.height,
 						border: "1px dotted #aaa",
+						borderRadius:
+							(Math.min(
+								previewStyle.width * sheetSize.width,
+								previewStyle.height * sheetSize.height
+							) /
+								2) *
+							previewStyle.borderRadius,
 					}}
 				>
 					<InnerObject
