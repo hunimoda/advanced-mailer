@@ -7,6 +7,7 @@ const Modifier = ({
 	scale,
 	isAligned,
 	isSquare,
+	borderRadius,
 }) => {
 	return (
 		<>
@@ -17,6 +18,7 @@ const Modifier = ({
 				style={{
 					borderWidth: `${1 / scale}px`,
 					transform: `translate(-${1 / scale}px, -${1 / scale}px)`,
+					borderRadius: `${borderRadius}px`,
 				}}
 			/>
 			<button

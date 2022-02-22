@@ -95,8 +95,8 @@ const ObjectSettings = ({ id, onClose, style }) => {
 				<div
 					className={classes.preview}
 					style={{
-						width: style.width * sheetSize.width,
-						height: style.height * sheetSize.height,
+						width: previewStyle.width * sheetSize.width,
+						height: previewStyle.height * sheetSize.height,
 						border: "1px dotted #aaa",
 						borderRadius:
 							(Math.min(

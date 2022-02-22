@@ -219,6 +219,15 @@ const InnerObject = ({
 
 	const onSettingsClose = () => setShowObjectSettings(false);
 
+	const borderRadiusInPixels =
+		(object.style.borderRadius *
+			Math.min(
+				object.style.width * sheetSize.width,
+				object.style.height * sheetSize.height
+			)) /
+		2 /
+		scale;
+
 	const getContentJsx = () => {
 		if (object.type === "image") {
 			return (
@@ -264,6 +273,7 @@ const InnerObject = ({
 									object.style.height * sheetSize.height
 							) < 1
 						}
+						borderRadius={borderRadiusInPixels}
 					/>
 				)}
 				{getContentJsx()}
