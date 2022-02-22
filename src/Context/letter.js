@@ -124,6 +124,27 @@ export const letterSlice = createSlice({
 					},
 					padding: 0,
 					zIndex: ++maxZIndex,
+					color: {
+						rgb: "#000000",
+						transparency: 0,
+					},
+					fontFamily: "Arial",
+					backgroundColor: {
+						rgb: "#ffffff",
+						transparency: 1,
+					},
+					textShadow: {
+						color: "transparent",
+						size: 0,
+					},
+					borderRadius: 0,
+					lineHeight: 1,
+					justifyContent: "center",
+					textAlign: "center",
+					boxShadow: {
+						color: "transparent",
+						dimension: [0, 0, 0],
+					},
 				},
 			};
 		},

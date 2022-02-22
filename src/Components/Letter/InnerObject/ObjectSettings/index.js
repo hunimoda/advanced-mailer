@@ -51,11 +51,27 @@ const ObjectSettings = ({ id, onClose, style }) => {
 
 			const typeCorrectedValue = isNaN(+value) ? value : +value;
 			const complexPropMatch = property.match(/([a-z]+)\.([a-z]+)/i);
+			let sizeChangeInPixels = null;
 
 			if (complexPropMatch) {
 				newStyle[complexPropMatch[1]][complexPropMatch[2]] = typeCorrectedValue;
+
+				if (property === "border.width") {
+					sizeChangeInPixels =
+						(newStyle.border.width - prevStyle.border.width) * sheetSize.height;
+				}
 			} else {
 				newStyle[property] = typeCorrectedValue;
+
+				if (property === "padding") {
+					sizeChangeInPixels =
+						(newStyle.padding - prevStyle.padding) * sheetSize.height;
+				}
+			}
+
+			if (property === "border.width" || property === "padding") {
+				newStyle.width += (2 * sizeChangeInPixels) / sheetSize.width;
+				newStyle.height += (2 * sizeChangeInPixels) / sheetSize.height;
 			}
 
 			return newStyle;
