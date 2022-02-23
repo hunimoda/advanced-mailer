@@ -52,14 +52,12 @@ const getSummaryFromSheetObjects = (objects) => {
 const createMetaData = (sheet) => {
 	const writerUid = getMyUid();
 	const createdAt = Date.now();
-	const summary = getSummaryFromSheetObjects(sheet.objects);
-	const previewImageUrl = "https://place-hold.it/300x500";
 
-	return { writerUid, createdAt, summary, previewImageUrl };
+	return { writerUid, createdAt };
 };
 
-export const getLetterByParams = async (uid, type, id) => {
-	const docRef = doc(db, `users/${uid}/${type}/${id}`);
+export const getLetterDocByParams = async (uid, id) => {
+	const docRef = doc(db, `users/${uid}/sent/${id}`);
 	const docSnap = await getDoc(docRef);
 
 	if (docSnap.exists()) {
@@ -70,9 +68,10 @@ export const getLetterByParams = async (uid, type, id) => {
 };
 
 export const sendLetter = async (letter, id) => {
+	const metaData = createMetaData(letter);
 	const docRef = doc(db, `users/${getMyUid()}/sent/${id}`);
 
-	await setDoc(docRef, letter);
+	await setDoc(docRef, { metaData, letter });
 };
 
 export const saveLetterToInbox = (letter, description) => {

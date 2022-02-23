@@ -1,92 +1,150 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getLetterByParams } from "../../Firebase/db";
-import LetterSheet from "../../Components/Letter/LetterSheet";
+import { useDispatch, useSelector } from "react-redux";
+import { letterActions } from "../../Context/letter";
+import { getLetterDocByParams } from "../../Firebase/db";
+import Sheet from "../../Components/Sheet";
 import InnerObject from "../../Components/Letter/InnerObject";
-import { getMyUid } from "../../Firebase/auth";
-import store from "../../Context";
+import classes from "./index.module.css";
 
-const Letter = ({ type }) => {
+const Letter = () => {
+	const dispatch = useDispatch();
+	const letter = useSelector((state) => state.letter);
+	const objects = useSelector((state) => state.letter.objects);
+
 	const [sheetSize, setSheetSize] = useState(null);
-	const [letter, setLetter] = useState(null);
-
-	const { id: letterId } = useParams();
+	// const [letter, setLetter] = useState(null);
+	const aspectRatio = letter.sheet.aspectRatio;
 
 	useEffect(() => {
-		const { location, screen } = window;
+		const { location } = window;
 		const params = new URLSearchParams(location.search);
 
-		const uid = type ? getMyUid() : params.get("uid");
-		const id = type ? letterId : params.get("id");
+		const uid = params.get("uid");
+		const id = params.get("id");
 
-		if (!id || !uid) {
-			console.log("Invalid url");
-		} else {
-			getLetterByParams(uid, type ?? "sent", id).then((letter) => {
-				if (letter) {
-					setLetter(letter);
+		const updateSheetSize = () => {
+			const { width, height } = window.screen;
+			const containerRatio = width / height;
 
-					const {
-						width: screenWidth,
-						height: screenHeight,
-						orientation,
-					} = screen;
+			const sheetWidth =
+				aspectRatio > containerRatio ? width : height * aspectRatio;
+			const sheetHeight =
+				aspectRatio > containerRatio ? width / aspectRatio : height;
 
-					const updateSheetSize = () => {
-						const screenRatio = screenWidth / screenHeight;
-						const sheetRatio = letter.sheet.aspectRatio;
+			dispatch(
+				letterActions.setSheetSize({ width: sheetWidth, height: sheetHeight })
+			);
+		};
 
-						const width =
-							sheetRatio > screenRatio
-								? screenWidth
-								: screenHeight * sheetRatio;
-						const height =
-							sheetRatio > screenRatio
-								? screenWidth / sheetRatio
-								: screenHeight;
+		getLetterDocByParams(uid, id).then((doc) => {
+			if (doc) {
+				dispatch(letterActions.setLetterState(doc.letter));
+				updateSheetSize();
+				// setLetter(letter);
 
-						setSheetSize({ width, height });
-					};
+				// const {
+				// 	width: screenWidth,
+				// 	height: screenHeight,
+				// 	orientation,
+				// } = screen;
 
-					updateSheetSize();
-					orientation.addEventListener("change", () => updateSheetSize());
-				} else {
-					console.log("Letter doesn't exist!");
-				}
-			});
-		}
-	}, [letterId, type]);
+				// const updateSheetSize = () => {
+				// 	const screenRatio = screenWidth / screenHeight;
+				// 	const sheetRatio = letter.sheet.aspectRatio;
 
-	if (sheetSize === null || letter === null) {
-		return null;
-	}
+				// 	const width =
+				// 		sheetRatio > screenRatio ? screenWidth : screenHeight * sheetRatio;
+				// 	const height =
+				// 		sheetRatio > screenRatio ? screenWidth / sheetRatio : screenHeight;
 
-	const {
-		sheet: { backgroundColor, objects },
-		description,
-	} = letter;
+				// 	setSheetSize({ width, height });
+				// };
+
+				// updateSheetSize();
+				// orientation.addEventListener("change", () => updateSheetSize());
+			} else {
+				console.log("Letter doesn't exist!");
+			}
+		});
+
+		window.screen.orientation.onchange = updateSheetSize;
+	}, [dispatch, aspectRatio]);
+
+	const onGoBackClick = () => {
+		// const { pathname } = window.location;
+		// if (pathname.startsWith("/sent")) {
+		// 	history.push("/sent");
+		// } else if (pathname.startsWith("/inbox")) {
+		// 	history.push("/inbox");
+		// } else {
+		// 	history.push("/");
+		// }
+	};
+
+	const onDownloadClick = () => {
+		// if (user) {
+		// 	//
+		// } else {
+		// 	console.log("need to login");
+		// }
+	};
 
 	return (
-		<LetterSheet
-			style={{
-				backgroundColor: backgroundColor ?? "transparent",
-				width: `${sheetSize.width}px`,
-				height: `${sheetSize.height}px`,
-			}}
-			description={description}
-			type={type}
-		>
-			{objects.map((object, index) => (
-				<InnerObject
-					key={index}
-					type={object.type}
-					value={object.value}
-					style={object.style}
-					sheetSize={sheetSize}
-				/>
-			))}
-		</LetterSheet>
+		<>
+			<div className={classes.controls}>
+				<button onClick={onGoBackClick}>
+					{/* {user ? (
+						<i className="fas fa-times" />
+					) : (
+						<i className="fas fa-home" />
+					)} */}
+					<i className="fas fa-times" />
+				</button>
+				{true && (
+					<button onClick={onDownloadClick}>
+						<i className="fas fa-download" />
+					</button>
+				)}
+			</div>
+			<div className={classes.backdrop} />
+			<Sheet>
+				{Object.entries(objects).map(([id, object]) => (
+					<InnerObject key={id} id={id} readOnly={true} />
+				))}
+			</Sheet>
+		</>
 	);
+
+	// if (sheetSize === null || letter === null) {
+	// 	return null;
+	// }
+
+	// const {
+	// 	sheet: { backgroundColor, objects },
+	// 	description,
+	// } = letter;
+
+	// return (
+	// 	<LetterSheet
+	// 		style={{
+	// 			backgroundColor: backgroundColor ?? "transparent",
+	// 			width: `${sheetSize.width}px`,
+	// 			height: `${sheetSize.height}px`,
+	// 		}}
+	// 		description={description}
+	// 		type={type}
+	// 	>
+	// 		{objects.map((object, index) => (
+	// 			<InnerObject
+	// 				key={index}
+	// 				type={object.type}
+	// 				value={object.value}
+	// 				style={object.style}
+	// 				sheetSize={sheetSize}
+	// 			/>
+	// 		))}
+	// 	</LetterSheet>
+	// );
 };
 
 export default Letter;

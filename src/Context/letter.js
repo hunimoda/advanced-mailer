@@ -44,6 +44,13 @@ export const letterSlice = createSlice({
 	name: "letter",
 	initialState: INIT_LETTER,
 	reducers: {
+		setLetterState: (state, action) => {
+			const { backgroundImage, sheet, objects } = action.payload;
+
+			state.backgroundImage = backgroundImage;
+			state.sheet = sheet;
+			state.objects = objects;
+		},
 		setSheetSize: (state, action) => {
 			state.sheet.size = action.payload;
 		},
