@@ -69,13 +69,10 @@ export const getLetterByParams = async (uid, type, id) => {
 	return null;
 };
 
-export const sendLetter = async (sheet) => {
-	const metaData = createMetaData(sheet);
+export const sendLetter = async (letter, id) => {
+	const docRef = doc(db, `users/${getMyUid()}/sent/${id}`);
 
-	const letterId = generateRandomId();
-	const docRef = doc(db, `users/${getMyUid()}/sent/${letterId}`);
-
-	await setDoc(docRef, { metaData, sheet });
+	await setDoc(docRef, letter);
 };
 
 export const saveLetterToInbox = (letter, description) => {

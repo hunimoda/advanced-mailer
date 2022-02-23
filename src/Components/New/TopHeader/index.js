@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { uploadImageByDataUrl } from "../../../Firebase/storage";
+import { sendLetter } from "../../../Firebase/db";
 import classes from "./index.module.css";
 
 const generateLetterId = () => {
@@ -36,7 +37,7 @@ const TopHeader = () => {
 			}
 		}
 
-		console.log(letterCopy);
+		sendLetter(letterCopy, letterId);
 	};
 
 	return (
