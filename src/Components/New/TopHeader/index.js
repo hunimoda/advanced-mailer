@@ -26,8 +26,23 @@ const TopHeader = () => {
 		const letterCopy = JSON.parse(JSON.stringify(letter));
 		const letterId = generateLetterId();
 
+		if (letterCopy.backgroundImage) {
+			letterCopy.backgroundImage = await uploadImageByDataUrl(
+				letterCopy.backgroundImage,
+				letterId
+			);
+		}
+
+		if (letterCopy.sheet.backgroundImage) {
+			letterCopy.sheet.backgroundImage = await uploadImageByDataUrl(
+				letterCopy.sheet.backgroundImage,
+				letterId
+			);
+		}
+
 		for (const id in letterCopy.objects) {
 			const { type, value } = letterCopy.objects[id];
+			console.log(letterCopy);
 
 			if (type === "image" && value.startsWith("data:image/")) {
 				letterCopy.objects[id].value = await uploadImageByDataUrl(
