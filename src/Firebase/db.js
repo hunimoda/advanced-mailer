@@ -20,7 +20,7 @@ const generateRandomId = () => {
 	const PUSH_CHARS =
 		"-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
 
-	for (let i = 0; i < 128; i++) {
+	for (let i = 0; i < 22; i++) {
 		const randIdx = Math.floor(Math.random() * 64);
 
 		id += PUSH_CHARS.charAt(randIdx);
