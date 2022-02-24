@@ -3,10 +3,19 @@
 	padding-bottom: 0;
 	position: relative;
 	top: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .title {
 	color: white;
 	font-size: 24px;
 	text-shadow: 0px 1px 4px #23430c;
+}
+
+.refreshButton {
+	border: none;
+	background: transparent;
+	font-size: 18px;
 }

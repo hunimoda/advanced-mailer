@@ -114,7 +114,7 @@ export const getLettersAfterTimestamp = (pageName, timestamp) =>
 	getLetters(pageName, "after", timestamp);
 
 export const getLettersBeforeTimestamp = (pageName, timestamp) =>
-	getLetters(pageName, "before", timestamp, 1);
+	getLetters(pageName, "before", timestamp, 3);
 
 export const getProfile = async (uid) => {
 	const docRef = doc(db, `profiles/${uid}`);

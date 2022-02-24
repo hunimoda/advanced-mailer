@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	getLettersBeforeTimestamp,
@@ -39,7 +39,7 @@ export const useLetter = (pageName) => {
 		setIsNewPending(false);
 	};
 
-	const onGetOldLetters = async () => {
+	const onGetOldLetters = useCallback(async () => {
 		if (start < 0) {
 			return;
 		}
@@ -65,7 +65,7 @@ export const useLetter = (pageName) => {
 		);
 
 		setIsOldPending(false);
-	};
+	}, [dispatch, start, end, pageName]);
 
 	return {
 		isNewPending,

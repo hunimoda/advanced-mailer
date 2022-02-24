@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import TitleBar from "../../Components/TitleBar";
 import LetterList from "../../UI/LetterList";
 import MoreLetters from "../../Components/MoreLetters";
@@ -12,6 +13,7 @@ const BasePage = ({ type, title, item: LetterItem }) => {
 		onGetOldLetters,
 		letters,
 	} = useLetter(type);
+	const [isInitialized, setIsInitialized] = useState(false);
 
 	let oldStatus = null;
 
@@ -23,17 +25,42 @@ const BasePage = ({ type, title, item: LetterItem }) => {
 
 	const newStatus = isNewPending ? "pending" : "";
 
+	useEffect(() => {
+		if (!isInitialized) {
+			onGetOldLetters();
+			setIsInitialized(true);
+		}
+	}, [isInitialized, onGetOldLetters]);
+
+	useEffect(() => {
+		const onPageScroll = () => {
+			const { innerHeight, scrollY } = window;
+			const {
+				body: { offsetHeight },
+			} = document;
+
+			const isScrolledToBottom = offsetHeight + 55 - innerHeight - scrollY <= 0;
+
+			if (isScrolledToBottom && !isOldPending && !hasNoMoreOlds) {
+				onGetOldLetters();
+			}
+		};
+
+		window.addEventListener("scroll", onPageScroll);
+
+		return () => window.removeEventListener("scroll", onPageScroll);
+	}, [onGetOldLetters, hasNoMoreOlds, isOldPending]);
+
 	return (
 		<>
-			<TitleBar>{title}</TitleBar>
-			<MoreLetters status={newStatus} />
-			<button onClick={onGetNewLetters}>최근 편지 가져오기</button>
+			<TitleBar onRefresh={onGetNewLetters} status={newStatus}>
+				{title}
+			</TitleBar>
 			<LetterList>
 				{letters.map((letter) => (
 					<LetterItem key={letter.id} letter={letter} />
 				))}
 			</LetterList>
-			<button onClick={onGetOldLetters}>예전 편지 가져오기</button>
 			<MoreLetters status={oldStatus} />
 		</>
 	);
