@@ -1,17 +1,16 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { getMyUid } from "../../Firebase/auth";
 import LetterItemCard from "../../UI/LetterItemCard";
 import LetterPreview from "../../UI/LetterPreview";
 import classes from "./index.module.css";
 
-const SentItem = ({ id, metaData }) => {
+const SentItem = ({ letter }) => {
 	const [showCopiedOK, setShowCopiedOK] = useState(false);
 
 	const history = useHistory();
 
 	const { protocol, hostname } = window.location;
-	const letterPath = `/view?id=${id}&uid=${getMyUid()}`;
+	const letterPath = `/view?id=${letter.id}&uid=${letter.metaData.writerUid}`;
 	const letterUrl = `${protocol}//${hostname}${letterPath}`;
 
 	const onShowLetterClick = () => history.push(letterPath);
@@ -45,7 +44,7 @@ const SentItem = ({ id, metaData }) => {
 					<i className={copyIconClassName} />
 				</button>
 			</div>
-			<LetterPreview metaData={metaData} onClick={onShowLetterClick} />
+			<LetterPreview letter={letter} onClick={onShowLetterClick} />
 		</LetterItemCard>
 	);
 };

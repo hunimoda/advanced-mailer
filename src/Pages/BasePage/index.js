@@ -30,11 +30,7 @@ const BasePage = ({ type, title, item: LetterItem }) => {
 			<button onClick={onGetNewLetters}>최근 편지 가져오기</button>
 			<LetterList>
 				{letters.map((letter) => (
-					<LetterItem
-						key={letter.id}
-						id={letter.id}
-						metaData={letter.metaData}
-					/>
+					<LetterItem key={letter.id} letter={letter} />
 				))}
 			</LetterList>
 			<button onClick={onGetOldLetters}>예전 편지 가져오기</button>
