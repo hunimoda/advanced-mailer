@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
+import InnerObject from "../../Components/Letter/InnerObject";
+import Sheet from "../../Components/Sheet";
 import { getProfileByUid } from "../../Helper/profile";
 import classes from "./index.module.css";
 
@@ -26,11 +28,18 @@ const LetterPreview = ({ letter: { metaData, letter }, onClick }) => {
 	const summary = getSummaryFromLetterObjects(letter.objects);
 
 	const [profile, setProfile] = useState(null);
+	const [sheetWidth, setSheetWidth] = useState(null);
+
+	const thumbnailRef = useRef();
 
 	useEffect(
 		() => getProfileByUid(writerUid).then((profile) => setProfile(profile)),
 		[writerUid]
 	);
+
+	useEffect(() => {
+		setSheetWidth(thumbnailRef.current.offsetWidth);
+	}, []);
 
 	const createdAtFormatted = new Date(createdAt)
 		.toISOString()
@@ -39,12 +48,34 @@ const LetterPreview = ({ letter: { metaData, letter }, onClick }) => {
 
 	return (
 		<>
-			{/* <img
-				src={previewImageUrl}
-				alt="placeholder"
-				className={classes.thumbnail}
-				onClick={onClick}
-			/> */}
+			<div className={classes.thumbnail} ref={thumbnailRef}>
+				{sheetWidth && (
+					<Sheet
+						className={classes.innerShadow}
+						sheet={{
+							size: {
+								width: sheetWidth,
+								height: sheetWidth / letter.sheet.aspectRatio,
+							},
+							aspectRatio: letter.sheet.aspectRatio,
+							backgroundColor: letter.sheet.backgroundColor,
+							backgroundImage: letter.sheet.backgroundImage,
+						}}
+					>
+						{Object.entries(letter.objects).map(([id, object]) => (
+							<InnerObject
+								key={id}
+								id={id}
+								sheetSize={{
+									width: sheetWidth,
+									height: sheetWidth / letter.sheet.aspectRatio,
+								}}
+								object={object}
+							/>
+						))}
+					</Sheet>
+				)}
+			</div>
 			<p className={classes.message} onClick={onClick}>
 				{summary}
 			</p>

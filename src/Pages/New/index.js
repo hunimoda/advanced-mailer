@@ -12,6 +12,7 @@ const New = () => {
 
 	const dispatch = useDispatch();
 
+	const sheet = useSelector((state) => state.letter.sheet);
 	const aspectRatio = useSelector((state) => state.letter.sheet.aspectRatio);
 	const objects = useSelector((state) => state.letter.objects);
 
@@ -67,13 +68,16 @@ const New = () => {
 		<>
 			<TopHeader />
 			<main ref={mainRef} className={classes.main}>
-				<Sheet>
+				<Sheet sheet={sheet}>
 					{Object.entries(objects).map(([id, object]) => (
 						<InnerObject
 							key={id}
 							id={id}
 							onSelectChange={onSelectChange}
 							selected={id === selectedId}
+							dispatch={dispatch}
+							sheetSize={sheet.size}
+							object={object}
 						/>
 					))}
 				</Sheet>

@@ -1,34 +1,23 @@
-import { forwardRef } from "react";
-import { useSelector } from "react-redux";
 import classes from "./index.module.css";
 
-const Sheet = forwardRef(({ children }, ref) => {
-	const size = useSelector((state) => state.letter.sheet.size);
-	const backgroundColor = useSelector(
-		(state) => state.letter.sheet.backgroundColor
-	);
-	const backgroundImage = useSelector(
-		(state) => state.letter.sheet.backgroundImage
-	);
-
-	if (!size) {
+const Sheet = ({ children, sheet, className }) => {
+	if (!sheet.size) {
 		return null;
 	}
 
 	return (
 		<div
-			ref={ref}
-			className={classes.sheet}
+			className={`${classes.sheet} ${className}`}
 			style={{
-				width: `${size.width}px`,
-				height: `${size.height}px`,
-				backgroundColor,
-				backgroundImage: `url("${backgroundImage}")`,
+				width: `${sheet.size.width}px`,
+				height: `${sheet.size.height}px`,
+				backgroundColor: sheet.backgroundColor,
+				backgroundImage: `url("${sheet.backgroundImage}")`,
 			}}
 		>
 			{children}
 		</div>
 	);
-});
+};
 
 export default Sheet;

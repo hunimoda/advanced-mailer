@@ -1,7 +1,8 @@
 import { useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { letterActions } from "../../../Context/letter";
 import { processStyle } from "./helper";
+import store from "../../../Context";
 import Modifier from "./Modifier";
 import ObjectSettings from "./ObjectSettings";
 import classes from "./index.module.css";
@@ -17,11 +18,10 @@ const InnerObject = ({
 	selected,
 	forcedStyle,
 	readOnly,
+	dispatch,
+	sheetSize,
+	object,
 }) => {
-	const dispatch = useDispatch();
-	const sheetSize = useSelector((state) => state.letter.sheet.size);
-	const object = useSelector((state) => state.letter.objects[id]);
-
 	const [containerStyle, contentStyle, scale] = processStyle(
 		forcedStyle ?? object.style,
 		sheetSize

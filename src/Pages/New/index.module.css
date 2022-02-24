@@ -3,4 +3,7 @@
 	height: calc(100vh - 2 * var(--header-height));
 	background: #1c1c1c;
 	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
