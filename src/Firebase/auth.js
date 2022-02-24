@@ -23,4 +23,4 @@ export const setAuthObserver = (callback) => {
 	onAuthStateChanged(auth, callback);
 };
 
-export const getMyUid = () => auth.currentUser.uid;
+export const getMyUid = () => auth.currentUser?.uid;

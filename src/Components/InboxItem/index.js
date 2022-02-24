@@ -1,15 +1,15 @@
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router";
 import LetterItemCard from "../../UI/LetterItemCard";
 import LetterPreview from "../../UI/LetterPreview";
 
-const InboxItem = ({ id, description }) => {
+const InboxItem = ({ letter }) => {
 	const history = useHistory();
 
-	const onShowLetterClick = () => history.push(`/inbox/${id}`);
+	const onShowLetterClick = () => history.push(`/inbox/${letter.id}`);
 
 	return (
 		<LetterItemCard>
-			<LetterPreview description={description} onClick={onShowLetterClick} />
+			<LetterPreview letter={letter} onClick={onShowLetterClick} />
 		</LetterItemCard>
 	);
 };

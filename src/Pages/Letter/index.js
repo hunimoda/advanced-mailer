@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { getLetterDocByParams } from "../../Firebase/db";
+import { getLetterDocByParams, saveLetterToInbox } from "../../Firebase/db";
 import Sheet from "../../Components/Sheet";
 import InnerObject from "../../Components/Letter/InnerObject";
 import store from "../../Context";
@@ -25,24 +25,29 @@ const getSheetSize = (sheetRatio) => {
 
 	return { width: sheetWidth, height: sheetHeight };
 };
+const getUidAndIdFromQueryString = () => {
+	const params = new URLSearchParams(window.location.search);
+	const uid = params.get("uid");
+	const id = params.get("id");
+
+	return { uid, id };
+};
 
 const Letter = ({ type }) => {
 	const history = useHistory();
-
-	const [sheet, setSheet] = useState({});
-	const [objects, setObjects] = useState({});
 	const { id } = useParams();
 
-	const setLetter = (letter) => {
-		letter.sheet.size = getSheetSize(letter.sheet.aspectRatio);
+	const [letterDoc, setLetterDoc] = useState(null);
+	const letter = letterDoc?.letter;
 
-		setSheet(letter.sheet);
-		setObjects(letter.objects);
+	const showLetter = (doc) => {
+		doc.letter.sheet.size = getSheetSize(doc.letter.sheet.aspectRatio);
+		setLetterDoc(doc);
 	};
 
 	const letterCallback = useCallback((doc) => {
 		if (doc) {
-			setLetter(doc.letter);
+			showLetter(doc);
 		} else {
 			console.log("Letter doesn't exist!");
 		}
@@ -50,18 +55,16 @@ const Letter = ({ type }) => {
 
 	useEffect(() => {
 		if (!type) {
-			const params = new URLSearchParams(window.location.search);
-			const uid = params.get("uid");
-			const id = params.get("id");
+			const { uid, id } = getUidAndIdFromQueryString();
 
 			getLetterDocByParams(uid, id).then(letterCallback);
 		} else {
-			const letterInStore = store
+			const letterDocInStore = store
 				.getState()
-				.page[type].letters.filter((letter) => letter.id === id)[0]?.letter;
+				.page[type].letters.filter((letter) => letter.id === id)[0];
 
-			if (letterInStore) {
-				setLetter(JSON.parse(JSON.stringify(letterInStore)));
+			if (letterDocInStore) {
+				showLetter(JSON.parse(JSON.stringify(letterDocInStore)));
 			} else {
 				const uid = getMyUid();
 
@@ -71,11 +74,13 @@ const Letter = ({ type }) => {
 	}, [type, id, letterCallback]);
 
 	const onDownloadClick = () => {
-		// if (user) {
-		// 	//
-		// } else {
-		// 	console.log("need to login");
-		// }
+		if (getMyUid()) {
+			const { id } = getUidAndIdFromQueryString();
+
+			saveLetterToInbox(letterDoc, id);
+		} else {
+			console.log("need to login");
+		}
 	};
 
 	return (
@@ -91,13 +96,13 @@ const Letter = ({ type }) => {
 				)}
 			</div>
 			<div className={classes.container}>
-				{sheet && objects && (
-					<Sheet sheet={sheet}>
-						{Object.entries(objects).map(([id, object]) => (
+				{letter && (
+					<Sheet sheet={letter.sheet}>
+						{Object.entries(letter.objects).map(([id, object]) => (
 							<InnerObject
 								key={id}
 								id={id}
-								sheetSize={sheet.size}
+								sheetSize={letter.sheet.size}
 								object={object}
 								readOnly={true}
 							/>
