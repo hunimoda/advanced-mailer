@@ -1,19 +1,18 @@
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router";
 import LetterItemCard from "../../UI/LetterItemCard";
 import LetterPreview from "../../UI/LetterPreview";
 import classes from "./index.module.css";
 
 const SentItem = ({ letter }) => {
-	const [showCopiedOK, setShowCopiedOK] = useState(false);
-
 	const history = useHistory();
+	const [showCopiedOK, setShowCopiedOK] = useState(false);
 
 	const { protocol, hostname } = window.location;
 	const letterPath = `/view?id=${letter.id}&uid=${letter.metaData.writerUid}`;
 	const letterUrl = `${protocol}//${hostname}${letterPath}`;
 
-	const onShowLetterClick = () => history.push(letterPath);
+	const onShowLetterClick = () => history.push(`/sent/${letter.id}`);
 
 	const onCopyUrlClick = () => {
 		if (window.isSecureContext) {

@@ -1,18 +1,23 @@
 .controls {
-	position: absolute;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: var(--max-z-index);
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 	background: transparent;
-	box-sizing: border-box;
-	width: 100%;
 	padding: 10px;
+	height: 60px;
 }
 
 .controls button {
-	width: 60px;
-	height: 60px;
+	height: 100%;
+	aspect-ratio: 1;
 	font-size: 30px;
 	border: none;
+	border-radius: 100px;
 	transition: background-color 0.2s ease-in-out 0s, color 0.2s ease-in-out 0s;
 	background: transparent;
 	color: rgba(255, 255, 255, 0.3);
@@ -24,8 +29,10 @@
 	color: rgba(255, 255, 255, 0.8);
 }
 
-.backdrop {
+.container {
 	background: black;
-	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	height: 100vh;
 }

@@ -71,6 +71,7 @@ const LetterPreview = ({ letter: { metaData, letter }, onClick }) => {
 									height: sheetWidth / letter.sheet.aspectRatio,
 								}}
 								object={object}
+								readOnly={true}
 							/>
 						))}
 					</Sheet>

@@ -56,8 +56,8 @@ const createMetaData = (sheet) => {
 	return { writerUid, createdAt };
 };
 
-export const getLetterDocByParams = async (uid, id) => {
-	const docRef = doc(db, `users/${uid}/sent/${id}`);
+export const getLetterDocByParams = async (uid, id, type) => {
+	const docRef = doc(db, `users/${uid}/${type ?? "sent"}/${id}`);
 	const docSnap = await getDoc(docRef);
 
 	if (docSnap.exists()) {
