@@ -2,7 +2,6 @@ import MoreLetters from "../MoreLetters";
 import classes from "./index.module.css";
 
 const TitleBar = ({ children, onRefresh, status }) => {
-	console.log(status);
 	return (
 		<div className={classes.titleBar}>
 			<h2 className={classes.title}>{children}</h2>

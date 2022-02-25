@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { useHistory } from "react-router";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { pageActions } from "../../Context/page";
 import LetterItemCard from "../../UI/LetterItemCard";
 import LetterPreview from "../../UI/LetterPreview";
 import classes from "./index.module.css";
 
 const SentItem = ({ letter }) => {
+	const dispatch = useDispatch();
 	const history = useHistory();
 	const [showCopiedOK, setShowCopiedOK] = useState(false);
 
@@ -12,7 +15,15 @@ const SentItem = ({ letter }) => {
 	const letterPath = `/view?id=${letter.id}&uid=${letter.metaData.writerUid}`;
 	const letterUrl = `${protocol}//${hostname}${letterPath}`;
 
-	const onShowLetterClick = () => history.push(`/sent/${letter.id}`);
+	const onShowLetterClick = () => {
+		history.push(`/sent/${letter.id}`);
+		dispatch(
+			pageActions.rememberScrollPosition({
+				pageName: "sent",
+				scrollPosition: window.scrollY,
+			})
+		);
+	};
 
 	const onCopyUrlClick = () => {
 		if (window.isSecureContext) {

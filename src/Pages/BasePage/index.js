@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { pageActions } from "../../Context/page";
 import TitleBar from "../../Components/TitleBar";
 import LetterList from "../../UI/LetterList";
 import MoreLetters from "../../Components/MoreLetters";
@@ -13,6 +15,12 @@ const BasePage = ({ type, title, item: LetterItem }) => {
 		onGetOldLetters,
 		letters,
 	} = useLetter(type);
+
+	const dispatch = useDispatch();
+	const scrollPosition = useSelector(
+		(state) => state.page[type].scrollPosition
+	);
+
 	const [isInitialized, setIsInitialized] = useState(false);
 
 	let oldStatus = null;
@@ -25,15 +33,19 @@ const BasePage = ({ type, title, item: LetterItem }) => {
 
 	const newStatus = isNewPending ? "pending" : "";
 
-	console.log(type);
-
 	useEffect(() => {
 		if (!isInitialized) {
 			onGetOldLetters();
 			setIsInitialized(true);
-			console.log("onGetOldLetters");
 		}
 	}, [isInitialized, onGetOldLetters]);
+
+	useEffect(() => {
+		if (scrollPosition !== null) {
+			setTimeout(() => window.scrollTo(0, scrollPosition), 0);
+			dispatch(pageActions.resetScrollPosition(type));
+		}
+	}, [scrollPosition, dispatch, type]);
 
 	useEffect(() => {
 		const onPageScroll = () => {
@@ -51,8 +63,10 @@ const BasePage = ({ type, title, item: LetterItem }) => {
 
 		window.addEventListener("scroll", onPageScroll);
 
-		return () => window.removeEventListener("scroll", onPageScroll);
-	}, [onGetOldLetters, hasNoMoreOlds, isOldPending]);
+		return () => {
+			window.removeEventListener("scroll", onPageScroll);
+		};
+	}, [scrollPosition, onGetOldLetters, hasNoMoreOlds, isOldPending, type]);
 
 	return (
 		<>

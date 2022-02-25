@@ -6,10 +6,12 @@ export const pageSlice = createSlice({
 		sent: {
 			timestamp: { start: null, end: null },
 			letters: [],
+			scrollPosition: null,
 		},
 		inbox: {
 			timestamp: { start: null, end: null },
 			letters: [],
+			scrollPosition: null,
 		},
 	},
 	reducers: {
@@ -21,6 +23,15 @@ export const pageSlice = createSlice({
 		},
 		setTimestamp: (state, { payload: { pageName, timestamp } }) => {
 			state[pageName].timestamp = timestamp;
+		},
+		rememberScrollPosition: (
+			state,
+			{ payload: { pageName, scrollPosition } }
+		) => {
+			state[pageName].scrollPosition = scrollPosition;
+		},
+		resetScrollPosition: (state, action) => {
+			state[action.payload].scrollPosition = null;
 		},
 	},
 });
