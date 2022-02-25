@@ -31,7 +31,12 @@ const MainRouter = () => {
 				/>
 			</Route>
 			<Route exact path="/drafts">
-				<BasePage key="draft" type="draft" title="잠깐 보관" item={DraftItem} />
+				<BasePage
+					key="drafts"
+					type="drafts"
+					title="잠깐 보관"
+					item={DraftItem}
+				/>
 			</Route>
 			<Route path="*">
 				<PageNotFound />

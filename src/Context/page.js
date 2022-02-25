@@ -14,6 +14,12 @@ export const pageSlice = createSlice({
 			letters: [],
 			scrollPosition: null,
 		},
+		drafts: {
+			timestamp: { start: null, end: null },
+			letters: [],
+			scrollPosition: null,
+			needsRefresh: false,
+		},
 	},
 	reducers: {
 		append: (state, { payload: { pageName, letters } }) => {
@@ -34,8 +40,10 @@ export const pageSlice = createSlice({
 		resetScrollPosition: (state, action) => {
 			state[action.payload].scrollPosition = null;
 		},
-		setNeedsRefresh: (state, action) => {
-			state.sent.needsRefresh = action.payload;
+		setNeedsRefresh: (state, { payload: { pageName, needsRefresh } }) => {
+			console.log("TEST");
+			console.log(pageName, needsRefresh);
+			state[pageName].needsRefresh = needsRefresh;
 		},
 	},
 });

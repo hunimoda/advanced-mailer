@@ -2,7 +2,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { pageActions } from "../../../Context/page";
 import { uploadImageByDataUrl } from "../../../Firebase/storage";
-import { sendLetter } from "../../../Firebase/db";
+import { sendLetter, saveLetterToDrafts } from "../../../Firebase/db";
 import classes from "./index.module.css";
 
 const generateLetterId = () => {
@@ -25,7 +25,43 @@ const TopHeader = () => {
 	const dispatch = useDispatch();
 	const letter = useSelector((state) => state.letter);
 
-	const onSaveLetterClick = () => {};
+	const onSaveLetterClick = async () => {
+		const letterCopy = JSON.parse(JSON.stringify(letter));
+		const letterId = generateLetterId();
+
+		if (letterCopy.backgroundImage) {
+			letterCopy.backgroundImage = await uploadImageByDataUrl(
+				letterCopy.backgroundImage,
+				letterId
+			);
+		}
+
+		if (letterCopy.sheet.backgroundImage) {
+			letterCopy.sheet.backgroundImage = await uploadImageByDataUrl(
+				letterCopy.sheet.backgroundImage,
+				letterId
+			);
+		}
+
+		for (const id in letterCopy.objects) {
+			const { type, value } = letterCopy.objects[id];
+			console.log(letterCopy);
+
+			if (type === "image" && value.startsWith("data:image/")) {
+				letterCopy.objects[id].value = await uploadImageByDataUrl(
+					value,
+					letterId
+				);
+			}
+		}
+
+		saveLetterToDrafts(letterCopy, letterId).then(() => {
+			history.replace("/drafts");
+			dispatch(
+				pageActions.setNeedsRefresh({ pageName: "drafts", needsRefresh: true })
+			);
+		});
+	};
 
 	const onSendLetterClick = async () => {
 		const letterCopy = JSON.parse(JSON.stringify(letter));
@@ -59,7 +95,9 @@ const TopHeader = () => {
 
 		sendLetter(letterCopy, letterId).then(() => {
 			history.replace("/sent");
-			dispatch(pageActions.setNeedsRefresh(true));
+			dispatch(
+				pageActions.setNeedsRefresh({ pageName: "sent", needsRefresh: true })
+			);
 		});
 	};
 

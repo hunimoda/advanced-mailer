@@ -78,7 +78,7 @@ const LetterPreview = ({ letter: { metaData, letter }, onClick }) => {
 				)}
 			</div>
 			<p className={classes.message} onClick={onClick}>
-				{summary}
+				{summary || "(내용 없음)"}
 			</p>
 			<div className={classes.itemRow}>
 				{profile && (

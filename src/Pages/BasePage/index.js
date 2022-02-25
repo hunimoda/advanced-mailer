@@ -37,9 +37,11 @@ const BasePage = ({ type, title, item: LetterItem }) => {
 	useEffect(() => {
 		if (needsRefresh) {
 			onGetNewLetters();
-			dispatch(pageActions.setNeedsRefresh(false));
+			dispatch(
+				pageActions.setNeedsRefresh({ pageName: type, needsRefresh: false })
+			);
 		}
-	}, [needsRefresh, dispatch, onGetNewLetters]);
+	}, [needsRefresh, dispatch, onGetNewLetters, type]);
 
 	useEffect(() => {
 		if (!isInitialized) {
