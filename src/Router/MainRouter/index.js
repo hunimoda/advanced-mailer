@@ -15,13 +15,23 @@ const MainRouter = () => {
 				<Redirect to="/inbox" />
 			</Route>
 			<Route exact path="/inbox">
-				<BasePage type="inbox" title="나에게 온 편지" item={InboxItem} />
+				<BasePage
+					key="inbox"
+					type="inbox"
+					title="나에게 온 편지"
+					item={InboxItem}
+				/>
 			</Route>
 			<Route exact path="/sent">
-				<BasePage type="sent" title="내가 보낸 편지" item={SentItem} />
+				<BasePage
+					key="sent"
+					type="sent"
+					title="내가 보낸 편지"
+					item={SentItem}
+				/>
 			</Route>
 			<Route exact path="/drafts">
-				<BasePage type="draft" title="잠깐 보관" item={DraftItem} />
+				<BasePage key="draft" type="draft" title="잠깐 보관" item={DraftItem} />
 			</Route>
 			<Route path="*">
 				<PageNotFound />

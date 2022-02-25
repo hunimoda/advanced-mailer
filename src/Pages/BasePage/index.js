@@ -25,10 +25,13 @@ const BasePage = ({ type, title, item: LetterItem }) => {
 
 	const newStatus = isNewPending ? "pending" : "";
 
+	console.log(type);
+
 	useEffect(() => {
 		if (!isInitialized) {
 			onGetOldLetters();
 			setIsInitialized(true);
+			console.log("onGetOldLetters");
 		}
 	}, [isInitialized, onGetOldLetters]);
 
