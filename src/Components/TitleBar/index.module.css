@@ -6,6 +6,12 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	margin-bottom: 0px;
+	transition: margin-bottom 0.3s ease-in-out 0s;
+}
+
+.titleBar--pending {
+	margin-bottom: 50px;
 }
 
 .title {
@@ -17,5 +23,22 @@
 .refreshButton {
 	border: none;
 	background: transparent;
-	font-size: 18px;
+	font-size: 30px;
+	line-height: 30px;
+	color: white;
+	text-shadow: 0px 1px 4px #23430c;
+	padding: 0;
+}
+
+.titleBar--pending .refreshButton {
+	animation: refreshButtonRotate 0.5s linear 0s infinite;
+}
+
+@keyframes refreshButtonRotate {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
 }
