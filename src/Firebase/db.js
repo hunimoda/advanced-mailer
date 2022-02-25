@@ -5,6 +5,7 @@ import {
 	getDoc,
 	getDocs,
 	setDoc,
+	deleteDoc,
 	query,
 	where,
 	orderBy,
@@ -79,6 +80,10 @@ export const saveLetterAsDocument = async (letter, id, type) => {
 	const docRef = doc(db, `users/${getMyUid()}/${type}/${id}`);
 
 	return setDoc(docRef, { metaData, letter });
+};
+
+export const deleteLetterByTypeAndId = async (type, id) => {
+	await deleteDoc(doc(db, `users/${getMyUid()}/${type}/${id}`));
 };
 
 export const saveLetterToInbox = (letterDoc, letterId) => {

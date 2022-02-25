@@ -45,6 +45,11 @@ export const pageSlice = createSlice({
 			console.log(pageName, needsRefresh);
 			state[pageName].needsRefresh = needsRefresh;
 		},
+		deleteLetterFromPage: (state, { payload: { pageName, id } }) => {
+			state[pageName].letters = state[pageName].letters.filter(
+				(letter) => letter.id !== id
+			);
+		},
 	},
 });
 

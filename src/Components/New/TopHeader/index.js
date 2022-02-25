@@ -2,7 +2,10 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { letterActions } from "../../../Context/letter";
 import { pageActions } from "../../../Context/page";
-import { saveLetterAsDocument } from "../../../Firebase/db";
+import {
+	deleteLetterByTypeAndId,
+	saveLetterAsDocument,
+} from "../../../Firebase/db";
 import { generateLetterId, processLetterBeforeSave } from "./helper";
 import classes from "./index.module.css";
 
@@ -14,6 +17,13 @@ const TopHeader = () => {
 	const letter = useSelector((state) => state.letter);
 
 	const onDoneWritingLetter = async (action) => {
+		if (id) {
+			if (action === "sent") {
+				await deleteLetterByTypeAndId("drafts", id);
+			}
+			dispatch(pageActions.deleteLetterFromPage({ pageName: "drafts", id }));
+		}
+
 		const letterId = id ?? generateLetterId();
 		const processedLetter = await processLetterBeforeSave(letter, letterId);
 
