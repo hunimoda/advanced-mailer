@@ -74,9 +74,9 @@ export const sendLetter = async (letter, id) => {
 	return setDoc(docRef, { metaData, letter });
 };
 
-export const saveLetterToDrafts = async (letter, id) => {
+export const saveLetterAsDocument = async (letter, id, type) => {
 	const metaData = createMetaData(letter);
-	const docRef = doc(db, `users/${getMyUid()}/drafts/${id}`);
+	const docRef = doc(db, `users/${getMyUid()}/${type}/${id}`);
 
 	return setDoc(docRef, { metaData, letter });
 };

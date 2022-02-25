@@ -51,6 +51,11 @@ export const letterSlice = createSlice({
 			state.sheet = sheet;
 			state.objects = objects;
 		},
+		resetLetterState: (state) => {
+			state.backgroundImage = INIT_LETTER.backgroundImage;
+			state.sheet = INIT_LETTER.sheet;
+			state.objects = INIT_LETTER.objects;
+		},
 		setSheetSize: (state, action) => {
 			state.sheet.size = action.payload;
 		},
