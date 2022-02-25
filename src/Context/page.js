@@ -7,6 +7,7 @@ export const pageSlice = createSlice({
 			timestamp: { start: null, end: null },
 			letters: [],
 			scrollPosition: null,
+			needsRefresh: false,
 		},
 		inbox: {
 			timestamp: { start: null, end: null },
@@ -32,6 +33,9 @@ export const pageSlice = createSlice({
 		},
 		resetScrollPosition: (state, action) => {
 			state[action.payload].scrollPosition = null;
+		},
+		setNeedsRefresh: (state, action) => {
+			state.sent.needsRefresh = action.payload;
 		},
 	},
 });

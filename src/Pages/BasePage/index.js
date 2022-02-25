@@ -20,6 +20,7 @@ const BasePage = ({ type, title, item: LetterItem }) => {
 	const scrollPosition = useSelector(
 		(state) => state.page[type].scrollPosition
 	);
+	const needsRefresh = useSelector((state) => state.page[type].needsRefresh);
 
 	const [isInitialized, setIsInitialized] = useState(false);
 
@@ -32,6 +33,13 @@ const BasePage = ({ type, title, item: LetterItem }) => {
 	}
 
 	const newStatus = isNewPending ? "pending" : "";
+
+	useEffect(() => {
+		if (needsRefresh) {
+			onGetNewLetters();
+			dispatch(pageActions.setNeedsRefresh(false));
+		}
+	}, [needsRefresh, dispatch, onGetNewLetters]);
 
 	useEffect(() => {
 		if (!isInitialized) {

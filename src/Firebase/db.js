@@ -71,7 +71,7 @@ export const sendLetter = async (letter, id) => {
 	const metaData = createMetaData(letter);
 	const docRef = doc(db, `users/${getMyUid()}/sent/${id}`);
 
-	await setDoc(docRef, { metaData, letter });
+	return setDoc(docRef, { metaData, letter });
 };
 
 export const saveLetterToInbox = (letterDoc, letterId) => {

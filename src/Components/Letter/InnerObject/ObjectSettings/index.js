@@ -23,7 +23,7 @@ const SUPPORTED_FONTS = [
 const ObjectSettings = ({ id, onClose, style }) => {
 	const dispatch = useDispatch();
 	const sheetSize = useSelector((state) => state.letter.sheet.size);
-	const objectType = useSelector((state) => state.letter.objects[id].type);
+	const object = useSelector((state) => state.letter.objects[id]);
 
 	const [previewStyle, setPreviewStyle] = useState(style);
 	const [settingsListClass, setSettingsListClass] = useState(
@@ -117,6 +117,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 							left: 0,
 							transform: { scale: previewStyle.transform.scale },
 						}}
+						object={object}
 						readOnly={true}
 					/>
 				</div>
@@ -125,7 +126,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 				className={`${settingsListClass} ${classes.settingsList}`}
 				onScroll={onSettingsListScroll}
 			>
-				{objectType === "text" && (
+				{object.type === "text" && (
 					<>
 						<div className={classes.group}>
 							<h4>글꼴</h4>
@@ -237,7 +238,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						step="0.01"
 					/>
 				</div>
-				{objectType === "text" && (
+				{object.type === "text" && (
 					<div className={classes.group}>
 						<h4>정렬</h4>
 						<SettingItem
@@ -367,7 +368,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 						property="boxShadow"
 						onChange={onSettingsChange}
 					/>
-					{objectType === "text" && (
+					{object.type === "text" && (
 						<SettingItem
 							title="선 간격"
 							type="range"

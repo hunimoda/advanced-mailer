@@ -17,7 +17,7 @@ export const useLetter = (pageName) => {
 		letters,
 	} = page;
 
-	const onGetNewLetters = async () => {
+	const onGetNewLetters = useCallback(async () => {
 		if (end === null) {
 			return;
 		}
@@ -37,7 +37,7 @@ export const useLetter = (pageName) => {
 		}
 
 		setIsNewPending(false);
-	};
+	}, [dispatch, start, end, pageName]);
 
 	const onGetOldLetters = useCallback(async () => {
 		if (start < 0) {

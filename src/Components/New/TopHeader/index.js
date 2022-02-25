@@ -1,4 +1,6 @@
-import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { pageActions } from "../../../Context/page";
 import { uploadImageByDataUrl } from "../../../Firebase/storage";
 import { sendLetter } from "../../../Firebase/db";
 import classes from "./index.module.css";
@@ -18,6 +20,9 @@ const generateLetterId = () => {
 };
 
 const TopHeader = () => {
+	const history = useHistory();
+
+	const dispatch = useDispatch();
 	const letter = useSelector((state) => state.letter);
 
 	const onSaveLetterClick = () => {};
@@ -52,7 +57,10 @@ const TopHeader = () => {
 			}
 		}
 
-		sendLetter(letterCopy, letterId);
+		sendLetter(letterCopy, letterId).then(() => {
+			history.replace("/sent");
+			dispatch(pageActions.setNeedsRefresh(true));
+		});
 	};
 
 	return (
