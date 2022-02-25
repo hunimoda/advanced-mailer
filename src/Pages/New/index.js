@@ -5,18 +5,42 @@ import TopHeader from "../../Components/New/TopHeader";
 import Sheet from "../../Components/Sheet";
 import InnerObject from "../../Components/Letter/InnerObject";
 import ToolBox from "../../Components/New/ToolBox";
+import { getLetterDocByParams } from "../../Firebase/db";
 import classes from "./index.module.css";
+import { getMyUid } from "../../Firebase/auth";
 
 const New = () => {
 	const mainRef = useRef();
+	const id = new URLSearchParams(window.location.search).get("id");
 
 	const dispatch = useDispatch();
 
 	const sheet = useSelector((state) => state.letter.sheet);
 	const aspectRatio = useSelector((state) => state.letter.sheet.aspectRatio);
 	const objects = useSelector((state) => state.letter.objects);
+	const draftLetters = useSelector((state) => state.page.drafts.letters);
 
 	const [selectedId, setSelectedId] = useState(null);
+
+	useEffect(() => {
+		if (id) {
+			let draftLetter = draftLetters.filter(
+				(letterDoc) => letterDoc.id === id
+			)[0];
+
+			if (!draftLetter) {
+				getLetterDocByParams(getMyUid(), id, "drafts").then((letterDoc) => {
+					if (letterDoc) {
+						dispatch(letterActions.setLetterState(letterDoc.letter));
+					} else {
+						console.log("We don't have the letter");
+					}
+				});
+			} else {
+				dispatch(letterActions.setLetterState(draftLetter.letter));
+			}
+		}
+	}, [draftLetters, id, dispatch]);
 
 	useEffect(() => {
 		const resizeObserver = new ResizeObserver((entries) => {

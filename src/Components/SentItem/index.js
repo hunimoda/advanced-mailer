@@ -6,17 +6,19 @@ import LetterItemCard from "../../UI/LetterItemCard";
 import LetterPreview from "../../UI/LetterPreview";
 import classes from "./index.module.css";
 
-const SentItem = ({ letter }) => {
+const SentItem = ({ letterDoc }) => {
+	const { id, letter, metaData } = letterDoc;
+
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const [showCopiedOK, setShowCopiedOK] = useState(false);
 
 	const { protocol, hostname } = window.location;
-	const letterPath = `/view?id=${letter.id}&uid=${letter.metaData.writerUid}`;
+	const letterPath = `/view?id=${id}&uid=${metaData.writerUid}`;
 	const letterUrl = `${protocol}//${hostname}${letterPath}`;
 
 	const onShowLetterClick = () => {
-		history.push(`/sent/${letter.id}`);
+		history.push(`/sent/${id}`);
 		dispatch(
 			pageActions.rememberScrollPosition({
 				pageName: "sent",
@@ -54,7 +56,7 @@ const SentItem = ({ letter }) => {
 					<i className={copyIconClassName} />
 				</button>
 			</div>
-			<LetterPreview letter={letter} onClick={onShowLetterClick} />
+			<LetterPreview letterDoc={letterDoc} onClick={onShowLetterClick} />
 		</LetterItemCard>
 	);
 };

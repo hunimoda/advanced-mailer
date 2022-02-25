@@ -4,12 +4,14 @@ import { pageActions } from "../../Context/page";
 import LetterItemCard from "../../UI/LetterItemCard";
 import LetterPreview from "../../UI/LetterPreview";
 
-const InboxItem = ({ letter }) => {
+const InboxItem = ({ letterDoc }) => {
+	const { id, letter, metaData } = letterDoc;
+
 	const history = useHistory();
 	const dispatch = useDispatch();
 
 	const onShowLetterClick = () => {
-		history.push(`/inbox/${letter.id}`);
+		history.push(`/inbox/${id}`);
 		dispatch(
 			pageActions.rememberScrollPosition({
 				pageName: "inbox",
@@ -20,7 +22,7 @@ const InboxItem = ({ letter }) => {
 
 	return (
 		<LetterItemCard>
-			<LetterPreview letter={letter} onClick={onShowLetterClick} />
+			<LetterPreview letterDoc={letterDoc} onClick={onShowLetterClick} />
 		</LetterItemCard>
 	);
 };

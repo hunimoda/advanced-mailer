@@ -23,7 +23,7 @@ const getSummaryFromLetterObjects = (objects) => {
 	return summary;
 };
 
-const LetterPreview = ({ letter: { metaData, letter }, onClick }) => {
+const LetterPreview = ({ letterDoc: { metaData, letter }, onClick }) => {
 	const { writerUid, createdAt } = metaData;
 	const summary = getSummaryFromLetterObjects(letter.objects);
 

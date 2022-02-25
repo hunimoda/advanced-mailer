@@ -84,8 +84,8 @@ const BasePage = ({ type, title, item: LetterItem }) => {
 				{title}
 			</TitleBar>
 			<LetterList>
-				{letters.map((letter) => (
-					<LetterItem key={letter.id} letter={letter} />
+				{letters.map((letterDoc) => (
+					<LetterItem key={letterDoc.id} letterDoc={letterDoc} />
 				))}
 			</LetterList>
 			<MoreLetters status={oldStatus} />
