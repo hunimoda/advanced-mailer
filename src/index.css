@@ -182,6 +182,7 @@ select {
 	--icon-grey: #5e6266;
 	--border-color: #f0f0f2;
 	--sidebar-transition-duration: 0.5s;
+	--loading-spinner-rotate-period: 1.1s;
 	--max-z-index: 1000000;
 }
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import MoreLetters from "../MoreLetters";
 import classes from "./index.module.css";
 
 const TitleBar = ({ children, onRefresh, status }) => {
@@ -8,7 +9,7 @@ const TitleBar = ({ children, onRefresh, status }) => {
 		if (status === "pending" && titleBarClass === classes.titleBar) {
 			setTitleBarClass(classes.titleBar + " " + classes["titleBar--pending"]);
 		} else if (status !== "pending" && titleBarClass !== classes.titleBar) {
-			setTimeout(() => setTitleBarClass(classes.titleBar), 1000);
+			setTimeout(() => setTitleBarClass(classes.titleBar), 3000);
 		}
 	}, [status, titleBarClass]);
 
@@ -18,6 +19,11 @@ const TitleBar = ({ children, onRefresh, status }) => {
 			<button onClick={onRefresh} className={classes.refreshButton}>
 				<i className="fas fa-sync-alt" />
 			</button>
+			<MoreLetters
+				status="pending"
+				className={classes.moreLetters}
+				spinner={classes.loadingSpinner}
+			/>
 		</div>
 	);
 };

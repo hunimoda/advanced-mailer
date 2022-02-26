@@ -2,7 +2,6 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin: calc(2.5 * var(--main-padding)) 0;
 }
 
 .spinner {

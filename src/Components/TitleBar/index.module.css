@@ -1,17 +1,16 @@
 .titleBar {
 	padding: var(--main-padding);
-	padding-bottom: 0;
-	position: relative;
-	top: 10px;
+	padding-top: 32px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	margin-bottom: 0px;
-	transition: margin-bottom 0.3s ease-in-out 0s;
+	transition: padding-bottom 0.2s ease-in-out 0.4s;
+	position: relative;
 }
 
 .titleBar--pending {
-	margin-bottom: 50px;
+	transition: padding-bottom 0.2s ease-in-out 0s;
+	padding-bottom: calc(48px + 2 * var(--main-padding));
 }
 
 .title {
@@ -31,7 +30,8 @@
 }
 
 .titleBar--pending .refreshButton {
-	animation: refreshButtonRotate 0.5s linear 0s infinite;
+	animation: refreshButtonRotate var(--loading-spinner-rotate-period) ease 0s
+		infinite;
 }
 
 @keyframes refreshButtonRotate {
@@ -41,4 +41,21 @@
 	100% {
 		transform: rotate(360deg);
 	}
+}
+
+.moreLetters {
+	position: absolute;
+	left: 50%;
+	bottom: var(--main-padding);
+	transform: translateX(-50%);
+	opacity: 0;
+	transition: opacity 0.2s linear 0.2s;
+}
+
+.titleBar--pending .moreLetters {
+	opacity: 1;
+}
+
+.loadingSpinner {
+	font-size: 48px;
 }

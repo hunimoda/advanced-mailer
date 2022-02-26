@@ -1,8 +1,7 @@
 .letterList {
 	padding: 0 var(--main-padding);
-	margin-top: var(--main-padding);
 }
 
-.letterList li {
-	margin: calc(var(--main-padding) * 0.75) 0;
+.letterList li:nth-child(n + 2) {
+	margin-top: calc(var(--main-padding) * 0.75);
 }
