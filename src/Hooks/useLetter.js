@@ -46,14 +46,21 @@ export const useLetter = (pageName) => {
 
 		setIsOldPending(true);
 
+		const LIMIT_COUNT = 3;
 		const refTimestamp = start ?? Date.now();
-		const letters = await getLettersBeforeTimestamp(pageName, refTimestamp);
+		const letters = await getLettersBeforeTimestamp(
+			pageName,
+			refTimestamp,
+			LIMIT_COUNT
+		);
 		let startTimestamp = null;
 
 		if (letters.length > 0) {
 			startTimestamp = letters[letters.length - 1].metaData.createdAt;
 			dispatch(pageActions.append({ pageName, letters }));
-		} else {
+		}
+
+		if (letters.length < LIMIT_COUNT) {
 			startTimestamp = -1;
 		}
 

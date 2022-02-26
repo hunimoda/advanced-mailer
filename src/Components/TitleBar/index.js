@@ -19,11 +19,7 @@ const TitleBar = ({ children, onRefresh, status }) => {
 			<button onClick={onRefresh} className={classes.refreshButton}>
 				<i className="fas fa-sync-alt" />
 			</button>
-			<MoreLetters
-				status="pending"
-				className={classes.moreLetters}
-				spinner={classes.loadingSpinner}
-			/>
+			<MoreLetters status="pending" className={classes.moreLetters} />
 		</div>
 	);
 };

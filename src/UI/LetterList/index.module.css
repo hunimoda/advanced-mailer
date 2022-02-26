@@ -2,6 +2,10 @@
 	padding: 0 var(--main-padding);
 }
 
+.letterList:last-child {
+	margin-bottom: 250px;
+}
+
 .letterList li:nth-child(n + 2) {
 	margin-top: calc(var(--main-padding) * 0.75);
 }

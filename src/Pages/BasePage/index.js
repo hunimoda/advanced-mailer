@@ -5,6 +5,7 @@ import TitleBar from "../../Components/TitleBar";
 import LetterList from "../../UI/LetterList";
 import MoreLetters from "../../Components/MoreLetters";
 import { useLetter } from "../../Hooks/useLetter";
+import classes from "./index.module.css";
 
 const BasePage = ({ type, title, item: LetterItem }) => {
 	const {
@@ -64,7 +65,8 @@ const BasePage = ({ type, title, item: LetterItem }) => {
 				body: { offsetHeight },
 			} = document;
 
-			const isScrolledToBottom = offsetHeight + 55 - innerHeight - scrollY <= 0;
+			const isScrolledToBottom =
+				offsetHeight + 55 - innerHeight - scrollY <= 100;
 
 			if (isScrolledToBottom && !isOldPending && !hasNoMoreOlds) {
 				onGetOldLetters();
@@ -88,7 +90,7 @@ const BasePage = ({ type, title, item: LetterItem }) => {
 					<LetterItem key={letterDoc.id} letterDoc={letterDoc} />
 				))}
 			</LetterList>
-			<MoreLetters status={oldStatus} />
+			<MoreLetters status={oldStatus} className={classes.moreLetters} />
 		</>
 	);
 };
