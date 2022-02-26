@@ -9,7 +9,7 @@
 }
 
 .message {
-	font-size: 22px;
+	font-size: 18px;
 	line-height: 36px;
 	padding: 12px 8px;
 }
@@ -27,8 +27,8 @@
 }
 
 .sender img {
-	width: 25px;
-	height: 25px;
+	width: 45px;
+	height: 45px;
 	object-fit: cover;
 	border-radius: 100px;
 	margin-right: 5px;

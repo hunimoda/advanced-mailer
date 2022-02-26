@@ -28,7 +28,7 @@ const MainHeader = ({ onSideBarOpen, onProfileOpen }) => {
 				<MainLogo />
 			</div>
 			<div className={classes.column}>
-				{profileImage && (
+				{profileImage !== null && (
 					<img
 						src={profileImage}
 						alt="profile"

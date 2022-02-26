@@ -129,7 +129,7 @@ export const getLettersBeforeTimestamp = (pageName, timestamp, limitCount) =>
 	getLetters(pageName, "before", timestamp, limitCount);
 
 export const getProfile = async (uid) => {
-	const docRef = doc(db, `profiles/${uid}`);
+	const docRef = doc(db, `users/${uid}`);
 	const docSnap = await getDoc(docRef);
 
 	if (docSnap.exists()) {

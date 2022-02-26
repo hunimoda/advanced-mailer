@@ -9,7 +9,7 @@ const TitleBar = ({ children, onRefresh, status }) => {
 		if (status === "pending" && titleBarClass === classes.titleBar) {
 			setTitleBarClass(classes.titleBar + " " + classes["titleBar--pending"]);
 		} else if (status !== "pending" && titleBarClass !== classes.titleBar) {
-			setTimeout(() => setTitleBarClass(classes.titleBar), 3000);
+			setTimeout(() => setTitleBarClass(classes.titleBar), 500);
 		}
 	}, [status, titleBarClass]);
 

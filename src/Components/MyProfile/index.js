@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getMyProfile } from "../../Helper/profile";
 import { signOut } from "../../Context/auth";
+import { getMyEmail } from "../../Firebase/auth";
 import classes from "./index.module.css";
 
 const MyProfile = ({ onProfileClose }) => {
@@ -46,7 +47,7 @@ const MyProfile = ({ onProfileClose }) => {
 				{name && <h3 className={classes.myName}>{name}</h3>}
 				<i className="fas fa-edit" />
 			</div>
-			<p className={classes.myEmail}>hunimoda@gmail.com</p>
+			<p className={classes.myEmail}>{getMyEmail() ?? "-"}</p>
 			<div className={classes.signoutBtnContainer}>
 				<button className={classes.signoutBtn} onClick={onSignOutClick}>
 					로그아웃
