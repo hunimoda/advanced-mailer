@@ -25,6 +25,7 @@
 	height: 92px;
 	object-fit: cover;
 	border-radius: 100px;
+	border: 1px solid var(--border-color);
 }
 
 .cameraBtnOuter {
@@ -54,29 +55,28 @@
 	display: none;
 }
 
-.myNameContainer {
-	font-size: 18px;
-	width: fit-content;
-	margin: 0 auto;
-	position: relative;
-}
-
-.myNameContainer i {
-	position: absolute;
-	right: 0;
-	top: 0;
-	transform: translateX(calc(100% + 5px));
-	color: #ccc;
-}
-
 .myName {
 	font-weight: 500;
+	font-size: 18px;
+	width: 50%;
+	padding: 8px 0;
+	border-radius: 10px;
+	margin: 0 auto 8px;
+	text-align: center;
+	outline: none;
+	transition: all 0.5s ease-in-out 0s;
+	background: #f5f5f5;
+	border: 1px solid var(--border-color);
+}
+
+.myName:focus {
+	background: #f7fbff;
+	border-color: #e8f5ff;
 }
 
 .myEmail {
 	color: var(--text-grey);
 	text-align: center;
-	margin-top: 8px;
 }
 
 .signoutBtnContainer {

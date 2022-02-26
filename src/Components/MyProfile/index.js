@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { profileActions } from "../../Context/profile";
@@ -6,6 +6,7 @@ import { signOut } from "../../Context/auth";
 import { getMyEmail, getMyUid } from "../../Firebase/auth";
 import { uploadProfileImageByDataUrl } from "../../Firebase/storage";
 import classes from "./index.module.css";
+import { saveProfileImage, saveProfileName } from "../../Firebase/db";
 
 function getImageDataUrl(event, callback) {
 	const {
@@ -24,6 +25,7 @@ const MyProfile = ({ onProfileClose }) => {
 
 	const dispatch = useDispatch();
 	const myProfile = useSelector((state) => state.profile[getMyUid()]);
+	const [profileName, setProfileName] = useState(myProfile.name);
 
 	useEffect(() => {}, []);
 
@@ -46,12 +48,30 @@ const MyProfile = ({ onProfileClose }) => {
 	};
 
 	const onProfileImageChange = (event) => {
-		function callback(dataUrl) {
-			uploadProfileImageByDataUrl(dataUrl).then((downloadUrl) => {
-				dispatch(profileActions.changeMyProfileImage(downloadUrl));
-			});
+		async function callback(dataUrl) {
+			const downloadUrl = await uploadProfileImageByDataUrl(dataUrl);
+
+			await saveProfileImage(downloadUrl);
+			dispatch(profileActions.changeMyProfileImage(downloadUrl));
 		}
 		getImageDataUrl(event, callback);
+	};
+
+	const onProfileNameChange = (event) => {
+		const nameValue = event.target.value;
+
+		if (nameValue.length < 8) {
+			setProfileName(nameValue);
+		}
+	};
+
+	const onProfileNameSave = (event) => {
+		const name = event.target.value;
+
+		if (name !== myProfile.name) {
+			saveProfileName(name);
+			dispatch(profileActions.changeMyProfileName(name));
+		}
 	};
 
 	return (
@@ -65,15 +85,19 @@ const MyProfile = ({ onProfileClose }) => {
 					<input
 						id="change-profile-image"
 						type="file"
+						accept="image/*"
 						className={classes.imageInput}
 						onChange={onProfileImageChange}
 					/>
 				</div>
 			</div>
-			<div className={classes.myNameContainer}>
-				{myProfile.name && <h3 className={classes.myName}>{myProfile.name}</h3>}
-				<i className="fas fa-edit" />
-			</div>
+			<input
+				className={classes.myName}
+				value={profileName}
+				onChange={onProfileNameChange}
+				onBlur={onProfileNameSave}
+				id="profile-name"
+			/>
 			<p className={classes.myEmail}>{getMyEmail() ?? "-"}</p>
 			<div className={classes.signoutBtnContainer}>
 				<button className={classes.signoutBtn} onClick={onSignOutClick}>

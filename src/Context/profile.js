@@ -9,8 +9,10 @@ export const profileSlice = createSlice({
 			state[uid] = profile;
 		},
 		changeMyProfileImage: (state, action) => {
-			console.log(getMyUid(), action.payload);
 			state[getMyUid()].image = action.payload;
+		},
+		changeMyProfileName: (state, action) => {
+			state[getMyUid()].name = action.payload;
 		},
 	},
 });

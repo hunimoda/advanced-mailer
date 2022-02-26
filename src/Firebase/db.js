@@ -138,3 +138,15 @@ export const getProfile = async (uid) => {
 
 	return null;
 };
+
+export const saveProfileImage = async (downloadUrl) => {
+	const profileRef = doc(db, `users/${getMyUid()}`);
+
+	return setDoc(profileRef, { image: downloadUrl }, { merge: true });
+};
+
+export const saveProfileName = async (name) => {
+	const profileRef = doc(db, `users/${getMyUid()}`);
+
+	return setDoc(profileRef, { name }, { merge: true });
+};
