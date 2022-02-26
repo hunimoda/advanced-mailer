@@ -9,15 +9,14 @@ export const getProfileByUid = async (uid) => {
 	let profile = profiles[uid];
 
 	if (!profile) {
-		profile = (await getProfile(uid)) ?? { name: "", image: "" };
+		profile = (await getProfile(uid)) ?? {
+			name: "(이름 없음)",
+			image: "/default-profile.png",
+		};
 		dispatch({ type: "profile/addNewProfile", payload: { uid, profile } });
 	}
 
-	profile = JSON.parse(JSON.stringify(profile));
-	profile.image ||= "/default-profile.png";
-	profile.name ||= "(이름 없음)";
-
-	return profile;
+	return JSON.parse(JSON.stringify(profile));
 };
 
 export const getMyProfile = () => {

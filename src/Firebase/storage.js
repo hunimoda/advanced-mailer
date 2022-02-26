@@ -21,3 +21,12 @@ export const uploadImageByDataUrl = async (imageDataUrl, letterId) => {
 
 	return downloadUrl;
 };
+
+export const uploadProfileImageByDataUrl = async (imageDataUrl) => {
+	const storageRef = ref(storage, `${getMyUid()}/profile`);
+
+	const uploadResult = await uploadString(storageRef, imageDataUrl, "data_url");
+	const downloadUrl = await getDownloadURL(uploadResult.ref);
+
+	return downloadUrl;
+};

@@ -1,15 +1,20 @@
 import { useState, useEffect } from "react";
-import MainLogo from "../MainLogo";
+import { useSelector } from "react-redux";
+import { getMyUid } from "../../Firebase/auth";
 import { getMyProfile } from "../../Helper/profile";
+import MainLogo from "../MainLogo";
 import classes from "./index.module.css";
 
 const MainHeader = ({ onSideBarOpen, onProfileOpen }) => {
+	const myProfile = useSelector((state) => state.profile[getMyUid()]);
+
 	const [imageClassName, setImageClassName] = useState(classes.profileImage);
-	const [profileImage, setProfileImage] = useState(null);
 
 	useEffect(() => {
-		getMyProfile().then(({ image }) => setProfileImage(image));
-	}, []);
+		if (!myProfile) {
+			getMyProfile();
+		}
+	}, [myProfile]);
 
 	const onProfileImageClick = () => {
 		setImageClassName(
@@ -28,9 +33,9 @@ const MainHeader = ({ onSideBarOpen, onProfileOpen }) => {
 				<MainLogo />
 			</div>
 			<div className={classes.column}>
-				{profileImage !== null && (
+				{myProfile?.image && (
 					<img
-						src={profileImage}
+						src={myProfile.image}
 						alt="profile"
 						className={imageClassName}
 						onClick={onProfileImageClick}

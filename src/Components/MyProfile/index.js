@@ -1,19 +1,31 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { getMyProfile } from "../../Helper/profile";
+import { useDispatch, useSelector } from "react-redux";
+import { profileActions } from "../../Context/profile";
 import { signOut } from "../../Context/auth";
-import { getMyEmail } from "../../Firebase/auth";
+import { getMyEmail, getMyUid } from "../../Firebase/auth";
+import { uploadProfileImageByDataUrl } from "../../Firebase/storage";
 import classes from "./index.module.css";
 
-const MyProfile = ({ onProfileClose }) => {
-	const [profile, setProfile] = useState({});
-	const { name, image } = profile;
+function getImageDataUrl(event, callback) {
+	const {
+		target: { files },
+	} = event;
+	const file = files[0];
+	const reader = new FileReader();
 
-	const dispatch = useDispatch();
+	reader.onloadend = (readerEvent) =>
+		callback(readerEvent.currentTarget.result);
+	reader.readAsDataURL(file);
+}
+
+const MyProfile = ({ onProfileClose }) => {
 	const history = useHistory();
 
-	useEffect(() => getMyProfile().then((profile) => setProfile(profile)), []);
+	const dispatch = useDispatch();
+	const myProfile = useSelector((state) => state.profile[getMyUid()]);
+
+	useEffect(() => {}, []);
 
 	useEffect(() => {
 		const closeProfile = () => onProfileClose();
@@ -33,18 +45,33 @@ const MyProfile = ({ onProfileClose }) => {
 		history.replace("/");
 	};
 
+	const onProfileImageChange = (event) => {
+		function callback(dataUrl) {
+			uploadProfileImageByDataUrl(dataUrl).then((downloadUrl) => {
+				dispatch(profileActions.changeMyProfileImage(downloadUrl));
+			});
+		}
+		getImageDataUrl(event, callback);
+	};
+
 	return (
 		<div className={classes.myProfile} onClick={onProfileClick}>
 			<div className={classes.profileImage}>
-				{image && <img src={image} alt="profile" />}
+				{myProfile.image && <img src={myProfile.image} alt="profile" />}
 				<div className={classes.cameraBtnOuter}>
-					<button className={classes.cameraBtn}>
+					<label htmlFor="change-profile-image" className={classes.cameraBtn}>
 						<i className="fas fa-camera-retro" />
-					</button>
+					</label>
+					<input
+						id="change-profile-image"
+						type="file"
+						className={classes.imageInput}
+						onChange={onProfileImageChange}
+					/>
 				</div>
 			</div>
 			<div className={classes.myNameContainer}>
-				{name && <h3 className={classes.myName}>{name}</h3>}
+				{myProfile.name && <h3 className={classes.myName}>{myProfile.name}</h3>}
 				<i className="fas fa-edit" />
 			</div>
 			<p className={classes.myEmail}>{getMyEmail() ?? "-"}</p>
