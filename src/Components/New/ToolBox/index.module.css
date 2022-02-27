@@ -28,6 +28,7 @@
 	outline: none;
 	border: none;
 	resize: none;
+	line-height: 1.5;
 }
 
 .controls {
@@ -85,5 +86,63 @@
 }
 
 .toolbox input {
+	display: none;
+}
+
+.letterSheetIcon {
+	transform: rotate(-90deg);
+}
+
+.addTextIcon {
+	font-family: "Times New Roman", Times, serif;
+}
+
+.menuPopup {
+	background: white;
+	border-radius: 10px;
+	box-shadow: rgb(50 50 93 / 25%) 0px 6px 12px -2px,
+		rgb(0 0 0 / 30%) 0px 3px 7px -3px;
+	width: calc(100% - 2 * var(--main-padding));
+	overflow: hidden;
+}
+
+.menuPopup header,
+.menuPopup footer {
+	height: 50px;
+}
+
+.menuPopup header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.menuPopup h3 {
+	font-size: 18px;
+	margin-left: var(--main-padding);
+}
+
+.menuPopup .closeButton {
+	font-size: 16px;
+	border: none;
+	color: #888;
+	background: transparent;
+	padding: calc(0.5 * var(--main-padding));
+	margin-right: calc(0.5 * var(--main-padding));
+}
+
+.menuPopup main {
+	border-top: 1px solid var(--border-color);
+	border-bottom: 1px solid var(--border-color);
+	padding: var(--main-padding);
+	max-height: calc(70vh - 100px);
+	overflow-y: scroll;
+}
+
+.menuPopup main ul {
+	list-style: none;
+}
+
+.hidden {
 	display: none;
 }

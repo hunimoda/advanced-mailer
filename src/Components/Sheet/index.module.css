@@ -1,4 +1,5 @@
 .sheet {
 	background-size: cover;
 	position: relative;
+	z-index: 0;
 }

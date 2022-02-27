@@ -1,10 +1,12 @@
 import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
+import Modal from "../../../UI/Modal";
 import {
 	letterActions,
 	addImageObjectBySrc,
 	setSheetBgImageResize,
 } from "../../../Context/letter";
+import SheetBgList from "./SheetBgList";
 import classes from "./index.module.css";
 
 const ToolBox = () => {
@@ -12,6 +14,7 @@ const ToolBox = () => {
 
 	const textareaRef = useRef();
 	const [showTextInput, setShowTextInput] = useState(false);
+	const [showMenuPopup, setShowMenuPopup] = useState(false);
 
 	const dispatchImageAction = (event, callback) => {
 		const {
@@ -64,8 +67,26 @@ const ToolBox = () => {
 		}
 	};
 
+	const onShowMenuPopup = () => setShowMenuPopup(true);
+
+	const onHideMenuPopup = () => setShowMenuPopup(false);
+
 	return (
 		<>
+			{showMenuPopup && (
+				<Modal className={classes.menuPopup} onClose={onHideMenuPopup}>
+					<header>
+						<h3>편지지</h3>
+						<button onClick={onHideMenuPopup} className={classes.closeButton}>
+							닫기
+						</button>
+					</header>
+					<main>
+						<SheetBgList />
+					</main>
+					<footer></footer>
+				</Modal>
+			)}
 			{showTextInput && (
 				<div className={classes.inputBackdrop} onClick={onInputBackdropClick}>
 					<div className={classes.controls}>
@@ -88,20 +109,14 @@ const ToolBox = () => {
 			)}
 			<footer className={classes.footer}>
 				<div className={classes.toolbox}>
-					<label className={classes.button} htmlFor="addSheetBgImage">
-						Bg
-					</label>
-					<input
-						id="addSheetBgImage"
-						type="file"
-						accept="image/*"
-						onChange={onAddSheetBgImageChange}
-					/>
+					<button className={classes.button} onClick={onShowMenuPopup}>
+						<i className={`fas fa-map ${classes.letterSheetIcon}`} />
+					</button>
 					<button className={classes.button} onClick={onResizeSheetClick}>
-						AR
+						3:4
 					</button>
 					<label className={classes.button} htmlFor="changeSheetColor">
-						C
+						<i className="fas fa-fill-drip" />
 					</label>
 					<input
 						id="changeSheetColor"
@@ -109,13 +124,13 @@ const ToolBox = () => {
 						onChange={onSheetColorChange}
 					/>
 					<button className={classes.button} onClick={onAddTextClick}>
-						+T
+						<span className={classes.addTextIcon}>T</span>
 					</button>
 					<button className={classes.button} onClick={onAddImageClick}>
-						+Img
+						<i className="fas fa-icons" />
 					</button>
 					<label className={classes.button} htmlFor="addGalleryImage">
-						Gal
+						<i className="fas fa-image" />
 					</label>
 					<input
 						id="addGalleryImage"
@@ -123,15 +138,6 @@ const ToolBox = () => {
 						accept="image/*"
 						onChange={onAddGalleryImageChange}
 					/>
-					<button className={classes.button}>
-						<i className="fas fa-times" />
-					</button>
-					<button className={classes.button}>
-						<i className="fas fa-times" />
-					</button>
-					<button className={classes.button}>
-						<i className="fas fa-times" />
-					</button>
 				</div>
 			</footer>
 		</>

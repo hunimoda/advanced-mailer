@@ -2,7 +2,7 @@ import { createPortal } from "react-dom";
 import classes from "./index.module.css";
 
 const Modal = ({ className, children, backdropColor, onClose }) => {
-	const onBackdropTouch = (event) => {
+	const onBackdropClick = (event) => {
 		event.stopPropagation();
 		onClose();
 	};
@@ -12,11 +12,11 @@ const Modal = ({ className, children, backdropColor, onClose }) => {
 			<div
 				className={classes.backdrop}
 				style={{ backgroundColor: backdropColor ?? "rgba(0, 0, 0, 0.3)" }}
-				onTouchStart={onBackdropTouch}
+				onClick={onBackdropClick}
 			/>
 			<div
 				className={`${classes.modal} ${className}`}
-				onTouchStart={(event) => event.stopPropagation()}
+				onClick={(event) => event.stopPropagation()}
 			>
 				{children}
 			</div>
