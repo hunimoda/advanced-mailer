@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../../UI/Modal";
 import {
 	letterActions,
@@ -8,13 +8,17 @@ import {
 } from "../../../Context/letter";
 import SheetBgList from "./SheetBgList";
 import classes from "./index.module.css";
+import SheetAspectRatio from "./SheetAspectRatio";
 
 const ToolBox = () => {
 	const dispatch = useDispatch();
+	const backgroundImage = useSelector(
+		(state) => state.letter.sheet.backgroundImage
+	);
 
 	const textareaRef = useRef();
 	const [showTextInput, setShowTextInput] = useState(false);
-	const [showMenuPopup, setShowMenuPopup] = useState(false);
+	const [menuPopup, setMenuPopup] = useState(null);
 
 	const dispatchImageAction = (event, callback) => {
 		const {
@@ -67,24 +71,40 @@ const ToolBox = () => {
 		}
 	};
 
-	const onShowMenuPopup = () => setShowMenuPopup(true);
+	const onShowMenuPopup = (event) => {
+		const type = event.currentTarget.dataset.type;
 
-	const onHideMenuPopup = () => setShowMenuPopup(false);
+		if (type === "sheet-background") {
+			setMenuPopup({
+				title: "편지지",
+				jsx: <SheetBgList onSelect={onMenuPopupClose} />,
+			});
+		} else if (type === "sheet-aspect-ratio") {
+			if (!backgroundImage) {
+				setMenuPopup({
+					title: "종횡비",
+					jsx: <SheetAspectRatio />,
+				});
+			} else {
+				alert("편지지의 비율이 배경 사진에 맞추어져 있습니다.");
+			}
+		}
+	};
+
+	const onMenuPopupClose = () => setMenuPopup(null);
 
 	return (
 		<>
-			{showMenuPopup && (
-				<Modal className={classes.menuPopup} onClose={onHideMenuPopup}>
+			{menuPopup && (
+				<Modal className={classes.menuPopup} onClose={onMenuPopupClose}>
 					<header>
-						<h3>편지지</h3>
-						<button onClick={onHideMenuPopup} className={classes.closeButton}>
+						<h3>{menuPopup.title}</h3>
+						<button onClick={onMenuPopupClose} className={classes.closeButton}>
 							닫기
 						</button>
 					</header>
-					<main>
-						<SheetBgList />
-					</main>
-					<footer></footer>
+					<main>{menuPopup.jsx}</main>
+					{menuPopup.message && <footer>{menuPopup.message}</footer>}
 				</Modal>
 			)}
 			{showTextInput && (
@@ -109,10 +129,18 @@ const ToolBox = () => {
 			)}
 			<footer className={classes.footer}>
 				<div className={classes.toolbox}>
-					<button className={classes.button} onClick={onShowMenuPopup}>
+					<button
+						className={classes.button}
+						onClick={onShowMenuPopup}
+						data-type="sheet-background"
+					>
 						<i className={`fas fa-map ${classes.letterSheetIcon}`} />
 					</button>
-					<button className={classes.button} onClick={onResizeSheetClick}>
+					<button
+						className={classes.button}
+						onClick={onShowMenuPopup}
+						data-type="sheet-aspect-ratio"
+					>
 						3:4
 					</button>
 					<label className={classes.button} htmlFor="changeSheetColor">

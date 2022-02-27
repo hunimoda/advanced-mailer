@@ -1,0 +1,94 @@
+.sheetOrientation {
+	width: fit-content;
+	margin: 0 auto var(--main-padding);
+}
+
+.sheetOrientation button {
+	font-size: 18px;
+	padding: 10px 20px;
+	border: 1px solid #2294ff;
+	transition: all 0.25s ease-in-out 0s;
+}
+
+.sheetOrientation button:first-child {
+	border-radius: 15px 0 0 15px;
+	color: #2294ff;
+	background: white;
+}
+
+.sheetOrientation button:last-child {
+	border-radius: 0 15px 15px 0;
+	background: #2294ff;
+	color: white;
+}
+
+.sheetOrientation button:first-child i {
+	transform: rotate(-90deg) scaleY(1.5);
+}
+
+.sheetOrientation button:last-child i {
+	transform: scaleY(1.5);
+}
+
+.horizontal.sheetOrientation button:first-child {
+	background: #2294ff;
+	color: white;
+}
+
+.horizontal.sheetOrientation button:last-child {
+	background: white;
+	color: #2294ff;
+}
+
+.ratioList {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.ratioList li {
+	width: 50%;
+	aspect-ratio: 1;
+	display: flex;
+	align-items: center;
+}
+
+.ratioList div {
+	background: #888;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+	font-size: 24px;
+}
+
+.ratioList span {
+	will-change: transform;
+	transform: rotate(0deg);
+}
+
+.ratioList li:nth-child(1) div {
+	height: 100%;
+	aspect-ratio: 9 / 16;
+}
+
+.ratioList li:nth-child(2) div {
+	height: 86.6%;
+	aspect-ratio: 3 / 4;
+}
+
+.ratioList li:nth-child(3) div {
+	height: 75%;
+	aspect-ratio: 1;
+}
+
+.rotated.ratioList li:nth-child(-n + 2) div {
+	transform: rotate(90deg);
+	box-shadow: rgba(0, 0, 0, 0.35) 0px -5px 15px;
+}
+
+.rotated.ratioList li:nth-child(-n + 2) div > * {
+	transform: rotate(-90deg);
+}

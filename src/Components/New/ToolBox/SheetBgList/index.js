@@ -4,7 +4,7 @@ import { getSheetDesigns } from "../../../../Firebase/db";
 import { setSheetBgImageResize } from "../../../../Context/letter";
 import classes from "./index.module.css";
 
-const SheetBgList = () => {
+const SheetBgList = ({ onSelect }) => {
 	const dispatch = useDispatch();
 	const [imageUrls, setImageUrls] = useState([]);
 
@@ -27,6 +27,7 @@ const SheetBgList = () => {
 
 	function setSheetBgImage(dataUrl) {
 		dispatch(setSheetBgImageResize(dataUrl));
+		// onSelect();
 	}
 
 	const onAddBgImageFromGallery = (event) => {
