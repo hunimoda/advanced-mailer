@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import classes from "./index.module.css";
 
 const TextInput = (props) => {
@@ -29,7 +30,7 @@ const TextInput = (props) => {
 		textareaRef.current.setSelectionRange(textLength, textLength);
 	}, []);
 
-	return (
+	return createPortal(
 		<div className={classes.inputBackdrop} onClick={onInputBackdropClick}>
 			<div className={classes.controls}>
 				<button onClick={props.onCancel} className={classes.cancelBtn}>
@@ -48,7 +49,8 @@ const TextInput = (props) => {
 					autoFocus
 				></textarea>
 			</div>
-		</div>
+		</div>,
+		document.getElementById("input-root")
 	);
 };
 

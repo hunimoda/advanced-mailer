@@ -114,6 +114,11 @@ export const letterSlice = createSlice({
 				},
 			};
 		},
+		editText: (state, action) => {
+			const { id, value } = action.payload;
+
+			state.objects[id].value = value;
+		},
 		addImageObject: (state, action) => {
 			const image = action.payload;
 			const sheetRatio = state.sheet.aspectRatio;

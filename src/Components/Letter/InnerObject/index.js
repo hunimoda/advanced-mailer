@@ -5,6 +5,7 @@ import { processStyle } from "./helper";
 import store from "../../../Context";
 import Modifier from "./Modifier";
 import ObjectSettings from "./ObjectSettings";
+import TextInput from "../../New/TextInput";
 import classes from "./index.module.css";
 
 let prevCoord = null;
@@ -31,6 +32,7 @@ const InnerObject = ({
 		object.type === "image" ? true : false
 	);
 	const [showObjectSettings, setShowObjectSettings] = useState(false);
+	const [showTextInput, setShowTextInput] = useState(false);
 
 	const MIN_SIDE_LENGTH = Math.max(
 		(object.style.padding + object.style.border.width) * 2 * sheetSize.height,
@@ -249,6 +251,15 @@ const InnerObject = ({
 		return null;
 	};
 
+	const onShowTextInput = () => setShowTextInput(true);
+
+	const onCancel = () => setShowTextInput(false);
+
+	const onConfirm = (textValue) => {
+		dispatch(letterActions.editText({ id, value: textValue }));
+		setShowTextInput(false);
+	};
+
 	return (
 		<>
 			<div
@@ -274,6 +285,7 @@ const InnerObject = ({
 							) < 1
 						}
 						borderRadius={borderRadiusInPixels}
+						onEdit={object.type === "text" && onShowTextInput}
 					/>
 				)}
 				{getContentJsx()}
@@ -283,6 +295,13 @@ const InnerObject = ({
 					id={id}
 					onClose={onSettingsClose}
 					style={object.style}
+				/>
+			)}
+			{showTextInput && (
+				<TextInput
+					defaultValue={object.value}
+					onCancel={onCancel}
+					onConfirm={onConfirm}
 				/>
 			)}
 		</>
