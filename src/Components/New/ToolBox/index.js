@@ -19,6 +19,7 @@ const ToolBox = () => {
 	const textareaRef = useRef();
 	const [showTextInput, setShowTextInput] = useState(false);
 	const [menuPopup, setMenuPopup] = useState(null);
+	const [ratioString, setRatioString] = useState("3:4");
 
 	const dispatchImageAction = (event, callback) => {
 		const {
@@ -83,7 +84,7 @@ const ToolBox = () => {
 			if (!backgroundImage) {
 				setMenuPopup({
 					title: "종횡비",
-					jsx: <SheetAspectRatio />,
+					jsx: <SheetAspectRatio onRatioChange={onSheetRatioChange} />,
 				});
 			} else {
 				alert("편지지의 비율이 배경 사진에 맞추어져 있습니다.");
@@ -92,6 +93,8 @@ const ToolBox = () => {
 	};
 
 	const onMenuPopupClose = () => setMenuPopup(null);
+
+	const onSheetRatioChange = (ratioString) => setRatioString(ratioString);
 
 	return (
 		<>
@@ -141,7 +144,11 @@ const ToolBox = () => {
 						onClick={onShowMenuPopup}
 						data-type="sheet-aspect-ratio"
 					>
-						3:4
+						{backgroundImage ? (
+							<i className="fas fa-vector-square" />
+						) : (
+							ratioString
+						)}
 					</button>
 					<label className={classes.button} htmlFor="changeSheetColor">
 						<i className="fas fa-fill-drip" />

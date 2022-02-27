@@ -68,6 +68,9 @@ export const letterSlice = createSlice({
 		setSheetBgImage: (state, action) => {
 			state.sheet.backgroundImage = action.payload;
 		},
+		resetSheetBgImage: (state, action) => {
+			state.sheet.backgroundImage = null;
+		},
 		addTextObject: (state, action) => {
 			state.objects[generateObjectId()] = {
 				type: "text",

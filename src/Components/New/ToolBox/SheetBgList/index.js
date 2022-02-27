@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getSheetDesigns } from "../../../../Firebase/db";
-import { setSheetBgImageResize } from "../../../../Context/letter";
+import {
+	letterActions,
+	setSheetBgImageResize,
+} from "../../../../Context/letter";
 import classes from "./index.module.css";
 
 const SheetBgList = ({ onSelect }) => {
@@ -34,14 +37,27 @@ const SheetBgList = ({ onSelect }) => {
 		dispatchImageAction(event, setSheetBgImage);
 	};
 
+	const onResetBgImage = () => dispatch(letterActions.resetSheetBgImage());
+
 	return (
 		<ul className={classes.sheetBgList}>
 			<li>
-				<label htmlFor="addSheetBgImage" className={classes.galleryButton}>
+				<label
+					className={classes.controlButton + " " + classes.noImageButton}
+					onClick={onResetBgImage}
+				>
+					<span>
+						<i className="far fa-times-circle" />
+					</span>
+					<p>선택 안 함</p>
+				</label>
+			</li>
+			<li>
+				<label htmlFor="addSheetBgImage" className={classes.controlButton}>
 					<span>
 						<i className="fas fa-images" />
 					</span>
-					<p>갤러리에서 추가</p>
+					<p>찾아보기</p>
 				</label>
 				<input
 					id="addSheetBgImage"

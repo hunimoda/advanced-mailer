@@ -15,7 +15,7 @@
 	border-radius: 10px;
 }
 
-.galleryButton {
+.controlButton {
 	width: 90%;
 	height: 90%;
 	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -24,17 +24,23 @@
 	align-items: center;
 	justify-content: center;
 	color: #aaa;
+	border: none;
+	background: white;
 }
 
-.galleryButton span {
+.controlButton span {
 	font-size: 48px;
 }
 
-.galleryButton p {
+.controlButton p {
 	margin-top: 10px;
-	font-size: 12px;
+	font-size: 14px;
 	white-space: nowrap;
 	text-align: center;
+}
+
+.noImageButton {
+	box-shadow: none;
 }
 
 .hidden {
