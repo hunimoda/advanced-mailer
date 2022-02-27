@@ -1,0 +1,56 @@
+.inputBackdrop {
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.8);
+	display: flex;
+	flex-direction: column;
+}
+
+.textareaContainer {
+	flex-grow: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.textarea {
+	width: calc(85vw);
+	max-height: 100vh;
+	overflow-y: scroll;
+	text-align: center;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 18px;
+	color: white;
+	background: transparent;
+	outline: none;
+	border: none;
+	resize: none;
+	line-height: 1.5;
+}
+
+.controls {
+	background: transparent;
+	padding: 20px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.controls button {
+	font-size: 18px;
+	color: white;
+	padding: 8px 20px;
+	border-radius: 100px;
+	border: none;
+}
+
+.cancelBtn {
+	background: tomato;
+}
+
+.confirmBtn {
+	background: green;
+}

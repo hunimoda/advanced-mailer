@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../../UI/Modal";
 import {
@@ -7,8 +7,9 @@ import {
 	setSheetBgImageResize,
 } from "../../../Context/letter";
 import SheetBgList from "./SheetBgList";
-import classes from "./index.module.css";
 import SheetAspectRatio from "./SheetAspectRatio";
+import TextInput from "../TextInput";
+import classes from "./index.module.css";
 
 const ToolBox = () => {
 	const dispatch = useDispatch();
@@ -16,7 +17,6 @@ const ToolBox = () => {
 		(state) => state.letter.sheet.backgroundImage
 	);
 
-	const textareaRef = useRef();
 	const [showTextInput, setShowTextInput] = useState(false);
 	const [menuPopup, setMenuPopup] = useState(null);
 	const [ratioString, setRatioString] = useState("3:4");
@@ -50,26 +50,11 @@ const ToolBox = () => {
 	const onAddGalleryImageChange = (event) =>
 		dispatchImageAction(event, addImageObjectBySrc);
 
-	const onInputBackdropClick = () => textareaRef.current.focus();
-
-	const onTextAreaChange = (event) => {
-		const { target } = event;
-
-		target.style.height = "0px";
-		target.style.height = `${target.scrollHeight}px`;
-	};
-
 	const onCancel = () => setShowTextInput(false);
 
-	const onConfirm = () => {
-		const inputString = textareaRef.current.value;
-
-		if (inputString.trim().length === 0) {
-			alert("빈 문자열 입력");
-		} else {
-			dispatch(letterActions.addTextObject(inputString));
-			setShowTextInput(false);
-		}
+	const onConfirm = (inputString) => {
+		dispatch(letterActions.addTextObject(inputString));
+		setShowTextInput(false);
 	};
 
 	const onShowMenuPopup = (event) => {
@@ -110,26 +95,7 @@ const ToolBox = () => {
 					{menuPopup.message && <footer>{menuPopup.message}</footer>}
 				</Modal>
 			)}
-			{showTextInput && (
-				<div className={classes.inputBackdrop} onClick={onInputBackdropClick}>
-					<div className={classes.controls}>
-						<button onClick={onCancel} className={classes.cancelBtn}>
-							취소
-						</button>
-						<button onClick={onConfirm} className={classes.confirmBtn}>
-							입력
-						</button>
-					</div>
-					<div className={classes.textareaContainer}>
-						<textarea
-							ref={textareaRef}
-							className={classes.textarea}
-							onChange={onTextAreaChange}
-							autoFocus
-						></textarea>
-					</div>
-				</div>
-			)}
+			{showTextInput && <TextInput onCancel={onCancel} onConfirm={onConfirm} />}
 			<footer className={classes.footer}>
 				<div className={classes.toolbox}>
 					<button

@@ -12,6 +12,7 @@
 	border-color: #0f0;
 }
 
+.edit,
 .delete,
 .resize,
 .resizeWidthBtn,
@@ -59,6 +60,13 @@
 	left: 0;
 	transform-origin: top left;
 	color: tomato;
+}
+
+.edit {
+	position: absolute;
+	top: 0;
+	left: 100%;
+	transform-origin: top left;
 }
 
 .resize {

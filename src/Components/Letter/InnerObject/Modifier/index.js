@@ -4,6 +4,7 @@ const Modifier = ({
 	onTouchMove,
 	isFixed,
 	onDelete,
+	onEdit,
 	scale,
 	isAligned,
 	isSquare,
@@ -31,6 +32,18 @@ const Modifier = ({
 			>
 				<i className="fas fa-times" />
 			</button>
+			{onEdit && (
+				<button
+					className={classes.edit}
+					style={{
+						transform: `scale(${1 / scale}) translate(0, -100%)`,
+					}}
+					onClick={onEdit}
+					onTouchMove={(event) => event.stopPropagation()}
+				>
+					<i className="fas fa-edit" />
+				</button>
+			)}
 			{isSquare && (
 				<>
 					<div

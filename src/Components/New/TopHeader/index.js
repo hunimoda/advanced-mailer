@@ -16,6 +16,11 @@ const TopHeader = () => {
 	const dispatch = useDispatch();
 	const letter = useSelector((state) => state.letter);
 
+	const onCancel = () => {
+		history.goBack();
+		dispatch(letterActions.resetLetterState());
+	};
+
 	const onDoneWritingLetter = async (action) => {
 		if (id) {
 			if (action === "sent") {
@@ -38,7 +43,7 @@ const TopHeader = () => {
 
 	return (
 		<header className={classes.header}>
-			<button onClick={history.goBack}>
+			<button onClick={onCancel}>
 				<i className="fas fa-times" />
 			</button>
 			<div className={classes.controls}>
