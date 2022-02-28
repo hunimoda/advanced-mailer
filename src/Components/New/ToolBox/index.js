@@ -11,6 +11,7 @@ import SheetAspectRatio from "./SheetAspectRatio";
 import TextInput from "../TextInput";
 import classes from "./index.module.css";
 import StickersList from "./StickersList";
+import Canvas from "./Canvas";
 
 const ToolBox = () => {
 	const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const ToolBox = () => {
 
 	const [showTextInput, setShowTextInput] = useState(false);
 	const [menuPopup, setMenuPopup] = useState(null);
+	const [showCanvas, setShowCanvas] = useState(false);
 	const [ratioString, setRatioString] = useState("3:4");
 
 	const dispatchImageAction = (event, callback) => {
@@ -99,6 +101,7 @@ const ToolBox = () => {
 				</Modal>
 			)}
 			{showTextInput && <TextInput onCancel={onCancel} onConfirm={onConfirm} />}
+			{showCanvas && <Canvas />}
 			<footer className={classes.footer}>
 				<div className={classes.toolbox}>
 					<button
@@ -146,6 +149,12 @@ const ToolBox = () => {
 						accept="image/*"
 						onChange={onAddGalleryImageChange}
 					/>
+					<button
+						className={classes.button}
+						onClick={() => setShowCanvas(true)}
+					>
+						<i className="fas fa-pen-nib" />
+					</button>
 				</div>
 			</footer>
 		</>
