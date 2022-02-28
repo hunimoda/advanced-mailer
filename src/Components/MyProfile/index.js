@@ -53,14 +53,22 @@ const MyProfile = ({ onProfileClose }) => {
 	const onProfileImageChange = (event) => {
 		async function callback(dataUrl) {
 			setIsLoading(true);
+			dispatch(profileActions.changeMyProfileImage(dataUrl));
 
 			const downloadUrl = await uploadProfileImageByDataUrl(dataUrl);
 
 			await saveProfileImage(downloadUrl);
+
 			dispatch(profileActions.changeMyProfileImage(downloadUrl));
 		}
 
 		getImageDataUrl(event, callback);
+	};
+
+	const onProfileImageLoad = (event) => {
+		if (!event.target.src.startsWith("data:")) {
+			setIsLoading(false);
+		}
 	};
 
 	const onProfileNameChange = (event) => {
@@ -89,7 +97,7 @@ const MyProfile = ({ onProfileClose }) => {
 						src={myProfile.image}
 						className={isLoading ? classes.darken : ""}
 						alt="profile"
-						onLoad={() => setIsLoading(false)}
+						onLoad={onProfileImageLoad}
 					/>
 				)}
 				<div className={classes.cameraBtnOuter}>
