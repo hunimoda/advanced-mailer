@@ -5,8 +5,9 @@ import { profileActions } from "../../Context/profile";
 import { signOut } from "../../Context/auth";
 import { getMyEmail, getMyUid } from "../../Firebase/auth";
 import { uploadProfileImageByDataUrl } from "../../Firebase/storage";
-import classes from "./index.module.css";
 import { saveProfileImage, saveProfileName } from "../../Firebase/db";
+import LoadingSpinner from "../../UI/LoadingSpinner";
+import classes from "./index.module.css";
 
 function getImageDataUrl(event, callback) {
 	const {
@@ -25,7 +26,9 @@ const MyProfile = ({ onProfileClose }) => {
 
 	const dispatch = useDispatch();
 	const myProfile = useSelector((state) => state.profile[getMyUid()]);
+
 	const [profileName, setProfileName] = useState(myProfile.name);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {}, []);
 
@@ -49,11 +52,14 @@ const MyProfile = ({ onProfileClose }) => {
 
 	const onProfileImageChange = (event) => {
 		async function callback(dataUrl) {
+			setIsLoading(true);
+
 			const downloadUrl = await uploadProfileImageByDataUrl(dataUrl);
 
 			await saveProfileImage(downloadUrl);
 			dispatch(profileActions.changeMyProfileImage(downloadUrl));
 		}
+
 		getImageDataUrl(event, callback);
 	};
 
@@ -77,7 +83,15 @@ const MyProfile = ({ onProfileClose }) => {
 	return (
 		<div className={classes.myProfile} onClick={onProfileClick}>
 			<div className={classes.profileImage}>
-				{myProfile.image && <img src={myProfile.image} alt="profile" />}
+				{isLoading && <LoadingSpinner className={classes.loader} />}
+				{myProfile.image && (
+					<img
+						src={myProfile.image}
+						className={isLoading ? classes.darken : ""}
+						alt="profile"
+						onLoad={() => setIsLoading(false)}
+					/>
+				)}
 				<div className={classes.cameraBtnOuter}>
 					<label htmlFor="change-profile-image" className={classes.cameraBtn}>
 						<i className="fas fa-camera-retro" />
