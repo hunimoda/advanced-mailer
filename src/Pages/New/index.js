@@ -6,8 +6,9 @@ import Sheet from "../../Components/Sheet";
 import InnerObject from "../../Components/Letter/InnerObject";
 import ToolBox from "../../Components/New/ToolBox";
 import { getLetterDocByParams } from "../../Firebase/db";
-import classes from "./index.module.css";
 import { getMyUid } from "../../Firebase/auth";
+import { isEqual } from "lodash";
+import classes from "./index.module.css";
 
 const New = () => {
 	const mainRef = useRef();
@@ -15,12 +16,29 @@ const New = () => {
 
 	const dispatch = useDispatch();
 
+	const letter = useSelector((state) => state.letter);
 	const sheet = useSelector((state) => state.letter.sheet);
 	const aspectRatio = useSelector((state) => state.letter.sheet.aspectRatio);
 	const objects = useSelector((state) => state.letter.objects);
 	const draftLetters = useSelector((state) => state.page.drafts.letters);
 
 	const [selectedId, setSelectedId] = useState(null);
+	const [objectIdsList, setObjectIdsList] = useState([]);
+
+	const updatedObjectIdsList = Object.keys(letter.objects).sort();
+
+	useEffect(() => {
+		if (!isEqual(objectIdsList, updatedObjectIdsList)) {
+			const newObjectId = updatedObjectIdsList.filter(
+				(id) => !objectIdsList.includes(id)
+			)[0];
+
+			if (newObjectId) {
+				setSelectedId(newObjectId);
+			}
+			setObjectIdsList(updatedObjectIdsList);
+		}
+	}, [updatedObjectIdsList, objectIdsList]);
 
 	useEffect(() => {
 		if (id) {
