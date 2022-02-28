@@ -50,6 +50,10 @@
 	overflow: hidden;
 }
 
+.menuPopup main {
+	overflow: hidden;
+}
+
 .menuPopup header,
 .menuPopup footer {
 	height: 50px;

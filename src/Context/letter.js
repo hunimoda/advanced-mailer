@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const INIT_LETTER = {
+export const INIT_LETTER = {
 	backgroundImage: null,
 	sheet: {
 		size: null,
