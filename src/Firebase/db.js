@@ -161,3 +161,25 @@ export const getSheetDesigns = async () => {
 
 	return null;
 };
+
+export const getGifDesigns = async () => {
+	const docRef = doc(db, "design/gifs");
+	const docSnap = await getDoc(docRef);
+
+	if (docSnap.exists()) {
+		return docSnap.data().downloadUrls;
+	}
+
+	return null;
+};
+
+export const getStickerDesigns = async () => {
+	const docRef = doc(db, "design/stickers");
+	const docSnap = await getDoc(docRef);
+
+	if (docSnap.exists()) {
+		return docSnap.data().downloadUrls;
+	}
+
+	return null;
+};

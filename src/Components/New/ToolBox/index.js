@@ -10,6 +10,7 @@ import SheetBgList from "./SheetBgList";
 import SheetAspectRatio from "./SheetAspectRatio";
 import TextInput from "../TextInput";
 import classes from "./index.module.css";
+import StickersList from "./StickersList";
 
 const ToolBox = () => {
 	const dispatch = useDispatch();
@@ -44,9 +45,6 @@ const ToolBox = () => {
 
 	const onAddTextClick = () => setShowTextInput(true);
 
-	const onAddImageClick = () =>
-		dispatch(addImageObjectBySrc("https://place-hold.it/300x500"));
-
 	const onAddGalleryImageChange = (event) =>
 		dispatchImageAction(event, addImageObjectBySrc);
 
@@ -74,6 +72,11 @@ const ToolBox = () => {
 			} else {
 				alert("편지지의 비율이 배경 사진에 맞추어져 있습니다.");
 			}
+		} else if (type === "gifs-and-stickers") {
+			setMenuPopup({
+				title: "스티커",
+				jsx: <StickersList onSelect={onMenuPopupClose} />,
+			});
 		}
 	};
 
@@ -127,7 +130,11 @@ const ToolBox = () => {
 					<button className={classes.button} onClick={onAddTextClick}>
 						<span className={classes.addTextIcon}>T</span>
 					</button>
-					<button className={classes.button} onClick={onAddImageClick}>
+					<button
+						className={classes.button}
+						onClick={onShowMenuPopup}
+						data-type="gifs-and-stickers"
+					>
 						<i className="fas fa-icons" />
 					</button>
 					<label className={classes.button} htmlFor="addGalleryImage">

@@ -37,7 +37,7 @@ const TextInput = (props) => {
 					취소
 				</button>
 				<button onClick={onConfirm} className={classes.confirmBtn}>
-					입력
+					{props.defaultValue ? "수정" : "입력"}
 				</button>
 			</div>
 			<div className={classes.textareaContainer}>

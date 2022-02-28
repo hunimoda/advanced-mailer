@@ -1,0 +1,57 @@
+.imageType {
+	width: fit-content;
+	margin: 0 auto var(--main-padding);
+}
+
+.imageType button {
+	font-size: 18px;
+	padding: 10px 20px;
+	border: 1px solid #2294ff;
+	transition: all 0.25s ease-in-out 0s;
+}
+
+.imageType i {
+	transform: scale(1.5);
+}
+
+.imageType button:first-child {
+	border-radius: 15px 0 0 15px;
+	color: #2294ff;
+	background: white;
+}
+
+.imageType button:last-child {
+	border-radius: 0 15px 15px 0;
+	background: #2294ff;
+	color: white;
+}
+
+.gifs.imageType button:first-child {
+	background: #2294ff;
+	color: white;
+}
+
+.gifs.imageType button:last-child {
+	background: white;
+	color: #2294ff;
+}
+
+.stickersList {
+	display: flex;
+	flex-wrap: wrap;
+	max-height: 40vh;
+	overflow-y: scroll;
+}
+
+.stickersList li {
+	width: calc(100% / 3);
+	aspect-ratio: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.stickersList li img {
+	max-width: 90%;
+	max-height: 90%;
+}
