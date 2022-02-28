@@ -59,6 +59,10 @@ const TopHeader = () => {
 	};
 
 	const onDoneWritingLetter = async (action) => {
+		if (!shouldBlockLeave) {
+			alert("입력된 내용이 없습니다");
+			return;
+		}
 		setShouldBlockLeave(false);
 
 		if (id) {

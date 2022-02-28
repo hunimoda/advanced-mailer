@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import InnerObject from "../../Components/Letter/InnerObject";
 import Sheet from "../../Components/Sheet";
 import { getProfileByUid } from "../../Helper/profile";
+import Img from "../Img";
 import classes from "./index.module.css";
 
 const getSummaryFromLetterObjects = (objects) => {
@@ -83,7 +84,11 @@ const LetterPreview = ({ letterDoc: { metaData, letter }, onClick }) => {
 			<div className={classes.itemRow}>
 				{profile && (
 					<div className={classes.sender}>
-						<img src={profile.image} alt="profile" />
+						<Img
+							src={profile.image}
+							alt="profile"
+							loaderClassName={classes.loader}
+						/>
 						<h4>{profile.name}</h4>
 					</div>
 				)}

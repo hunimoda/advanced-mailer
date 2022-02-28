@@ -6,6 +6,7 @@ import {
 	setSheetBgImageResize,
 } from "../../../../Context/letter";
 import classes from "./index.module.css";
+import Img from "../../../../UI/Img";
 
 const SheetBgList = ({ onSelect }) => {
 	const dispatch = useDispatch();
@@ -69,7 +70,7 @@ const SheetBgList = ({ onSelect }) => {
 			</li>
 			{imageUrls.map((imageUrl) => (
 				<li key={imageUrl}>
-					<img
+					<Img
 						src={imageUrl}
 						alt=""
 						onClick={(event) => setSheetBgImage(event.target.src)}

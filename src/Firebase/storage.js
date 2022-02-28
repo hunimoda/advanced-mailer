@@ -23,7 +23,7 @@ export const uploadImageByDataUrl = async (imageDataUrl, letterId) => {
 };
 
 export const uploadProfileImageByDataUrl = async (imageDataUrl) => {
-	const storageRef = ref(storage, `${getMyUid()}/profile`);
+	const storageRef = ref(storage, `users/${getMyUid()}/profile`);
 
 	const uploadResult = await uploadString(storageRef, imageDataUrl, "data_url");
 	const downloadUrl = await getDownloadURL(uploadResult.ref);

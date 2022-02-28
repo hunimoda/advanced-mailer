@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { getMyUid } from "../../Firebase/auth";
 import { getMyProfile } from "../../Helper/profile";
+import Img from "../../UI/Img";
 import MainLogo from "../MainLogo";
 import classes from "./index.module.css";
 
@@ -34,10 +35,11 @@ const MainHeader = ({ onSideBarOpen, onProfileOpen }) => {
 			</div>
 			<div className={classes.column}>
 				{myProfile?.image && (
-					<img
+					<Img
 						src={myProfile.image}
 						alt="profile"
 						className={imageClassName}
+						loaderClassName={classes.loader}
 						onClick={onProfileImageClick}
 					/>
 				)}

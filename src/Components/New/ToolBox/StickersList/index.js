@@ -7,6 +7,7 @@ import {
 	setSheetBgImageResize,
 } from "../../../../Context/letter";
 import classes from "./index.module.css";
+import Img from "../../../../UI/Img";
 
 const StickersList = ({ onSelect }) => {
 	const dispatch = useDispatch();
@@ -41,7 +42,7 @@ const StickersList = ({ onSelect }) => {
 			<ul className={classes.stickersList}>
 				{(showGifs ? gifUrls : stickerUrls).map((url) => (
 					<li key={url}>
-						<img src={url} alt="" onClick={onAddImageClick} />
+						<Img src={url} alt="" onClick={onAddImageClick} />
 					</li>
 				))}
 			</ul>
