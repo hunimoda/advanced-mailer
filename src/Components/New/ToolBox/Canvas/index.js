@@ -3,16 +3,22 @@ import { createPortal } from "react-dom";
 import { useSelector } from "react-redux";
 import classes from "./index.module.css";
 
-const SCALE_FACTOR = 1;
+const SCALE_FACTOR = 3;
+const FILTER_LENGTH = 10;
+
+const MIN_BRUSH_WIDTH = 2;
+const THRESHOLD_PRESSURE = 0.4;
+const BRUSH_WIDTH_GRAD = 5;
+
 let context = null;
 let coords = [];
+let pressureRecords = [];
 
 const Canvas = () => {
 	const canvasRef = useRef();
 
 	const { width, height } = useSelector((state) => state.letter.sheet.size);
 	const [pointerType, setPointerType] = useState(null);
-	const [pressure, setPressure] = useState(null);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -21,18 +27,18 @@ const Canvas = () => {
 		canvas.height = height * SCALE_FACTOR;
 
 		context = canvas.getContext("2d");
-		context.strokeStyle = "red";
+		context.strokeStyle = "black";
+		context.shadowColor = "black";
 		context.lineCap = "round";
 		context.lineJoin = "round";
-		// context.lineWidth = 2.5;
 	}, [width, height]);
 
 	const getTouchPositionFromEvent = (event) => {
 		const canvas = event.currentTarget.getBoundingClientRect();
 
 		return {
-			x: event.touches[0].clientX - canvas.x,
-			y: event.touches[0].clientY - canvas.y,
+			x: SCALE_FACTOR * (event.touches[0].clientX - canvas.x),
+			y: SCALE_FACTOR * (event.touches[0].clientY - canvas.y),
 		};
 	};
 
@@ -43,13 +49,57 @@ const Canvas = () => {
 		};
 	};
 
+	const getLineWidth = () => {
+		const weighedSum = pressureRecords.reduce(
+			(prevValue, currValue, currIndex) =>
+				prevValue + (currIndex + 1) * currValue,
+			0
+		);
+		const weighedAvgPressure =
+			(2 * weighedSum) /
+				pressureRecords.length /
+				(pressureRecords.length + 1) || 0;
+
+		return (
+			SCALE_FACTOR *
+			Math.max(
+				MIN_BRUSH_WIDTH,
+				BRUSH_WIDTH_GRAD * (weighedAvgPressure - THRESHOLD_PRESSURE) +
+					MIN_BRUSH_WIDTH
+			)
+		);
+	};
+
+	const drawCurve = (mode) => {
+		context.beginPath();
+		context.moveTo(coords[0].x, coords[0].y);
+
+		if (mode === "straight") {
+			context.lineTo(coords[1].x, coords[1].y);
+		} else {
+			context.quadraticCurveTo(
+				coords[1].x,
+				coords[1].y,
+				coords[2].x,
+				coords[2].y
+			);
+		}
+		context.lineWidth = getLineWidth();
+		context.shadowBlur = context.lineWidth * 0.2;
+		context.stroke();
+	};
+
 	const onPointerDown = (event) => {
 		event.preventDefault();
 		setPointerType(event.pointerType);
 	};
 
 	const onPointerMove = (event) => {
-		setPressure(event.pressure);
+		pressureRecords.push(event.pressure);
+
+		if (pressureRecords.length > FILTER_LENGTH) {
+			pressureRecords.shift();
+		}
 	};
 
 	const onTouchStart = (event) => {
@@ -58,7 +108,7 @@ const Canvas = () => {
 		if (pointerType !== "pen") {
 			return;
 		}
-		// context.beginPath();
+
 		coords.push(getTouchPositionFromEvent(event));
 	};
 
@@ -75,21 +125,7 @@ const Canvas = () => {
 		coords.push(midCoord, newCoord);
 		coords = coords.slice(-4);
 
-		context.beginPath();
-		context.moveTo(SCALE_FACTOR * coords[0].x, SCALE_FACTOR * coords[0].y);
-
-		if (coords.length < 4) {
-			context.lineTo(SCALE_FACTOR * coords[1].x, SCALE_FACTOR * coords[1].y);
-		} else {
-			context.quadraticCurveTo(
-				SCALE_FACTOR * coords[1].x,
-				SCALE_FACTOR * coords[1].y,
-				SCALE_FACTOR * coords[2].x,
-				SCALE_FACTOR * coords[2].y
-			);
-		}
-		context.lineWidth = SCALE_FACTOR * Math.max(1, Math.min(12 * pressure, 3));
-		context.stroke();
+		drawCurve(coords.length < 4 ? "straight" : "curve");
 	};
 
 	const onTouchEnd = (event) => {
@@ -101,31 +137,15 @@ const Canvas = () => {
 
 		coords = coords.slice(-2);
 		if (coords.length === 2) {
-			context.beginPath();
-			context.moveTo(SCALE_FACTOR * coords[0].x, SCALE_FACTOR * coords[0].y);
-			context.lineTo(SCALE_FACTOR * coords[1].x, SCALE_FACTOR * coords[1].y);
-			context.lineWidth =
-				SCALE_FACTOR * Math.max(1, Math.min(12 * pressure, 3));
-			context.stroke();
+			drawCurve("straight");
 		}
+
 		coords = [];
+		pressureRecords = [];
 	};
 
 	return createPortal(
 		<>
-			<div
-				style={{
-					width: 100,
-					height: 100,
-					background: "red",
-					position: "fixed",
-					zIndex: 5,
-					top: 100,
-					left: 100,
-				}}
-			>
-				{pressure}
-			</div>
 			<div className={classes.backdrop} />
 			<canvas
 				ref={canvasRef}
