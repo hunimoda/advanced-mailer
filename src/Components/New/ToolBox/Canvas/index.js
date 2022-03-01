@@ -4,12 +4,14 @@ import { useSelector } from "react-redux";
 import classes from "./index.module.css";
 
 let context = null;
+let prevCoord = null;
 
 const Canvas = () => {
 	const canvasRef = useRef();
 
 	const { width, height } = useSelector((state) => state.letter.sheet.size);
 	const [pointerType, setPointerType] = useState(null);
+	const [pressure, setPressure] = useState(null);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -19,17 +21,32 @@ const Canvas = () => {
 
 		context = canvas.getContext("2d");
 		context.strokeStyle = "red";
-		context.lineWidth = 2.5;
+		context.lineCap = "round";
+		// context.lineWidth = 2.5;
 	}, [width, height]);
+
+	const getTouchPositionFromEvent = (event) => {
+		const canvas = event.currentTarget.getBoundingClientRect();
+
+		return {
+			x: event.touches[0].clientX - canvas.x,
+			y: event.touches[0].clientY - canvas.y,
+		};
+	};
 
 	const onPointerDown = (event) => {
 		event.preventDefault();
 		setPointerType(event.pointerType);
 	};
 
+	const onPointerMove = (event) => {
+		setPressure(event.pressure);
+	};
+
 	const onTouchStart = (event) => {
 		event.preventDefault();
-		context.beginPath();
+		// context.beginPath();
+		prevCoord = getTouchPositionFromEvent(event);
 	};
 
 	const onTouchMove = (event) => {
@@ -39,14 +56,15 @@ const Canvas = () => {
 			return;
 		}
 
-		const canvas = event.currentTarget.getBoundingClientRect();
-		const { x, y } = {
-			x: event.touches[0].clientX - canvas.x,
-			y: event.touches[0].clientY - canvas.y,
-		};
+		const currCoord = getTouchPositionFromEvent(event);
 
-		context.lineTo(x, y);
+		context.beginPath();
+		context.moveTo(prevCoord.x, prevCoord.y);
+		context.lineTo(currCoord.x, currCoord.y);
+		context.lineWidth = Math.min(12 * pressure, 3);
 		context.stroke();
+
+		prevCoord = currCoord;
 	};
 
 	const onTouchEnd = (event) => {
@@ -55,21 +73,19 @@ const Canvas = () => {
 
 	return createPortal(
 		<>
-			{pointerType && (
-				<div
-					style={{
-						width: 100,
-						height: 100,
-						background: "red",
-						position: "fixed",
-						zIndex: 5,
-						top: 100,
-						left: 100,
-					}}
-				>
-					{pointerType}
-				</div>
-			)}
+			<div
+				style={{
+					width: 100,
+					height: 100,
+					background: "red",
+					position: "fixed",
+					zIndex: 5,
+					top: 100,
+					left: 100,
+				}}
+			>
+				{pressure}
+			</div>
 			<div className={classes.backdrop} />
 			<canvas
 				ref={canvasRef}
@@ -79,6 +95,7 @@ const Canvas = () => {
 				onTouchMove={onTouchMove}
 				onTouchEnd={onTouchEnd}
 				onPointerDown={onPointerDown}
+				onPointerMove={onPointerMove}
 			></canvas>
 		</>,
 		document.getElementById("canvas-root")
