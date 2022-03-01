@@ -9,7 +9,7 @@ const Canvas = () => {
 	const canvasRef = useRef();
 
 	const { width, height } = useSelector((state) => state.letter.sheet.size);
-	const [show, setShow] = useState(false);
+	const [pointerType, setPointerType] = useState(null);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -22,15 +22,22 @@ const Canvas = () => {
 		context.lineWidth = 2.5;
 	}, [width, height]);
 
+	const onPointerDown = (event) => {
+		event.preventDefault();
+		setPointerType(event.pointerType);
+	};
+
 	const onTouchStart = (event) => {
 		event.preventDefault();
-
-		setShow(true);
 		context.beginPath();
 	};
 
 	const onTouchMove = (event) => {
 		event.preventDefault();
+
+		if (pointerType !== "pen") {
+			return;
+		}
 
 		const canvas = event.currentTarget.getBoundingClientRect();
 		const { x, y } = {
@@ -44,13 +51,11 @@ const Canvas = () => {
 
 	const onTouchEnd = (event) => {
 		event.preventDefault();
-
-		setShow(false);
 	};
 
 	return createPortal(
 		<>
-			{show && (
+			{pointerType && (
 				<div
 					style={{
 						width: 100,
@@ -61,7 +66,9 @@ const Canvas = () => {
 						top: 100,
 						left: 100,
 					}}
-				/>
+				>
+					{pointerType}
+				</div>
 			)}
 			<div className={classes.backdrop} />
 			<canvas
@@ -71,6 +78,7 @@ const Canvas = () => {
 				onTouchStart={onTouchStart}
 				onTouchMove={onTouchMove}
 				onTouchEnd={onTouchEnd}
+				onPointerDown={onPointerDown}
 			></canvas>
 		</>,
 		document.getElementById("canvas-root")
