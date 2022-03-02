@@ -38,8 +38,7 @@ const Modifier = ({
 					style={{
 						transform: `scale(${1 / scale}) translate(0, -100%)`,
 					}}
-					onClick={onEdit}
-					onTouchMove={(event) => event.stopPropagation()}
+					onTouchStart={onEdit}
 				>
 					<i className="fas fa-edit" />
 				</button>

@@ -291,7 +291,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 											<p>위</p>
 										</div>
 									),
-									value: "start",
+									value: "flex-start",
 								},
 								{
 									jsx: (
@@ -313,7 +313,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 											<p>아래</p>
 										</div>
 									),
-									value: "end",
+									value: "flex-end",
 								},
 							]}
 							initValue={previewStyle.justifyContent}
@@ -393,8 +393,8 @@ const ObjectSettings = ({ id, onClose, style }) => {
 				</div>
 			</ul>
 			<footer className={classes.controlFooter}>
-				<button onClick={onClose}>취소</button>
-				<button onClick={onApplySettingsClick}>적용</button>
+				<button onTouchStart={onClose}>취소</button>
+				<button onTouchStart={onApplySettingsClick}>적용</button>
 			</footer>
 		</Modal>
 	);

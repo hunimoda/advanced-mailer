@@ -96,7 +96,7 @@ const Canvas = ({ size }) => {
 	};
 
 	const onPointerDown = (event) => {
-		event.preventDefault();
+		// event.preventDefault();
 		setPointerType(event.pointerType);
 	};
 
@@ -109,7 +109,7 @@ const Canvas = ({ size }) => {
 	};
 
 	const onTouchStart = (event) => {
-		event.preventDefault();
+		// event.preventDefault();
 
 		if (pointerType !== "pen") {
 			return;
@@ -119,7 +119,7 @@ const Canvas = ({ size }) => {
 	};
 
 	const onTouchMove = (event) => {
-		event.preventDefault();
+		// event.preventDefault();
 
 		if (pointerType !== "pen") {
 			return;
@@ -135,7 +135,7 @@ const Canvas = ({ size }) => {
 	};
 
 	const onTouchEnd = (event) => {
-		event.preventDefault();
+		// event.preventDefault();
 
 		if (pointerType !== "pen") {
 			return;

@@ -216,22 +216,20 @@ const New = () => {
 	};
 
 	const onTouchStart = (event) => {
-		event.preventDefault();
-
 		if (pointerType !== "pen") {
 			return;
 		}
 
+		event.preventDefault();
 		coords.push(getTouchPositionFromEvent(event));
 	};
 
 	const onTouchMove = (event) => {
-		event.preventDefault();
-
 		if (pointerType !== "pen") {
 			return;
 		}
 
+		event.preventDefault();
 		const newCoord = getTouchPositionFromEvent(event);
 		const midCoord = getMiddlePosition(coords[coords.length - 1], newCoord);
 
@@ -242,13 +240,13 @@ const New = () => {
 	};
 
 	const onTouchEnd = (event) => {
-		event.preventDefault();
-
 		if (pointerType !== "pen") {
 			return;
 		}
 
+		event.preventDefault();
 		coords = coords.slice(-2);
+
 		if (coords.length === 2) {
 			drawCurve("straight");
 		}
