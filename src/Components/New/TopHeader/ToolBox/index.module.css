@@ -1,0 +1,30 @@
+.toolbox {
+	display: flex;
+	width: fit-content;
+	position: absolute;
+	z-index: 1;
+	top: calc(100% + 30px);
+	left: 50%;
+	transform: translateX(calc(-50% - var(--header-height) / 2));
+	background: white;
+	padding: 30px;
+	border-radius: 10px;
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.toolbox--eraser {
+	transform: translateX(calc(-50% + var(--header-height) / 2));
+}
+
+.nose {
+	width: 20px;
+	height: 20px;
+	background: white;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	box-shadow: rgba(0, 0, 0, 0.1) 5px -5px 10px;
+
+	transform-origin: center;
+	transform: translate(-50%, -50%) rotate(-45deg);
+}

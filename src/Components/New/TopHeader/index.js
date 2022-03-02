@@ -9,7 +9,12 @@ import {
 } from "../../../Firebase/db";
 import { generateLetterId, processLetterBeforeSave } from "./helper";
 import { isEqual } from "lodash";
+import Container from "./Container";
+import SizeToolbox from "./SizeToolbox";
+import StyleToolbox from "./StyleToolbox";
+import ColorToolbox from "./ColorToolbox";
 import classes from "./index.module.css";
+import Toolbox from "./ToolBox";
 
 const TopHeader = () => {
 	const history = useHistory();
@@ -131,182 +136,18 @@ const TopHeader = () => {
 					<button onClick={() => onDoneWritingLetter("sent")}>완료</button>
 				</div>
 				{showPenToolbox && (
-					<div
-						className={classes.toolbox}
-						onClick={(event) => event.stopPropagation()}
-					>
-						<div className={classes.nose} />
+					<Toolbox>
 						<div>
-							<div>
-								<div className={classes.row}>
-									<div className={classes.container}>
-										<div className={classes.border} />
-									</div>
-									<div className={classes.container}>
-										<div className={classes.border} />
-									</div>
-									<div className={classes.container}>
-										<div className={classes.border} />
-									</div>
-									<div className={classes.container}>
-										<div className={classes.border} />
-									</div>
-								</div>
-								<div className={classes.row}>
-									<div className={classes.container}>
-										<div className={classes.border} />
-									</div>
-									<div className={classes.container}>
-										<div className={classes.border} />
-									</div>
-									<div className={classes.container}>
-										<div className={classes.border} />
-									</div>
-									<div className={classes.container}>
-										<div className={classes.border} />
-									</div>
-								</div>
-								<div className={classes.row}>
-									<div className={classes.container}>
-										<div className={classes.border} />
-									</div>
-									<div className={classes.container}>
-										<div className={classes.border} />
-									</div>
-									<div className={classes.container}>
-										<div className={classes.border} />
-									</div>
-									<div className={classes.container}>
-										<div className={classes.border} />
-									</div>
-								</div>
-							</div>
-							<div>
-								<div className={classes.row}>
-									<div
-										className={`${classes.container} ${classes["container--long"]}`}
-									>
-										<div className={classes.border} />
-									</div>
-									<div
-										className={`${classes.container} ${classes["container--long"]}`}
-									>
-										<div className={classes.border} />
-									</div>
-								</div>
-							</div>
+							<SizeToolbox />
+							<StyleToolbox />
 						</div>
-						<div className={classes.colors}>
-							<div className={classes.row}>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-							</div>
-							<div className={classes.row}>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-							</div>
-							<div className={classes.row}>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-							</div>
-							<div className={classes.row}>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-							</div>
-						</div>
-					</div>
+						<ColorToolbox />
+					</Toolbox>
 				)}
 				{showEraserToolbox && (
-					<div
-						className={`${classes.toolbox} ${classes["toolbox--eraser"]}`}
-						onClick={(event) => event.stopPropagation()}
-					>
-						<div className={classes.nose} />
-						<div>
-							<div className={classes.row}>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-							</div>
-							<div className={classes.row}>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-							</div>
-							<div className={classes.row}>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-								<div className={classes.container}>
-									<div className={classes.border} />
-								</div>
-							</div>
-						</div>
-					</div>
+					<Toolbox type="eraser">
+						<SizeToolbox />
+					</Toolbox>
 				)}
 			</header>
 		</>
