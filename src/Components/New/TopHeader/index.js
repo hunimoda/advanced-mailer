@@ -20,6 +20,8 @@ const TopHeader = () => {
 
 	const [shouldBlockLeave, setShouldBlockLeave] = useState(false);
 	const [leavePage, setLeavePage] = useState(false);
+	const [showPenToolbox, setShowPenToolbox] = useState(false);
+	const [showEraserToolbox, setShowEraserToolbox] = useState(false);
 
 	useEffect(() => {
 		const letterCopy = JSON.parse(JSON.stringify(letter));
@@ -45,6 +47,13 @@ const TopHeader = () => {
 			dispatch(letterActions.resetLetterState());
 		}
 	}, [dispatch, history, leavePage, shouldBlockLeave]);
+
+	useEffect(() => {
+		window.addEventListener("click", () => {
+			setShowPenToolbox(false);
+			setShowEraserToolbox(false);
+		});
+	}, []);
 
 	const onCancel = () => {
 		if (shouldBlockLeave) {
@@ -84,6 +93,24 @@ const TopHeader = () => {
 		dispatch(letterActions.resetLetterState());
 	};
 
+	const onShowPenToolbox = (event) => {
+		event.stopPropagation();
+		setShowPenToolbox(true);
+
+		if (showEraserToolbox) {
+			setShowEraserToolbox(false);
+		}
+	};
+
+	const onShowEraserToolbox = (event) => {
+		event.stopPropagation();
+		setShowEraserToolbox(true);
+
+		if (showPenToolbox) {
+			setShowPenToolbox(false);
+		}
+	};
+
 	return (
 		<>
 			<Prompt when={shouldBlockLeave} message="Hello World Prompt" />
@@ -91,10 +118,196 @@ const TopHeader = () => {
 				<button onClick={onCancel}>
 					<i className="fas fa-times" />
 				</button>
+				<div className={classes.drawingTools}>
+					<button onClick={onShowPenToolbox}>
+						<i className="fas fa-pencil-alt" />
+					</button>
+					<button onClick={onShowEraserToolbox}>
+						<i className="fas fa-eraser" />
+					</button>
+				</div>
 				<div className={classes.controls}>
 					<button onClick={() => onDoneWritingLetter("drafts")}>저장</button>
 					<button onClick={() => onDoneWritingLetter("sent")}>완료</button>
 				</div>
+				{showPenToolbox && (
+					<div
+						className={classes.toolbox}
+						onClick={(event) => event.stopPropagation()}
+					>
+						<div className={classes.nose} />
+						<div>
+							<div>
+								<div className={classes.row}>
+									<div className={classes.container}>
+										<div className={classes.border} />
+									</div>
+									<div className={classes.container}>
+										<div className={classes.border} />
+									</div>
+									<div className={classes.container}>
+										<div className={classes.border} />
+									</div>
+									<div className={classes.container}>
+										<div className={classes.border} />
+									</div>
+								</div>
+								<div className={classes.row}>
+									<div className={classes.container}>
+										<div className={classes.border} />
+									</div>
+									<div className={classes.container}>
+										<div className={classes.border} />
+									</div>
+									<div className={classes.container}>
+										<div className={classes.border} />
+									</div>
+									<div className={classes.container}>
+										<div className={classes.border} />
+									</div>
+								</div>
+								<div className={classes.row}>
+									<div className={classes.container}>
+										<div className={classes.border} />
+									</div>
+									<div className={classes.container}>
+										<div className={classes.border} />
+									</div>
+									<div className={classes.container}>
+										<div className={classes.border} />
+									</div>
+									<div className={classes.container}>
+										<div className={classes.border} />
+									</div>
+								</div>
+							</div>
+							<div>
+								<div className={classes.row}>
+									<div
+										className={`${classes.container} ${classes["container--long"]}`}
+									>
+										<div className={classes.border} />
+									</div>
+									<div
+										className={`${classes.container} ${classes["container--long"]}`}
+									>
+										<div className={classes.border} />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div className={classes.colors}>
+							<div className={classes.row}>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+							</div>
+							<div className={classes.row}>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+							</div>
+							<div className={classes.row}>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+							</div>
+							<div className={classes.row}>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+							</div>
+						</div>
+					</div>
+				)}
+				{showEraserToolbox && (
+					<div
+						className={`${classes.toolbox} ${classes["toolbox--eraser"]}`}
+						onClick={(event) => event.stopPropagation()}
+					>
+						<div className={classes.nose} />
+						<div>
+							<div className={classes.row}>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+							</div>
+							<div className={classes.row}>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+							</div>
+							<div className={classes.row}>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+								<div className={classes.container}>
+									<div className={classes.border} />
+								</div>
+							</div>
+						</div>
+					</div>
+				)}
 			</header>
 		</>
 	);

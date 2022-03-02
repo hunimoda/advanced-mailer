@@ -9,8 +9,8 @@ import {
 import SheetBgList from "./SheetBgList";
 import SheetAspectRatio from "./SheetAspectRatio";
 import TextInput from "../TextInput";
-import classes from "./index.module.css";
 import StickersList from "./StickersList";
+import classes from "./index.module.css";
 
 const ToolBox = ({ onStartCanvas }) => {
 	const dispatch = useDispatch();
@@ -146,12 +146,6 @@ const ToolBox = ({ onStartCanvas }) => {
 						accept="image/*"
 						onChange={onAddGalleryImageChange}
 					/>
-					<button
-						className={classes.button}
-						onClick={() => onStartCanvas(true)}
-					>
-						<i className="fas fa-pen-nib" />
-					</button>
 				</div>
 			</footer>
 		</>

@@ -183,6 +183,7 @@ const InnerObject = ({
 		}
 
 		event.stopPropagation();
+		clearTimeout(timer);
 		timer = setTimeout(onLongTouch, TOUCH_DURATION);
 
 		if (!selected) {
@@ -199,6 +200,10 @@ const InnerObject = ({
 		if (selected && pointerType === "touch") {
 			clearTimeout(timer);
 			clickedAfterSelected = false;
+
+			if (event.touches.length >= 2) {
+				return;
+			}
 
 			const { clientX: x, clientY: y } = event.touches[0];
 			const action = event.currentTarget.dataset.action;
