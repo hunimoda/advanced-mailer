@@ -1,9 +1,7 @@
 import { useRef, useEffect, useState } from "react";
-import { createPortal } from "react-dom";
-import { useSelector } from "react-redux";
 import classes from "./index.module.css";
 
-const SCALE_FACTOR = 3;
+const SCALE_FACTOR = 2;
 const FILTER_LENGTH = 10;
 
 const MIN_BRUSH_WIDTH = 2;
@@ -14,11 +12,19 @@ let context = null;
 let coords = [];
 let pressureRecords = [];
 
-const Canvas = () => {
+const Canvas = ({ size }) => {
 	const canvasRef = useRef();
 
-	const { width, height } = useSelector((state) => state.letter.sheet.size);
+	const { width, height } = size;
 	const [pointerType, setPointerType] = useState(null);
+
+	useEffect(() => {
+		window.addEventListener("pointerup", (event) => {
+			if (event.pointerType === "touch") {
+				setPointerType(null);
+			}
+		});
+	}, []);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -142,23 +148,25 @@ const Canvas = () => {
 
 		coords = [];
 		pressureRecords = [];
+
+		setPointerType(null);
 	};
 
-	return createPortal(
+	return (
 		<>
-			<div className={classes.backdrop} />
+			<h1 style={{ position: "fixed", zIndex: 1, top: 100, left: 100 }}>
+				{pointerType}
+			</h1>
 			<canvas
 				ref={canvasRef}
 				className={classes.canvas}
-				style={{ width, height }}
 				onTouchStart={onTouchStart}
 				onTouchMove={onTouchMove}
 				onTouchEnd={onTouchEnd}
 				onPointerDown={onPointerDown}
 				onPointerMove={onPointerMove}
 			></canvas>
-		</>,
-		document.getElementById("canvas-root")
+		</>
 	);
 };
 

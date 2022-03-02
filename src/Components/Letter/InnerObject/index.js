@@ -33,6 +33,7 @@ const InnerObject = ({
 	);
 	const [showObjectSettings, setShowObjectSettings] = useState(false);
 	const [showTextInput, setShowTextInput] = useState(false);
+	const [pointerType, setPointerType] = useState(null);
 
 	const MIN_SIDE_LENGTH = Math.max(
 		(object.style.padding + object.style.border.width) * 2 * sheetSize.height,
@@ -166,8 +167,10 @@ const InnerObject = ({
 		setShowObjectSettings(true);
 	};
 
+	const onObjectPointerDown = (event) => setPointerType(event.pointerType);
+
 	const onObjectTouchStart = (event) => {
-		if (readOnly) {
+		if (readOnly || pointerType !== "touch") {
 			return;
 		}
 
@@ -217,6 +220,8 @@ const InnerObject = ({
 		clearTimeout(timer);
 		clickedAfterSelected = null;
 		prevCoord = null;
+
+		setPointerType(null);
 	};
 
 	const onSettingsClose = () => setShowObjectSettings(false);
@@ -270,6 +275,7 @@ const InnerObject = ({
 				onTouchStart={onObjectTouchStart}
 				onTouchMove={onTouchMove}
 				onTouchEnd={onObjectTouchEnd}
+				onPointerDown={onObjectPointerDown}
 			>
 				{selected && (
 					<Modifier

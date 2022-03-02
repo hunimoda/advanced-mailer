@@ -9,6 +9,7 @@ import { getLetterDocByParams } from "../../Firebase/db";
 import { getMyUid } from "../../Firebase/auth";
 import { isEqual } from "lodash";
 import classes from "./index.module.css";
+import Canvas from "../../Components/New/Canvas";
 
 const New = () => {
 	const mainRef = useRef();
@@ -122,6 +123,7 @@ const New = () => {
 							object={object}
 						/>
 					))}
+					{sheet.size && <Canvas size={sheet.size} />}
 				</Sheet>
 			</main>
 			<ToolBox />
