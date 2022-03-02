@@ -27,8 +27,7 @@ const Modifier = ({
 				style={{
 					transform: `scale(${1 / scale}) translate(-50%, -50%)`,
 				}}
-				onClick={onDelete}
-				onTouchStart={(event) => event.stopPropagation()}
+				onTouchStart={onDelete}
 				onTouchMove={(event) => event.stopPropagation()}
 			>
 				<i className="fas fa-times" />

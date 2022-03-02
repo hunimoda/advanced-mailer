@@ -1,6 +1,15 @@
 import classes from "./index.module.css";
 
-const Sheet = ({ children, sheet, className }) => {
+const Sheet = ({
+	children,
+	sheet,
+	className,
+	onPointerDown,
+	onPointerMove,
+	onTouchStart,
+	onTouchMove,
+	onTouchEnd,
+}) => {
 	if (!sheet.size) {
 		return null;
 	}
@@ -14,6 +23,11 @@ const Sheet = ({ children, sheet, className }) => {
 				backgroundColor: sheet.backgroundColor,
 				backgroundImage: `url("${sheet.backgroundImage}")`,
 			}}
+			onPointerDown={onPointerDown}
+			onPointerMove={onPointerMove}
+			onTouchStart={onTouchStart}
+			onTouchMove={onTouchMove}
+			onTouchEnd={onTouchEnd}
 		>
 			{children}
 		</div>

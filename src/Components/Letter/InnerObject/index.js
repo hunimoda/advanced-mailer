@@ -158,8 +158,10 @@ const InnerObject = ({
 	};
 
 	const deleteObject = () => {
-		dispatch(letterActions.deleteObject(id));
-		onSelectChange(id, false);
+		if (pointerType === "touch") {
+			dispatch(letterActions.deleteObject(id));
+			onSelectChange(id, false);
+		}
 	};
 
 	const onLongTouch = () => {
@@ -167,7 +169,13 @@ const InnerObject = ({
 		setShowObjectSettings(true);
 	};
 
-	const onObjectPointerDown = (event) => setPointerType(event.pointerType);
+	const onObjectPointerDown = (event) => {
+		setPointerType(event.pointerType);
+
+		if (event.pointerType === "touch") {
+			event.stopPropagation();
+		}
+	};
 
 	const onObjectTouchStart = (event) => {
 		if (readOnly || pointerType !== "touch") {
@@ -188,7 +196,7 @@ const InnerObject = ({
 	};
 
 	const onTouchMove = (event) => {
-		if (selected) {
+		if (selected && pointerType === "touch") {
 			clearTimeout(timer);
 			clickedAfterSelected = false;
 
