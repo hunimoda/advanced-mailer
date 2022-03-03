@@ -10,12 +10,13 @@ import { getMyUid } from "../../Firebase/auth";
 import { isEqual } from "lodash";
 import classes from "./index.module.css";
 
-const SCALE_FACTOR = 2;
-const FILTER_LENGTH = 10;
+const CANVAS_SCALE_FACTOR = 2;
+const FILTER_LENGTH = 1;
 
-let minBrushWidth = 2;
-const THRESHOLD_PRESSURE = 0.4;
-const BRUSH_WIDTH_GRAD = 5;
+let brushWidth = 3;
+let isBrushWidthConstant = true;
+const THRESHOLD_PRESSURE = 0.2;
+const BRUSH_SCALE_FACTOR = 5;
 
 let context = null;
 let coords = [];
@@ -140,7 +141,6 @@ const New = () => {
 		if (canvas) {
 			context = canvas.getContext("2d");
 			context.strokeStyle = "black";
-			context.shadowColor = "black";
 			context.lineCap = "round";
 			context.lineJoin = "round";
 		}
@@ -150,8 +150,8 @@ const New = () => {
 		const canvas = event.currentTarget.getBoundingClientRect();
 
 		return {
-			x: SCALE_FACTOR * (event.touches[0].clientX - canvas.x),
-			y: SCALE_FACTOR * (event.touches[0].clientY - canvas.y),
+			x: CANVAS_SCALE_FACTOR * (event.touches[0].clientX - canvas.x),
+			y: CANVAS_SCALE_FACTOR * (event.touches[0].clientY - canvas.y),
 		};
 	};
 
@@ -173,12 +173,18 @@ const New = () => {
 				pressureRecords.length /
 				(pressureRecords.length + 1) || 0;
 
+		if (isBrushWidthConstant) {
+			return CANVAS_SCALE_FACTOR * brushWidth;
+		}
+
 		return (
-			SCALE_FACTOR *
+			CANVAS_SCALE_FACTOR *
+			brushWidth *
 			Math.max(
-				minBrushWidth,
-				BRUSH_WIDTH_GRAD * (weighedAvgPressure - THRESHOLD_PRESSURE) +
-					minBrushWidth
+				((BRUSH_SCALE_FACTOR - 1) / (1 - THRESHOLD_PRESSURE)) *
+					(weighedAvgPressure - THRESHOLD_PRESSURE) +
+					1,
+				1
 			)
 		);
 	};
@@ -198,7 +204,6 @@ const New = () => {
 			);
 		}
 		context.lineWidth = getLineWidth();
-		context.shadowBlur = context.lineWidth * 0.2;
 		context.stroke();
 	};
 
@@ -257,9 +262,19 @@ const New = () => {
 		setPointerType(null);
 	};
 
+	const onSelectPen = (pen) => {
+		if (pen.color) {
+			context.strokeStyle = pen.color;
+		} else if (pen.size) {
+			brushWidth = pen.size;
+		} else if (pen.style) {
+			isBrushWidthConstant = pen.style === "constant";
+		}
+	};
+
 	return (
 		<>
-			<TopHeader context={context} minBrushWidth={minBrushWidth} />
+			<TopHeader onSelectPen={onSelectPen} />
 			<main ref={mainRef} className={classes.main}>
 				<Sheet
 					sheet={sheet}
@@ -284,8 +299,8 @@ const New = () => {
 						<canvas
 							ref={canvasRef}
 							className={classes.canvas}
-							width={SCALE_FACTOR * sheet.size.width}
-							height={SCALE_FACTOR * sheet.size.height}
+							width={CANVAS_SCALE_FACTOR * sheet.size.width}
+							height={CANVAS_SCALE_FACTOR * sheet.size.height}
 						></canvas>
 					)}
 				</Sheet>

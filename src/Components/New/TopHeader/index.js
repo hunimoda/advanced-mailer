@@ -18,7 +18,7 @@ import Toolbox from "./ToolBox";
 import PenToolbox from "./PenToolbox";
 import EraserToolbox from "./EraserToolbox";
 
-const TopHeader = ({ context, minBrushWidth }) => {
+const TopHeader = ({ onSelectPen }) => {
 	const history = useHistory();
 	const id = new URLSearchParams(window.location.search).get("id");
 
@@ -137,12 +137,8 @@ const TopHeader = ({ context, minBrushWidth }) => {
 					<button onClick={() => onDoneWritingLetter("drafts")}>저장</button>
 					<button onClick={() => onDoneWritingLetter("sent")}>완료</button>
 				</div>
-				<PenToolbox
-					show={showPenToolbox}
-					context={context}
-					minBrushWidth={minBrushWidth}
-				/>
-				<EraserToolbox show={showEraserToolbox} context={context} />
+				<PenToolbox show={showPenToolbox} onSelectPen={onSelectPen} />
+				<EraserToolbox show={showEraserToolbox} />
 			</header>
 		</>
 	);
