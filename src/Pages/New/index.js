@@ -11,7 +11,6 @@ import { isEqual } from "lodash";
 import classes from "./index.module.css";
 
 const CANVAS_SCALE_FACTOR = 2;
-const FILTER_LENGTH = 1;
 
 let brushWidth = 3;
 let isBrushWidthConstant = true;
@@ -162,17 +161,7 @@ const New = () => {
 		};
 	};
 
-	const getLineWidth = () => {
-		const weighedSum = pressureRecords.reduce(
-			(prevValue, currValue, currIndex) =>
-				prevValue + (currIndex + 1) * currValue,
-			0
-		);
-		const weighedAvgPressure =
-			(2 * weighedSum) /
-				pressureRecords.length /
-				(pressureRecords.length + 1) || 0;
-
+	const getLineWidth = (pressure) => {
 		if (isBrushWidthConstant) {
 			return CANVAS_SCALE_FACTOR * brushWidth;
 		}
@@ -182,45 +171,126 @@ const New = () => {
 			brushWidth *
 			Math.max(
 				((BRUSH_SCALE_FACTOR - 1) / (1 - THRESHOLD_PRESSURE)) *
-					(weighedAvgPressure - THRESHOLD_PRESSURE) +
+					(pressure - THRESHOLD_PRESSURE) +
 					1,
 				1
 			)
 		);
 	};
 
-	const drawCurve = (mode) => {
-		context.beginPath();
-		context.moveTo(coords[0].x, coords[0].y);
+	const getLinearPressureAtT = (start, end, t) => (1 - t) * start + t * end;
 
-		if (mode === "straight") {
-			context.lineTo(coords[1].x, coords[1].y);
-		} else {
-			context.quadraticCurveTo(
-				coords[1].x,
-				coords[1].y,
-				coords[2].x,
-				coords[2].y
+	const getLinearPositionAtT = (start, end, t) => {
+		const x = (1 - t) * start.x + t * end.x;
+		const y = (1 - t) * start.y + t * end.y;
+
+		return { x, y };
+	};
+
+	const drawLine = () => {
+		// coords[0] -> coords[1]
+		for (let i = 0; i < 1000; i++) {
+			const subStartPoint = getLinearPositionAtT(
+				coords[0],
+				coords[1],
+				i / 10000
 			);
+			const subEndPoint = getLinearPositionAtT(
+				coords[0],
+				coords[1],
+				(i + 1) / 1000
+			);
+			const pressure = getLinearPressureAtT(
+				pressureRecords[0],
+				pressureRecords[1],
+				i / 1000
+			);
+
+			context.beginPath();
+
+			context.moveTo(subStartPoint.x, subStartPoint.y);
+			context.lineTo(subEndPoint.x, subEndPoint.y);
+
+			context.lineWidth = getLineWidth(pressure);
+			context.stroke();
 		}
-		context.lineWidth = getLineWidth();
-		context.stroke();
+	};
+
+	const getQuadraticPressureAtT = (start, control, end, t) => {
+		return (
+			Math.pow(1 - t, 2) * start +
+			2 * (1 - t) * t * control +
+			Math.pow(t, 2) * end
+		);
+	};
+
+	const getQuadraticPositionAtT = (start, control, end, t) => {
+		const x =
+			Math.pow(1 - t, 2) * start.x +
+			2 * (1 - t) * t * control.x +
+			Math.pow(t, 2) * end.x;
+		const y =
+			Math.pow(1 - t, 2) * start.y +
+			2 * (1 - t) * t * control.y +
+			Math.pow(t, 2) * end.y;
+
+		return { x, y };
+	};
+
+	const drawCurve = () => {
+		// coords[0] -> (coords[1]) -> coords[2]
+		for (let i = 0; i < 1000; i++) {
+			const subStartPoint = getQuadraticPositionAtT(
+				coords[0],
+				coords[1],
+				coords[2],
+				i / 1000
+			);
+			const subEndPoint = getQuadraticPositionAtT(
+				coords[0],
+				coords[1],
+				coords[2],
+				(i + 1) / 1000
+			);
+			const pressure = getQuadraticPressureAtT(
+				pressureRecords[0],
+				pressureRecords[1],
+				pressureRecords[2],
+				i / 1000
+			);
+
+			context.beginPath();
+
+			context.moveTo(subStartPoint.x, subStartPoint.y);
+			context.lineTo(subEndPoint.x, subEndPoint.y);
+
+			context.lineWidth = getLineWidth(pressure);
+			context.stroke();
+		}
 	};
 
 	const onPointerDown = (event) => {
+		console.log("pointer-down");
 		event.preventDefault();
+
 		setPointerType(event.pointerType);
+		pressureRecords.push(event.pressure);
 	};
 
 	const onPointerMove = (event) => {
-		pressureRecords.push(event.pressure);
+		console.log("pointer-move");
+		event.preventDefault();
 
-		if (pressureRecords.length > FILTER_LENGTH) {
-			pressureRecords.shift();
-		}
+		const newPressure = event.pressure;
+		const midPressure =
+			(pressureRecords[pressureRecords.length - 1] + newPressure) / 2;
+
+		pressureRecords.push(midPressure, newPressure);
+		pressureRecords = pressureRecords.slice(-4);
 	};
 
 	const onTouchStart = (event) => {
+		console.log("touch-start");
 		if (pointerType !== "pen") {
 			return;
 		}
@@ -230,6 +300,7 @@ const New = () => {
 	};
 
 	const onTouchMove = (event) => {
+		console.log("touch-move");
 		if (pointerType !== "pen") {
 			return;
 		}
@@ -241,10 +312,15 @@ const New = () => {
 		coords.push(midCoord, newCoord);
 		coords = coords.slice(-4);
 
-		drawCurve(coords.length < 4 ? "straight" : "curve");
+		if (coords.length < 4) {
+			drawLine();
+		} else {
+			drawCurve();
+		}
 	};
 
 	const onTouchEnd = (event) => {
+		console.log("touch-end");
 		if (pointerType !== "pen") {
 			return;
 		}
@@ -253,7 +329,7 @@ const New = () => {
 		coords = coords.slice(-2);
 
 		if (coords.length === 2) {
-			drawCurve("straight");
+			drawLine();
 		}
 
 		coords = [];
