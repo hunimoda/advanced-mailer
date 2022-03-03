@@ -23,7 +23,7 @@
 	position: absolute;
 	top: 0;
 	left: 50%;
-	box-shadow: rgba(0, 0, 0, 0.1) 5px -5px 10px;
+	box-shadow: rgba(0, 0, 0, 0.1) 5px -5px 5px;
 
 	transform-origin: center;
 	transform: translate(-50%, -50%) rotate(-45deg);
