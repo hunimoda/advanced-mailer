@@ -15,6 +15,8 @@ import StyleToolbox from "./StyleToolbox";
 import ColorToolbox from "./ColorToolbox";
 import classes from "./index.module.css";
 import Toolbox from "./ToolBox";
+import PenToolbox from "./PenToolbox";
+import EraserToolbox from "./EraserToolbox";
 
 const TopHeader = () => {
 	const history = useHistory();
@@ -135,20 +137,8 @@ const TopHeader = () => {
 					<button onClick={() => onDoneWritingLetter("drafts")}>저장</button>
 					<button onClick={() => onDoneWritingLetter("sent")}>완료</button>
 				</div>
-				{showPenToolbox && (
-					<Toolbox>
-						<div>
-							<SizeToolbox />
-							<StyleToolbox />
-						</div>
-						<ColorToolbox />
-					</Toolbox>
-				)}
-				{showEraserToolbox && (
-					<Toolbox type="eraser">
-						<SizeToolbox />
-					</Toolbox>
-				)}
+				<PenToolbox show={showPenToolbox} />
+				<EraserToolbox show={showEraserToolbox} />
 			</header>
 		</>
 	);

@@ -5,11 +5,15 @@ import classes from "./index.module.css";
 
 const BRUSH_STYLES = ["constant", "varying"];
 
-const StyleToolbox = () => {
+const StyleToolbox = ({ onSelect }) => {
 	const [brushStyle, setBrushStyle] = useState(BRUSH_STYLES[0]);
 
-	const onSelectStyle = (event) =>
-		setBrushStyle(event.currentTarget.dataset.label);
+	const onSelectStyle = (event) => {
+		const style = event.currentTarget.dataset.label;
+
+		setBrushStyle(style);
+		onSelect(style);
+	};
 
 	return (
 		<div>
