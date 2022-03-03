@@ -1,10 +1,10 @@
 import Toolbox from "../ToolBox";
 import SizeToolbox from "../SizeToolbox";
 
-const EraserToolbox = ({ show, context }) => {
+const EraserToolbox = ({ show, onSelectEraser }) => {
 	return (
 		<Toolbox type="eraser" show={show}>
-			<SizeToolbox onSelect />
+			<SizeToolbox onSelect={onSelectEraser} />
 		</Toolbox>
 	);
 };

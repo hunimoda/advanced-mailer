@@ -346,11 +346,22 @@ const New = () => {
 		} else if (pen.style) {
 			isBrushWidthConstant = pen.style === "constant";
 		}
+
+		context.globalCompositeOperation = "source-over";
+	};
+
+	const onSelectEraser = (size) => {
+		if (size) {
+			brushWidth = size;
+		}
+
+		context.globalCompositeOperation = "destination-out";
+		context.strokeStyle = "rgba(255, 255, 255, 1)";
 	};
 
 	return (
 		<>
-			<TopHeader onSelectPen={onSelectPen} />
+			<TopHeader onSelectPen={onSelectPen} onSelectEraser={onSelectEraser} />
 			<main ref={mainRef} className={classes.main}>
 				<Sheet
 					sheet={sheet}
