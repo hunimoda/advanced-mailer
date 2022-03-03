@@ -14,6 +14,7 @@
 
 .container--long {
 	width: 90px;
+	background: transparent;
 }
 
 .border {

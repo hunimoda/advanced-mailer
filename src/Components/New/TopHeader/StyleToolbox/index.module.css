@@ -1,0 +1,5 @@
+.brushStyleImage {
+	position: relative;
+	z-index: -1;
+	border-radius: 100px;
+}
