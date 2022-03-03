@@ -13,7 +13,7 @@ import classes from "./index.module.css";
 const SCALE_FACTOR = 2;
 const FILTER_LENGTH = 10;
 
-const MIN_BRUSH_WIDTH = 2;
+let minBrushWidth = 2;
 const THRESHOLD_PRESSURE = 0.4;
 const BRUSH_WIDTH_GRAD = 5;
 
@@ -176,9 +176,9 @@ const New = () => {
 		return (
 			SCALE_FACTOR *
 			Math.max(
-				MIN_BRUSH_WIDTH,
+				minBrushWidth,
 				BRUSH_WIDTH_GRAD * (weighedAvgPressure - THRESHOLD_PRESSURE) +
-					MIN_BRUSH_WIDTH
+					minBrushWidth
 			)
 		);
 	};
@@ -259,7 +259,7 @@ const New = () => {
 
 	return (
 		<>
-			<TopHeader />
+			<TopHeader context={context} minBrushWidth={minBrushWidth} />
 			<main ref={mainRef} className={classes.main}>
 				<Sheet
 					sheet={sheet}

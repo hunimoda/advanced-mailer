@@ -6,7 +6,7 @@ const COL_PER_ROW = 4;
 const BRUSH_SIZES = [1, 1.5, 2, 2.5, 3, 4, 6, 8, 11, 14, 19, 28];
 
 const SizeToolbox = ({ onSelect }) => {
-	const [selectedBrushSize, setSelectedBrushSize] = useState(3);
+	const [selectedBrushSize, setSelectedBrushSize] = useState(BRUSH_SIZES[4]);
 
 	const numOfLines = Math.floor((BRUSH_SIZES.length - 1) / COL_PER_ROW) + 1;
 	const rows = [];

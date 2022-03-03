@@ -3,14 +3,19 @@ import SizeToolbox from "../SizeToolbox";
 import StyleToolbox from "../StyleToolbox";
 import ColorToolbox from "../ColorToolbox";
 
-const PenToolbox = ({ show }) => {
+const PenToolbox = ({ show, context, minBrushWidth }) => {
 	return (
 		<Toolbox show={show}>
 			<div>
 				<SizeToolbox onSelect />
 				<StyleToolbox onSelect />
 			</div>
-			<ColorToolbox />
+			<ColorToolbox
+				onSelect={(color) => {
+					context.strokeStyle = color;
+					context.shadowColor = color;
+				}}
+			/>
 		</Toolbox>
 	);
 };
