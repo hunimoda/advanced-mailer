@@ -14,12 +14,12 @@ const CANVAS_SCALE_FACTOR = 2;
 
 let brushWidth = 3;
 let isBrushWidthConstant = true;
-const THRESHOLD_PRESSURE = 0.2;
-const BRUSH_SCALE_FACTOR = 5;
+const BRUSH_SCALE_FACTOR = 4;
 
 let context = null;
 let coords = [];
 let pressureRecords = [];
+const SMOOTHING_FACTOR = 0.8;
 
 const New = () => {
 	const mainRef = useRef();
@@ -168,13 +168,8 @@ const New = () => {
 
 		return (
 			CANVAS_SCALE_FACTOR *
-			brushWidth *
-			Math.max(
-				((BRUSH_SCALE_FACTOR - 1) / (1 - THRESHOLD_PRESSURE)) *
-					(pressure - THRESHOLD_PRESSURE) +
-					1,
-				1
-			)
+			((BRUSH_SCALE_FACTOR - 1) * brushWidth * Math.pow(pressure, 2) +
+				brushWidth)
 		);
 	};
 
@@ -217,6 +212,11 @@ const New = () => {
 	};
 
 	const getQuadraticPressureAtT = (start, control, end, t) => {
+		// if (0 <= t && t < 0.5) {
+		// 	return getLinearPressureAtT(start, control, 2 * t);
+		// } else {
+		// 	return getLinearPressureAtT(control, end, 2 * (t - 0.5));
+		// }
 		return (
 			Math.pow(1 - t, 2) * start +
 			2 * (1 - t) * t * control +
@@ -281,9 +281,10 @@ const New = () => {
 		console.log("pointer-move");
 		event.preventDefault();
 
-		const newPressure = event.pressure;
-		const midPressure =
-			(pressureRecords[pressureRecords.length - 1] + newPressure) / 2;
+		const prevPressure = pressureRecords[pressureRecords.length - 1];
+		const newPressure =
+			SMOOTHING_FACTOR * event.pressure + (1 - SMOOTHING_FACTOR) * prevPressure;
+		const midPressure = (prevPressure + newPressure) / 2;
 
 		pressureRecords.push(midPressure, newPressure);
 		pressureRecords = pressureRecords.slice(-4);
