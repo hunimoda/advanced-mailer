@@ -1,21 +1,14 @@
+import { getBorderRadius, isAligned, isSquare } from "../helper";
 import classes from "./index.module.css";
 
-const Modifier = ({
-	isFixed,
-	scale,
-	isAligned,
-	isSquare,
-	borderRadius,
-	onEdit,
-	onDelete,
-}) => {
+const Modifier = ({ isFixed, scale, id, onEdit, onDelete }) => {
 	const borderClass = `${classes.border} ${
-		isAligned ? classes["border--aligned"] : ""
+		isAligned(id) ? classes["border--aligned"] : ""
 	}`;
 	const borderStyle = {
 		borderWidth: `${1 / scale}px`,
 		transform: `translate(-${1 / scale}px, -${1 / scale}px)`,
-		borderRadius: `${borderRadius}px`,
+		borderRadius: `${getBorderRadius(id)}px`,
 	};
 
 	const scaleAndTranslate = {
@@ -85,7 +78,7 @@ const Modifier = ({
 			<div className={borderClass} style={borderStyle} />
 			{deleteButton}
 			{onEdit && editButton}
-			{isSquare && squareIndicators}
+			{isSquare(id) && squareIndicators}
 			{isFixed ? fixedRatioResizeButton : variableRatioResizeButtons}
 		</>
 	);
