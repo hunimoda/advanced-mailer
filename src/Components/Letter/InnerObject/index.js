@@ -1,8 +1,6 @@
 import { useState, useRef } from "react";
-import { useDispatch } from "react-redux";
 import { letterActions } from "../../../Context/letter";
 import { processStyle } from "./helper";
-import store from "../../../Context";
 import Modifier from "./Modifier";
 import ObjectSettings from "./ObjectSettings";
 import TextInput from "../../New/TextInput";
@@ -157,11 +155,9 @@ const InnerObject = ({
 		}
 	};
 
-	const deleteObject = () => {
-		if (pointerType === "touch") {
-			dispatch(letterActions.deleteObject(id));
-			onSelectChange(id, false);
-		}
+	const onDelete = () => {
+		dispatch(letterActions.deleteObject(id));
+		onSelectChange(id, false);
 	};
 
 	const onLongTouch = () => {
@@ -169,55 +165,47 @@ const InnerObject = ({
 		setShowObjectSettings(true);
 	};
 
-	const onObjectPointerDown = (event) => {
-		setPointerType(event.pointerType);
-
-		if (event.pointerType === "touch") {
+	const onPointerDown = (event) => {
+		if (!readOnly && event.pointerType === "touch") {
 			event.stopPropagation();
-		}
-	};
 
-	const onObjectTouchStart = (event) => {
-		if (readOnly || pointerType !== "touch") {
-			return;
-		}
+			if (event.target.dataset.type === "content") {
+				if (selected) {
+					clearTimeout(timer);
+					timer = setTimeout(onLongTouch, TOUCH_DURATION);
 
-		event.stopPropagation();
-		clearTimeout(timer);
-		timer = setTimeout(onLongTouch, TOUCH_DURATION);
+					clickedAfterSelected = true;
+				} else {
+					onSelectChange(id, true);
+					dispatch(letterActions.moveObjectToFront(id));
+				}
 
-		if (!selected) {
-			onSelectChange(id, true);
-			dispatch(letterActions.moveObjectToFront(id));
-		} else {
-			clickedAfterSelected = true;
-		}
-
-		prevCoord = { x: event.touches[0].clientX, y: event.touches[0].clientY };
-	};
-
-	const onTouchMove = (event) => {
-		if (selected && pointerType === "touch") {
-			clearTimeout(timer);
-			clickedAfterSelected = false;
-
-			if (event.touches.length >= 2) {
-				return;
+				prevCoord = {
+					x: event.clientX,
+					y: event.clientY,
+				};
 			}
+		}
+	};
 
-			const { clientX: x, clientY: y } = event.touches[0];
-			const action = event.currentTarget.dataset.action;
+	const onPointerMove = (event) => {
+		if (!readOnly && event.pointerType === "touch") {
+			const targetType = event.target.dataset.type;
+			const { clientX: x, clientY: y } = event;
 
-			if (action === "move") {
+			if (targetType === "content") {
+				clearTimeout(timer);
+				clickedAfterSelected = false;
+
 				moveObject(
 					(x - prevCoord.x) / sheetSize.width,
 					(y - prevCoord.y) / sheetSize.height
 				);
-			} else if (action === "resize-fixed-ratio") {
+			} else if (targetType === "fixed-resize-button") {
 				resizeObjectFixedAspectRatio(x, y);
-			} else if (action === "resize-width") {
+			} else if (targetType === "resize-width-button") {
 				resizeObjectSide(x, y, "width");
-			} else if (action === "resize-height") {
+			} else if (targetType === "resize-height-button") {
 				resizeObjectSide(x, y, "height");
 			}
 
@@ -225,16 +213,18 @@ const InnerObject = ({
 		}
 	};
 
-	const onObjectTouchEnd = () => {
-		if (clickedAfterSelected) {
-			setIsAspectRatioFixed((prev) => !prev);
+	const onPointerUp = (event) => {
+		if (!readOnly && event.pointerType === "touch") {
+			if (event.target.dataset.type === "content") {
+				if (clickedAfterSelected) {
+					setIsAspectRatioFixed((prev) => !prev);
+				}
+
+				clearTimeout(timer);
+				clickedAfterSelected = null;
+				prevCoord = null;
+			}
 		}
-
-		clearTimeout(timer);
-		clickedAfterSelected = null;
-		prevCoord = null;
-
-		setPointerType(null);
 	};
 
 	const onSettingsClose = () => setShowObjectSettings(false);
@@ -252,6 +242,7 @@ const InnerObject = ({
 		if (object.type === "image") {
 			return (
 				<img
+					data-type="content"
 					className={classes.content}
 					style={contentStyle}
 					src={object.value}
@@ -260,7 +251,7 @@ const InnerObject = ({
 			);
 		} else if (object.type === "text") {
 			return (
-				<p className={classes.content} style={contentStyle}>
+				<p className={classes.content} style={contentStyle} data-type="content">
 					{object.value}
 				</p>
 			);
@@ -269,7 +260,7 @@ const InnerObject = ({
 		return null;
 	};
 
-	const onShowTextInput = () => setShowTextInput(true);
+	const onEdit = object.type === "text" && (() => setShowTextInput(true));
 
 	const onCancel = () => setShowTextInput(false);
 
@@ -278,33 +269,31 @@ const InnerObject = ({
 		setShowTextInput(false);
 	};
 
+	const isSquare =
+		Math.abs(
+			object.style.width * sheetSize.width -
+				object.style.height * sheetSize.height
+		) < 1;
+
 	return (
 		<>
 			<div
 				ref={objectRef}
-				data-action="move"
 				className={classes.object}
 				style={containerStyle}
-				onTouchStart={onObjectTouchStart}
-				onTouchMove={onTouchMove}
-				onTouchEnd={onObjectTouchEnd}
-				onPointerDown={onObjectPointerDown}
+				onPointerDown={onPointerDown}
+				onPointerMove={onPointerMove}
+				onPointerUp={onPointerUp}
 			>
 				{selected && (
 					<Modifier
-						onTouchMove={onTouchMove}
 						isFixed={isAspectRatioFixed}
-						onDelete={deleteObject}
 						scale={scale}
 						isAligned={!object.style.transform.rotate}
-						isSquare={
-							Math.abs(
-								object.style.width * sheetSize.width -
-									object.style.height * sheetSize.height
-							) < 1
-						}
+						isSquare={isSquare}
 						borderRadius={borderRadiusInPixels}
-						onEdit={object.type === "text" && onShowTextInput}
+						onEdit={onEdit}
+						onDelete={onDelete}
 					/>
 				)}
 				{getContentJsx()}

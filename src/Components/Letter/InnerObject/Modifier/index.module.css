@@ -4,6 +4,7 @@
 	border-style: dotted;
 	border-color: red;
 	position: absolute;
+	pointer-events: none;
 	top: 0;
 	left: 0;
 }
@@ -17,6 +18,8 @@
 .resize,
 .resizeWidthBtn,
 .resizeHeightBtn {
+	position: absolute;
+	transform-origin: top left;
 	background: white;
 	border: 1px solid var(--border-color);
 	width: 30px;
@@ -30,49 +33,49 @@
 		rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
+.edit i,
+.delete i,
+.resize i,
+.resizeWidthBtn i,
+.resizeHeightBtn i {
+	pointer-events: none;
+}
+
 .topIndicator,
 .leftIndicator {
+	position: absolute;
 	background: white;
 	border: 1px dotted #0f0;
 	width: 10px;
 	height: 10px;
 	border-radius: 10px;
+	transform-origin: top left;
 }
 
 .topIndicator {
-	position: absolute;
 	top: 0;
 	left: 50%;
-	transform-origin: top left;
 }
 
 .leftIndicator {
-	position: absolute;
 	top: 50%;
 	left: 0;
-	transform-origin: top left;
-}
-
-.delete {
-	position: absolute;
-	top: 0;
-	left: 0;
-	transform-origin: top left;
-	color: tomato;
 }
 
 .edit {
-	position: absolute;
 	top: 0;
 	left: 100%;
-	transform-origin: top left;
+}
+
+.delete {
+	top: 0;
+	left: 0;
+	color: tomato;
 }
 
 .resize {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	transform-origin: bottom right;
+	top: 100%;
+	left: 100%;
 }
 
 .resize i {
@@ -80,15 +83,11 @@
 }
 
 .resizeWidthBtn {
-	position: absolute;
 	top: 50%;
-	right: 0;
-	transform-origin: top right;
+	left: 100%;
 }
 
 .resizeHeightBtn {
-	position: absolute;
-	bottom: 0;
-	right: 50%;
-	transform-origin: bottom right;
+	top: 100%;
+	left: 50%;
 }

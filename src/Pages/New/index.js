@@ -184,30 +184,40 @@ const New = () => {
 
 	const drawLine = () => {
 		// coords[0] -> coords[1]
-		for (let i = 0; i < 1000; i++) {
-			const subStartPoint = getLinearPositionAtT(
-				coords[0],
-				coords[1],
-				i / 10000
-			);
-			const subEndPoint = getLinearPositionAtT(
-				coords[0],
-				coords[1],
-				(i + 1) / 1000
-			);
-			const pressure = getLinearPressureAtT(
-				pressureRecords[0],
-				pressureRecords[1],
-				i / 1000
-			);
-
+		if (isBrushWidthConstant) {
 			context.beginPath();
 
-			context.moveTo(subStartPoint.x, subStartPoint.y);
-			context.lineTo(subEndPoint.x, subEndPoint.y);
+			context.moveTo(coords[0].x, coords[0].y);
+			context.lineTo(coords[1].x, coords[1].y);
 
-			context.lineWidth = getLineWidth(pressure);
+			context.lineWidth = getLineWidth();
 			context.stroke();
+		} else {
+			for (let i = 0; i < 1000; i++) {
+				const subStartPoint = getLinearPositionAtT(
+					coords[0],
+					coords[1],
+					i / 10000
+				);
+				const subEndPoint = getLinearPositionAtT(
+					coords[0],
+					coords[1],
+					(i + 1) / 1000
+				);
+				const pressure = getLinearPressureAtT(
+					pressureRecords[0],
+					pressureRecords[1],
+					i / 1000
+				);
+
+				context.beginPath();
+
+				context.moveTo(subStartPoint.x, subStartPoint.y);
+				context.lineTo(subEndPoint.x, subEndPoint.y);
+
+				context.lineWidth = getLineWidth(pressure);
+				context.stroke();
+			}
 		}
 	};
 
@@ -239,33 +249,49 @@ const New = () => {
 
 	const drawCurve = () => {
 		// coords[0] -> (coords[1]) -> coords[2]
-		for (let i = 0; i < 1000; i++) {
-			const subStartPoint = getQuadraticPositionAtT(
-				coords[0],
-				coords[1],
-				coords[2],
-				i / 1000
-			);
-			const subEndPoint = getQuadraticPositionAtT(
-				coords[0],
-				coords[1],
-				coords[2],
-				(i + 1) / 1000
-			);
-			const pressure = getQuadraticPressureAtT(
-				pressureRecords[0],
-				pressureRecords[1],
-				pressureRecords[2],
-				i / 1000
-			);
 
+		if (isBrushWidthConstant) {
 			context.beginPath();
 
-			context.moveTo(subStartPoint.x, subStartPoint.y);
-			context.lineTo(subEndPoint.x, subEndPoint.y);
+			context.moveTo(coords[0].x, coords[0].y);
+			context.quadraticCurveTo(
+				coords[1].x,
+				coords[1].y,
+				coords[2].x,
+				coords[2].y
+			);
 
-			context.lineWidth = getLineWidth(pressure);
+			context.lineWidth = getLineWidth();
 			context.stroke();
+		} else {
+			for (let i = 0; i < 1000; i++) {
+				const subStartPoint = getQuadraticPositionAtT(
+					coords[0],
+					coords[1],
+					coords[2],
+					i / 1000
+				);
+				const subEndPoint = getQuadraticPositionAtT(
+					coords[0],
+					coords[1],
+					coords[2],
+					(i + 1) / 1000
+				);
+				const pressure = getQuadraticPressureAtT(
+					pressureRecords[0],
+					pressureRecords[1],
+					pressureRecords[2],
+					i / 1000
+				);
+
+				context.beginPath();
+
+				context.moveTo(subStartPoint.x, subStartPoint.y);
+				context.lineTo(subEndPoint.x, subEndPoint.y);
+
+				context.lineWidth = getLineWidth(pressure);
+				context.stroke();
+			}
 		}
 	};
 
@@ -360,17 +386,25 @@ const New = () => {
 		context.strokeStyle = "rgba(255, 255, 255, 1)";
 	};
 
+	function isCanvasBlank() {
+		const pixelBuffer = new Uint32Array(
+			context.getImageData(0, 0, canvas.width, canvas.height).data.buffer
+		);
+
+		return !pixelBuffer.some((color) => color !== 0);
+	}
+
 	return (
 		<>
 			<TopHeader onSelectPen={onSelectPen} onSelectEraser={onSelectEraser} />
 			<main ref={mainRef} className={classes.main}>
 				<Sheet
 					sheet={sheet}
-					onPointerDown={onPointerDown}
-					onPointerMove={onPointerMove}
-					onTouchStart={onTouchStart}
-					onTouchMove={onTouchMove}
-					onTouchEnd={onTouchEnd}
+					// onPointerDown={onPointerDown}
+					// onPointerMove={onPointerMove}
+					// onTouchStart={onTouchStart}
+					// onTouchMove={onTouchMove}
+					// onTouchEnd={onTouchEnd}
 				>
 					{Object.entries(objects).map(([id, object]) => (
 						<InnerObject
@@ -391,6 +425,7 @@ const New = () => {
 							height={CANVAS_SCALE_FACTOR * sheet.size.height}
 						></canvas>
 					)}
+					<button onClick={() => console.log(canvas.toDataURL())}>Done</button>
 				</Sheet>
 			</main>
 			<ToolBox />
