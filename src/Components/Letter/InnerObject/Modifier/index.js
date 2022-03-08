@@ -1,7 +1,12 @@
-import { getBorderRadius, isAligned, isSquare } from "../helper";
+import { useDispatch } from "react-redux";
+import { letterActions } from "../../../../Context/letter";
+import { getBorderRadius, isAligned, isSquare, getScale } from "../helper";
 import classes from "./index.module.css";
 
-const Modifier = ({ isFixed, scale, id, onEdit, onDelete }) => {
+const Modifier = ({ id, onEdit, isFixed }) => {
+	const dispatch = useDispatch();
+	const scale = getScale(id);
+
 	const borderClass = `${classes.border} ${
 		isAligned(id) ? classes["border--aligned"] : ""
 	}`;
@@ -14,6 +19,8 @@ const Modifier = ({ isFixed, scale, id, onEdit, onDelete }) => {
 	const scaleAndTranslate = {
 		transform: `scale(${1 / scale}) translate(-50%, -50%)`,
 	};
+
+	const onDelete = () => dispatch(letterActions.deleteObject(id));
 
 	const deleteButton = (
 		<button

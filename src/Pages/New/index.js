@@ -110,7 +110,7 @@ const New = () => {
 		return () => resizeObserver.unobserve(mainElem);
 	}, [dispatch, aspectRatio]);
 
-	const onSelectChange = (id, select) => setSelectedId(select ? id : null);
+	const onObjectSelect = (id) => setSelectedId(id);
 
 	const canvasRef = useRef();
 
@@ -410,7 +410,7 @@ const New = () => {
 						<InnerObject
 							key={id}
 							id={id}
-							onSelectChange={onSelectChange}
+							onSelect={onObjectSelect}
 							selected={id === selectedId}
 							dispatch={dispatch}
 							sheetSize={sheet.size}

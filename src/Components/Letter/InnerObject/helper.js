@@ -68,11 +68,13 @@ const convertStyleValue = (style, prop, value, sheetSize, scale) => {
 	return value;
 };
 
+export const getObjectById = (id) => store.getState().letter.objects[id];
+
 const getObjectStyle = (id) => store.getState().letter.objects[id].style;
 
 const getSheetSize = () => store.getState().letter.sheet.size;
 
-const getScale = (id) => getObjectStyle(id).transform?.scale;
+export const getScale = (id) => getObjectStyle(id).transform?.scale;
 
 export const processStyle = (style) => {
 	const sheetSize = getSheetSize();
@@ -104,8 +106,13 @@ export const processStyle = (style) => {
 	};
 };
 
-export const moveObject = (id, left, top) =>
-	store.dispatch(letterActions.moveObject({ id, left, top }));
+export const moveObject = (id, left, top) => {
+	const { width, height } = getSheetSize();
+
+	store.dispatch(
+		letterActions.moveObject({ id, left: left / width, top: top / height })
+	);
+};
 
 const getMinSideLength = (id) => {
 	const objectStyle = getObjectStyle(id);
@@ -275,4 +282,14 @@ export const getBorderRadius = (id) => {
 		2 /
 		getScale(id)
 	);
+};
+
+export const getObjectSize = (id) => {
+	const objectStyle = getObjectStyle(id);
+	const sheetSize = getSheetSize();
+
+	return {
+		x: objectStyle.left * sheetSize.width,
+		y: objectStyle.top * sheetSize.height,
+	};
 };

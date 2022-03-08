@@ -1,9 +1,15 @@
 import { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 import { createPortal } from "react-dom";
+import { letterActions } from "../../../Context/letter";
+import { getObjectById } from "../../Letter/InnerObject/helper";
 import classes from "./index.module.css";
 
-const TextInput = (props) => {
+const TextInput = ({ id, onClose }) => {
 	const textareaRef = useRef();
+	const dispatch = useDispatch();
+
+	const defaultValue = getObjectById(id)?.value;
 
 	const onInputBackdropClick = () => textareaRef.current.focus();
 
@@ -20,7 +26,12 @@ const TextInput = (props) => {
 		if (inputString.trim().length === 0) {
 			alert("빈 문자열 입력");
 		} else {
-			props.onConfirm(inputString);
+			if (id) {
+				dispatch(letterActions.editText({ id, value: inputString }));
+			} else {
+				dispatch(letterActions.addTextObject(inputString));
+			}
+			onClose();
 		}
 	};
 
@@ -33,11 +44,11 @@ const TextInput = (props) => {
 	return createPortal(
 		<div className={classes.inputBackdrop} onClick={onInputBackdropClick}>
 			<div className={classes.controls}>
-				<button onClick={props.onCancel} className={classes.cancelBtn}>
+				<button onClick={onClose} className={classes.cancelBtn}>
 					취소
 				</button>
 				<button onClick={onConfirm} className={classes.confirmBtn}>
-					{props.defaultValue ? "수정" : "입력"}
+					{defaultValue ? "수정" : "입력"}
 				</button>
 			</div>
 			<div className={classes.textareaContainer}>
@@ -45,7 +56,7 @@ const TextInput = (props) => {
 					ref={textareaRef}
 					className={classes.textarea}
 					onChange={onTextAreaChange}
-					defaultValue={props.defaultValue}
+					defaultValue={defaultValue}
 					autoFocus
 				></textarea>
 			</div>

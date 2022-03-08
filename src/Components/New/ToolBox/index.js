@@ -48,12 +48,7 @@ const ToolBox = ({ onStartCanvas }) => {
 	const onAddGalleryImageChange = (event) =>
 		dispatchImageAction(event, addImageObjectBySrc);
 
-	const onCancel = () => setShowTextInput(false);
-
-	const onConfirm = (inputString) => {
-		dispatch(letterActions.addTextObject(inputString));
-		setShowTextInput(false);
-	};
+	const onTextInputClose = () => setShowTextInput(false);
 
 	const onShowMenuPopup = (event) => {
 		const type = event.currentTarget.dataset.type;
@@ -98,7 +93,7 @@ const ToolBox = ({ onStartCanvas }) => {
 					{menuPopup.message && <footer>{menuPopup.message}</footer>}
 				</Modal>
 			)}
-			{showTextInput && <TextInput onCancel={onCancel} onConfirm={onConfirm} />}
+			{showTextInput && <TextInput onClose={onTextInputClose} />}
 			<footer className={classes.footer}>
 				<div className={classes.toolbox}>
 					<button

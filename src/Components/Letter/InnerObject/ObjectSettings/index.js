@@ -20,12 +20,12 @@ const SUPPORTED_FONTS = [
 	"Andalé Mono",
 ];
 
-const ObjectSettings = ({ id, onClose, style }) => {
+const ObjectSettings = ({ id, onClose }) => {
 	const dispatch = useDispatch();
 	const sheetSize = useSelector((state) => state.letter.sheet.size);
 	const object = useSelector((state) => state.letter.objects[id]);
 
-	const [previewStyle, setPreviewStyle] = useState(style);
+	const [previewStyle, setPreviewStyle] = useState(object.style);
 	const [settingsListClass, setSettingsListClass] = useState(
 		`${classes.settingsList} ${classes.settingsListTop}`
 	);
@@ -91,7 +91,7 @@ const ObjectSettings = ({ id, onClose, style }) => {
 		>
 			<div
 				className={classes.previewContainer}
-				style={{ height: style.height * sheetSize.height + 2 }}
+				style={{ height: object.style.height * sheetSize.height + 2 }}
 			>
 				<div
 					className={classes.preview}

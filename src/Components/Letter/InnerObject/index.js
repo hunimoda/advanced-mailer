@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { letterActions } from "../../../Context/letter";
 import {
 	processStyle,
@@ -6,9 +7,7 @@ import {
 	resizeObjectFixedAspectRatio,
 	resizeObjectSide,
 	getContentJsx,
-	isSquare,
-	getBorderRadius,
-	isAligned,
+	getObjectSize,
 } from "./helper";
 import Modifier from "./Modifier";
 import ObjectSettings from "./ObjectSettings";
@@ -18,42 +17,34 @@ import classes from "./index.module.css";
 let prevCoord = null;
 let clickedAfterSelected = null;
 let timer = null;
-const TOUCH_DURATION = 1000;
+const TOUCH_DURATION = 500;
 
-const InnerObject = ({
-	id,
-	onSelectChange,
-	selected,
-	forcedStyle,
-	readOnly,
-	dispatch,
-	sheetSize,
-	object,
-}) => {
-	const { containerStyle, contentStyle, scale } = processStyle(
-		forcedStyle ?? object.style
+const InnerObject = ({ id, onSelect, selected, forcedStyle }) => {
+	const dispatch = useDispatch();
+	const { type, value, style } = useSelector(
+		(state) => state.letter.objects[id]
 	);
 
+	const objectRef = useRef();
+
 	const [isAspectRatioFixed, setIsAspectRatioFixed] = useState(
-		object.type === "image" ? true : false
+		type === "image" ? true : false
 	);
 	const [showObjectSettings, setShowObjectSettings] = useState(false);
 	const [showTextInput, setShowTextInput] = useState(false);
 
-	const objectRef = useRef();
+	const { containerStyle, contentStyle } = processStyle(forcedStyle ?? style);
+	const readOnly = !Boolean(onSelect);
+
 	const getCenterPosition = () => {
 		const { left: sheetLeft, top: sheetTop } =
 			objectRef.current.parentElement.getBoundingClientRect();
+		const objectSize = getObjectSize(id);
 
 		return {
-			x: object.style.left * sheetSize.width + sheetLeft,
-			y: object.style.top * sheetSize.height + sheetTop,
+			x: objectSize.x + sheetLeft,
+			y: objectSize.y + sheetTop,
 		};
-	};
-
-	const onDelete = () => {
-		dispatch(letterActions.deleteObject(id));
-		onSelectChange(id, false);
 	};
 
 	const onLongTouch = () => {
@@ -72,7 +63,7 @@ const InnerObject = ({
 
 					clickedAfterSelected = true;
 				} else {
-					onSelectChange(id, true);
+					onSelect(id);
 					dispatch(letterActions.moveObjectToFront(id));
 				}
 
@@ -97,11 +88,10 @@ const InnerObject = ({
 				clearTimeout(timer);
 				clickedAfterSelected = false;
 
-				moveObject(
-					id,
-					(touchPosition.x - prevCoord.x) / sheetSize.width,
-					(touchPosition.y - prevCoord.y) / sheetSize.height
-				);
+				const xChange = touchPosition.x - prevCoord.x;
+				const yChange = touchPosition.y - prevCoord.y;
+
+				moveObject(id, xChange, yChange);
 			} else if (targetType === "fixed-resize-button") {
 				resizeObjectFixedAspectRatio(id, centerPosition, touchPosition);
 			} else if (targetType === "resize-width-button") {
@@ -130,14 +120,9 @@ const InnerObject = ({
 
 	const onSettingsClose = () => setShowObjectSettings(false);
 
-	const onEdit = object.type === "text" && (() => setShowTextInput(true));
+	const onEdit = type === "text" && (() => setShowTextInput(true));
 
-	const onCancel = () => setShowTextInput(false);
-
-	const onConfirm = (textValue) => {
-		dispatch(letterActions.editText({ id, value: textValue }));
-		setShowTextInput(false);
-	};
+	const onTextInputClose = () => setShowTextInput(false);
 
 	return (
 		<>
@@ -150,30 +135,14 @@ const InnerObject = ({
 				onPointerUp={onPointerUp}
 			>
 				{selected && (
-					<Modifier
-						isFixed={isAspectRatioFixed}
-						scale={scale}
-						id={id}
-						onEdit={onEdit}
-						onDelete={onDelete}
-					/>
+					<Modifier id={id} onEdit={onEdit} isFixed={isAspectRatioFixed} />
 				)}
-				{getContentJsx(object.type, object.value, contentStyle)}
+				{getContentJsx(type, value, contentStyle)}
 			</div>
 			{showObjectSettings && (
-				<ObjectSettings
-					id={id}
-					onClose={onSettingsClose}
-					style={object.style}
-				/>
+				<ObjectSettings id={id} onClose={onSettingsClose} />
 			)}
-			{showTextInput && (
-				<TextInput
-					defaultValue={object.value}
-					onCancel={onCancel}
-					onConfirm={onConfirm}
-				/>
-			)}
+			{showTextInput && <TextInput id={id} onClose={onTextInputClose} />}
 		</>
 	);
 };
