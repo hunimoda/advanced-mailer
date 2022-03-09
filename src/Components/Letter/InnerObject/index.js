@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import store from "../../../Context";
 import { letterActions } from "../../../Context/letter";
 import {
 	processStyle,
@@ -19,11 +20,16 @@ let clickedAfterSelected = null;
 let timer = null;
 const TOUCH_DURATION = 500;
 
-const InnerObject = ({ id, onSelect, selected, forcedStyle }) => {
+const InnerObject = ({
+	id,
+	onSelect,
+	selected,
+	forcedStyle,
+	object,
+	sheetSize,
+}) => {
 	const dispatch = useDispatch();
-	const { type, value, style } = useSelector(
-		(state) => state.letter.objects[id]
-	);
+	const { type, value, style } = store.getState().letter.objects[id] ?? object;
 
 	const objectRef = useRef();
 
@@ -33,7 +39,10 @@ const InnerObject = ({ id, onSelect, selected, forcedStyle }) => {
 	const [showObjectSettings, setShowObjectSettings] = useState(false);
 	const [showTextInput, setShowTextInput] = useState(false);
 
-	const { containerStyle, contentStyle } = processStyle(forcedStyle ?? style);
+	const { containerStyle, contentStyle } = processStyle(
+		forcedStyle ?? style,
+		sheetSize
+	);
 	const readOnly = !Boolean(onSelect);
 
 	const getCenterPosition = () => {

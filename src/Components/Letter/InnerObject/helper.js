@@ -76,8 +76,8 @@ const getSheetSize = () => store.getState().letter.sheet.size;
 
 export const getScale = (id) => getObjectStyle(id).transform?.scale;
 
-export const processStyle = (style) => {
-	const sheetSize = getSheetSize();
+export const processStyle = (style, sheetSize) => {
+	sheetSize ??= getSheetSize();
 
 	const containerStyle = {};
 	const contentStyle = { fontSize: `${sheetSize.height}px` };

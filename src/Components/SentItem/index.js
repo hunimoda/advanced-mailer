@@ -48,6 +48,8 @@ const SentItem = ({ letterDoc }) => {
 		? `fas fa-check ${classes.check}`
 		: "far fa-copy";
 
+	console.log(letterDoc);
+
 	return (
 		<LetterItemCard>
 			<div className={classes.letterURL}>
