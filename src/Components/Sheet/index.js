@@ -6,9 +6,7 @@ const Sheet = ({
 	className,
 	onPointerDown,
 	onPointerMove,
-	onTouchStart,
-	onTouchMove,
-	onTouchEnd,
+	onPointerUp,
 }) => {
 	if (!sheet.size) {
 		return null;
@@ -25,9 +23,8 @@ const Sheet = ({
 			}}
 			onPointerDown={onPointerDown}
 			onPointerMove={onPointerMove}
-			onTouchStart={onTouchStart}
-			onTouchMove={onTouchMove}
-			onTouchEnd={onTouchEnd}
+			onPointerUp={onPointerUp}
+			onTouchEnd={(event) => event.preventDefault()}
 		>
 			{children}
 		</div>
