@@ -18,7 +18,7 @@ import Toolbox from "./ToolBox";
 import PenToolbox from "./PenToolbox";
 import EraserToolbox from "./EraserToolbox";
 
-const TopHeader = ({ onSelectPen, onSelectEraser }) => {
+const TopHeader = () => {
 	const history = useHistory();
 	const id = new URLSearchParams(window.location.search).get("id");
 
@@ -107,8 +107,6 @@ const TopHeader = ({ onSelectPen, onSelectEraser }) => {
 		if (showEraserToolbox) {
 			setShowEraserToolbox(false);
 		}
-
-		onSelectPen();
 	};
 
 	const onShowEraserToolbox = (event) => {
@@ -118,8 +116,6 @@ const TopHeader = ({ onSelectPen, onSelectEraser }) => {
 		if (showPenToolbox) {
 			setShowPenToolbox(false);
 		}
-
-		onSelectEraser();
 	};
 
 	return (
@@ -141,11 +137,8 @@ const TopHeader = ({ onSelectPen, onSelectEraser }) => {
 					<button onClick={() => onDoneWritingLetter("drafts")}>저장</button>
 					<button onClick={() => onDoneWritingLetter("sent")}>완료</button>
 				</div>
-				<PenToolbox show={showPenToolbox} onSelectPen={onSelectPen} />
-				<EraserToolbox
-					show={showEraserToolbox}
-					onSelectEraser={onSelectEraser}
-				/>
+				<PenToolbox show={showPenToolbox} />
+				<EraserToolbox show={showEraserToolbox} />
 			</header>
 		</>
 	);

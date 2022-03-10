@@ -1,16 +1,29 @@
+import { useContext, useEffect, useState } from "react";
 import Toolbox from "../ToolBox";
 import SizeToolbox from "../SizeToolbox";
-import StyleToolbox from "../StyleToolbox";
+// import StyleToolbox from "../StyleToolbox";
 import ColorToolbox from "../ColorToolbox";
+import { CanvasContext } from "../../../../Context/canvas";
 
-const PenToolbox = ({ show, onSelectPen }) => {
+const PenToolbox = ({ show }) => {
+	const { setPen } = useContext(CanvasContext);
+
+	const [size, setSize] = useState(null);
+	const [color, setColor] = useState(null);
+
+	useEffect(() => {
+		if (size && color && show) {
+			setPen(size, color);
+		}
+	}, [size, color, show, setPen]);
+
 	return (
 		<Toolbox show={show}>
 			<div>
-				<SizeToolbox onSelect={(size) => onSelectPen({ size })} />
-				<StyleToolbox onSelect={(style) => onSelectPen({ style })} />
+				<SizeToolbox onSelect={setSize} size={size} />
+				{/* <StyleToolbox onSelect={(style) => onSelectPen({ style })} /> */}
 			</div>
-			<ColorToolbox onSelect={(color) => onSelectPen({ color })} />
+			<ColorToolbox onSelect={setColor} color={color} />
 		</Toolbox>
 	);
 };

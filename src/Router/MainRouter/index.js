@@ -7,6 +7,7 @@ import DraftItem from "../../Components/DraftItem";
 import PageNotFound from "../../Pages/PageNotFound";
 import Layout from "../../UI/Layout";
 import Letter from "../../Pages/Letter";
+import { CanvasContextProvider } from "../../Context/canvas";
 
 const MainRouter = () => {
 	const innerSwitch = (
@@ -53,7 +54,9 @@ const MainRouter = () => {
 				<Letter type="inbox" />
 			</Route>
 			<Route exact path="/new">
-				<New />
+				<CanvasContextProvider>
+					<New />
+				</CanvasContextProvider>
 			</Route>
 			<Route exact path="*">
 				<Layout>{innerSwitch}</Layout>

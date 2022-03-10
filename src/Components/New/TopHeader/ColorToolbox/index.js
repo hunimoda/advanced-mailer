@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import Row from "../Row";
 import ColorContainer from "./ColorContainer";
 import classes from "./index.module.css";
@@ -23,20 +23,13 @@ const BRUSH_COLORS = [
 	"#946635",
 ];
 
-const ColorToolbox = ({ onSelect }) => {
-	const [selectedBrushColor, setSelectedBrushColor] = useState(
-		BRUSH_COLORS[14]
-	);
-
+const ColorToolbox = ({ onSelect, color }) => {
 	const numOfLines = Math.floor((BRUSH_COLORS.length - 1) / COL_PER_ROW) + 1;
 	const rows = [];
 
-	const onSelectColor = (event) => {
-		const brushColor = event.currentTarget.dataset.label;
+	const onSelectColor = (event) => onSelect(event.currentTarget.dataset.label);
 
-		setSelectedBrushColor(brushColor);
-		onSelect(brushColor);
-	};
+	useEffect(() => onSelect(BRUSH_COLORS[0]), [onSelect]);
 
 	for (let rowIdx = 0; rowIdx < numOfLines; rowIdx++) {
 		const containers = [];
@@ -50,7 +43,7 @@ const ColorToolbox = ({ onSelect }) => {
 						key={`size-container_${rowIdx}-${colIdx}`}
 						label={brushColor}
 						onClick={onSelectColor}
-						selected={brushColor === selectedBrushColor}
+						selected={brushColor === color}
 					/>
 				);
 			}

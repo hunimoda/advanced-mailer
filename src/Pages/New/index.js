@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { letterActions } from "../../Context/letter";
 import TopHeader from "../../Components/New/TopHeader";
@@ -9,17 +9,11 @@ import { getLetterDocByParams } from "../../Firebase/db";
 import { getMyUid } from "../../Firebase/auth";
 import { isEqual } from "lodash";
 import classes from "./index.module.css";
-
-const CANVAS_SCALE_FACTOR = 2;
-
-let brushWidth = 3;
-
-let context = null;
-let coords = [];
-
-let timeStamp = null;
+import { CanvasContext, CANVAS_SCALE_FACTOR } from "../../Context/canvas";
 
 const New = () => {
+	const { setContext } = useContext(CanvasContext);
+
 	const mainRef = useRef();
 	const id = new URLSearchParams(window.location.search).get("id");
 
@@ -115,147 +109,20 @@ const New = () => {
 
 	const canvasRef = useRef();
 
-	// useEffect(
-	// 	() =>
-	// 		window.addEventListener("pointerdown", (event) => {
-	// 			setSelectedId(null);
-	// 		}),
-	// 	[]
-	// );
-
 	useEffect(() => {
 		if (sheetSize) {
 			canvasRef.current.width = CANVAS_SCALE_FACTOR * sheetSize.width;
 			canvasRef.current.height = CANVAS_SCALE_FACTOR * sheetSize.height;
 
-			context = canvasRef.current.getContext("2d");
-			context.strokeStyle = "black";
-			context.lineCap = "round";
-			context.lineJoin = "round";
+			setContext(canvasRef.current.getContext("2d"));
 		}
-	}, [canvasRef, sheetSize]);
-
-	const getTouchPositionFromEvent = (event) => {
-		const canvas = event.currentTarget.getBoundingClientRect();
-
-		return {
-			x: CANVAS_SCALE_FACTOR * (event.clientX - canvas.x),
-			y: CANVAS_SCALE_FACTOR * (event.clientY - canvas.y),
-		};
-	};
-
-	const getMiddlePosition = (pos1, pos2) => {
-		return {
-			x: (pos1.x + pos2.x) / 2,
-			y: (pos1.y + pos2.y) / 2,
-		};
-	};
-
-	const getLineWidth = () => CANVAS_SCALE_FACTOR * brushWidth;
-
-	const drawLine = () => {
-		// coords[0] -> coords[1]
-		context.beginPath();
-
-		context.moveTo(coords[0].x, coords[0].y);
-		context.lineTo(coords[1].x, coords[1].y);
-
-		context.lineWidth = getLineWidth();
-		context.stroke();
-	};
-
-	const drawCurve = () => {
-		// coords[0] -> (coords[1]) -> coords[2]
-
-		context.beginPath();
-
-		context.moveTo(coords[0].x, coords[0].y);
-		context.quadraticCurveTo(
-			coords[1].x,
-			coords[1].y,
-			coords[2].x,
-			coords[2].y
-		);
-
-		context.lineWidth = getLineWidth();
-		context.stroke();
-	};
-
-	const onPointerDown = (event) => {
-		if (event.pointerType === "pen") {
-			coords.push(getTouchPositionFromEvent(event));
-		}
-		setSelectedId(null);
-	};
-
-	const onPointerMove = (event) => {
-		if (event.pointerType === "pen" && event.timeStamp !== timeStamp) {
-			const newCoord = getTouchPositionFromEvent(event);
-			const midCoord = getMiddlePosition(coords[coords.length - 1], newCoord);
-
-			coords.push(midCoord, newCoord);
-			coords = coords.slice(-4);
-
-			if (coords.length < 4) {
-				drawLine();
-			} else {
-				drawCurve();
-			}
-
-			timeStamp = event.timeStamp;
-		}
-	};
-
-	const onPointerUp = (event) => {
-		if (event.pointerType === "pen") {
-			coords = coords.slice(-2);
-
-			if (coords.length === 2) {
-				drawLine();
-			}
-
-			coords = [];
-			timeStamp = null;
-		}
-	};
-
-	const onSelectPen = (pen) => {
-		if (pen.color) {
-			context.strokeStyle = pen.color;
-		} else if (pen.size) {
-			brushWidth = pen.size;
-		}
-
-		context.globalCompositeOperation = "source-over";
-	};
-
-	const onSelectEraser = (size) => {
-		if (size) {
-			brushWidth = size;
-		}
-
-		context.globalCompositeOperation = "destination-out";
-		context.strokeStyle = "rgba(255, 255, 255, 1)";
-	};
-
-	// function isCanvasBlank() {
-	// 	const pixelBuffer = new Uint32Array(
-	// 		context.getImageData(0, 0, canvas.width, canvas.height).data.buffer
-	// 	);
-
-	// 	return !pixelBuffer.some((color) => color !== 0);
-	// }
+	}, [canvasRef, sheetSize, setContext]);
 
 	return (
 		<>
-			<TopHeader onSelectPen={onSelectPen} onSelectEraser={onSelectEraser} />
+			<TopHeader />
 			<main ref={mainRef} className={classes.main}>
-				<Sheet
-					sheet={sheet}
-					onPointerDown={onPointerDown}
-					onPointerMove={onPointerMove}
-					onPointerUp={onPointerUp}
-				>
+				<Sheet sheet={sheet}>
 					{Object.entries(objects).map(([id, object]) => (
 						<InnerObject
 							key={id}
@@ -267,12 +134,7 @@ const New = () => {
 							object={object}
 						/>
 					))}
-					<canvas
-						ref={canvasRef}
-						className={classes.canvas}
-						// width={CANVAS_SCALE_FACTOR * sheet.size.width}
-						// height={CANVAS_SCALE_FACTOR * sheet.size.height}
-					></canvas>
+					<canvas ref={canvasRef} className={classes.canvas}></canvas>
 					<button
 						style={{ width: 100, height: 50, backgroundColor: debugString }}
 					></button>
