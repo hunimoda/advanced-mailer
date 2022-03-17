@@ -63,6 +63,7 @@ const LetterPreview = ({ letterDoc: { metaData, letter }, onClick }) => {
 							backgroundImage: letter.sheet.backgroundImage,
 						}}
 					>
+						<img src={letter.canvas} alt="" className={classes.handwritting} />
 						{Object.entries(letter.objects).map(([id, object]) => (
 							<InnerObject
 								key={id}

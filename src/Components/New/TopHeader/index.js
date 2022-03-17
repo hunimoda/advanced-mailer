@@ -73,6 +73,7 @@ const TopHeader = () => {
 	};
 
 	const onDoneWritingLetter = async (action) => {
+		alert(canvas.toDataURL());
 		dispatch(letterActions.setCanvas(canvas.toDataURL()));
 
 		if (!shouldBlockLeave) {
