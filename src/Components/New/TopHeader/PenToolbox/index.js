@@ -15,6 +15,7 @@ const PenToolbox = ({ show }) => {
 		if (size && color && show) {
 			setPen(size, color);
 		}
+		console.log(size, color, show);
 	}, [size, color, show, setPen]);
 
 	return (

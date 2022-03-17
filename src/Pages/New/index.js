@@ -12,7 +12,7 @@ import classes from "./index.module.css";
 import { CanvasContext, CANVAS_SCALE_FACTOR } from "../../Context/canvas";
 
 const New = () => {
-	const { setContext } = useContext(CanvasContext);
+	const { setCanvas, setContext } = useContext(CanvasContext);
 
 	const mainRef = useRef();
 	const id = new URLSearchParams(window.location.search).get("id");
@@ -30,6 +30,7 @@ const New = () => {
 	const [selectedId, setSelectedId] = useState(null);
 	const [objectIdsList, setObjectIdsList] = useState([]);
 	const [debugString, setDebugString] = useState("");
+	const [isInit, setIsInit] = useState(false);
 
 	const updatedObjectIdsList = Object.keys(letter.objects).sort();
 
@@ -110,13 +111,15 @@ const New = () => {
 	const canvasRef = useRef();
 
 	useEffect(() => {
-		if (sheetSize) {
+		if (sheetSize && !isInit) {
 			canvasRef.current.width = CANVAS_SCALE_FACTOR * sheetSize.width;
 			canvasRef.current.height = CANVAS_SCALE_FACTOR * sheetSize.height;
 
+			setCanvas(canvasRef.current);
 			setContext(canvasRef.current.getContext("2d"));
+			setIsInit(true);
 		}
-	}, [canvasRef, sheetSize, setContext]);
+	}, [sheetSize, setCanvas, setContext, isInit]);
 
 	return (
 		<>

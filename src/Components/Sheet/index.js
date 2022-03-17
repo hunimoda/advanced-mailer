@@ -2,10 +2,7 @@ import { useContext } from "react";
 import { CanvasContext, CANVAS_SCALE_FACTOR } from "../../Context/canvas";
 import classes from "./index.module.css";
 
-let brushWidth = 3;
-
 let coords = [];
-
 let timeStamp = null;
 
 const Sheet = ({
@@ -38,8 +35,6 @@ const Sheet = ({
 		};
 	};
 
-	const getLineWidth = () => CANVAS_SCALE_FACTOR * brushWidth;
-
 	const drawLine = () => {
 		// coords[0] -> coords[1]
 		context.beginPath();
@@ -47,7 +42,6 @@ const Sheet = ({
 		context.moveTo(coords[0].x, coords[0].y);
 		context.lineTo(coords[1].x, coords[1].y);
 
-		context.lineWidth = getLineWidth();
 		context.stroke();
 	};
 
@@ -64,7 +58,6 @@ const Sheet = ({
 			coords[2].y
 		);
 
-		context.lineWidth = getLineWidth();
 		context.stroke();
 	};
 

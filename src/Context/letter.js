@@ -9,6 +9,7 @@ export const INIT_LETTER = {
 		backgroundImage: null,
 	},
 	objects: {},
+	canvas: null,
 };
 
 let maxZIndex = 0;
@@ -196,6 +197,9 @@ export const letterSlice = createSlice({
 			const { id, style } = action.payload;
 
 			state.objects[id].style = style;
+		},
+		setCanvas: (state, action) => {
+			state.canvas = action.payload;
 		},
 	},
 });

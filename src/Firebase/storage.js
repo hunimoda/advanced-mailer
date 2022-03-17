@@ -13,7 +13,7 @@ const storage = getStorage();
 export const uploadImageByDataUrl = async (imageDataUrl, letterId) => {
 	const storageRef = ref(
 		storage,
-		`${getMyUid()}/letters/${letterId}/${uuidv4()}`
+		`users/${getMyUid()}/letters/${letterId}/${uuidv4()}`
 	);
 
 	const uploadResult = await uploadString(storageRef, imageDataUrl, "data_url");

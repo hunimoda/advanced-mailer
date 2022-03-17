@@ -25,6 +25,8 @@ async function convertDataUrlToDownloadUrl(value, letterId) {
 export async function processLetterBeforeSave(letter, id) {
 	const letterCopy = JSON.parse(JSON.stringify(letter));
 
+	letterCopy.canvas = await convertDataUrlToDownloadUrl(letterCopy.canvas, id);
+
 	letterCopy.backgroundImage = await convertDataUrlToDownloadUrl(
 		letterCopy.backgroundImage,
 		id

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useHistory, Prompt } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { letterActions, INIT_LETTER } from "../../../Context/letter";
@@ -9,16 +9,14 @@ import {
 } from "../../../Firebase/db";
 import { generateLetterId, processLetterBeforeSave } from "./helper";
 import { isEqual } from "lodash";
-import Container from "./Container";
-import SizeToolbox from "./SizeToolbox";
-import StyleToolbox from "./StyleToolbox";
-import ColorToolbox from "./ColorToolbox";
-import classes from "./index.module.css";
-import Toolbox from "./ToolBox";
 import PenToolbox from "./PenToolbox";
 import EraserToolbox from "./EraserToolbox";
+import classes from "./index.module.css";
+import { CanvasContext } from "../../../Context/canvas";
 
 const TopHeader = () => {
+	const { canvas } = useContext(CanvasContext);
+
 	const history = useHistory();
 	const id = new URLSearchParams(window.location.search).get("id");
 
@@ -75,6 +73,8 @@ const TopHeader = () => {
 	};
 
 	const onDoneWritingLetter = async (action) => {
+		dispatch(letterActions.setCanvas(canvas.toDataURL()));
+
 		if (!shouldBlockLeave) {
 			alert("입력된 내용이 없습니다");
 			return;
